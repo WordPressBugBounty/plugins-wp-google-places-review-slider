@@ -290,6 +290,12 @@
 				if($currentform[0]->style=="4"){
 					$misc_style = $misc_style . '#wprev-slider-'.$currentform[0]->id.' .wprev_preview_tcolor3_T'.$currentform[0]->style.' {color:'.$template_misc_array['tcolor3'].';}';
 				}
+				
+				//readmore color
+				if($template_misc_array['read_more_color']!=''){
+					$misc_style = $misc_style . '#wprev-slider-'.$currentform[0]->id.' .wprs_rd_more{color:'.$template_misc_array['read_more_color'].';}';
+				}
+				
 				//------------------------
 				echo "<style>".$misc_style."</style>";
 			}

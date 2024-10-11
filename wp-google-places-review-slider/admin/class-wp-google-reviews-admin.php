@@ -2013,6 +2013,8 @@ class WP_Google_Reviews_Admin {
 		
 		//read more
 		$templatemiscarray['read_more_num']=sanitize_text_field($formarray['wprevpro_t_read_more_num']);
+		$templatemiscarray['read_more_color']=sanitize_text_field($formarray['wprevpro_t_read_more_color']);
+
 
 		$templatemiscjson = json_encode($templatemiscarray);
 		

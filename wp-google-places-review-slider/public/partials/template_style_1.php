@@ -174,7 +174,7 @@ for ($x = 0; $x < count($rowarray); $x++) {
 				//slice the array in to two
 				$part1 = array_slice($pieces, 0, $readmorenum);
 				$part2 = array_slice($pieces, $readmorenum);
-				$reviewtext = implode(" ",$part1)."<a class='wprs_rd_more'>... ".$currentform[0]->read_more_text."</a><span class='wprs_rd_more_text' style='display:none;'> ".implode(" ",$part2)."</span>";
+				$reviewtext = implode(" ",$part1)."<span class='wprs_rd_more'>... ".$currentform[0]->read_more_text."</span><span class='wprs_rd_more_text' style='display:none;'> ".implode(" ",$part2)."</span>";
 			}
 		}
 		

@@ -195,6 +195,7 @@
 
 		//read more
 		$templatemiscarray['read_more_num']=sanitize_text_field($_POST['wprevpro_t_read_more_num']);
+		$templatemiscarray['read_more_color']=sanitize_text_field($_POST['wprevpro_t_read_more_color']);
 
 
 		$templatemiscjson = json_encode($templatemiscarray);
@@ -741,6 +742,9 @@ echo $dbmsg;
 			if(!isset($template_misc_array['read_more_num'])){
 					$template_misc_array['read_more_num']='30';
 			}
+			if(!isset($template_misc_array['read_more_color'])){
+					$template_misc_array['read_more_color']='';
+			}
 			?>
 			<tr class="wprevpro_row">
 				<th scope="row">
@@ -756,6 +760,10 @@ echo $dbmsg;
 					<input id="wprevpro_t_read_more_text" type="text" name="wprevpro_t_read_more_text" placeholder="read more" value="<?php if($currenttemplate->read_more_text!=''){echo $currenttemplate->read_more_text;} else {echo "read more";}?>" style="width: 6em">
 					<label for="wprevpro_t_read_more_num">&nbsp;&nbsp;<?php _e('Number of Words:', 'wp-google-reviews'); ?>&nbsp;</label>
 					<input id="wprevpro_t_read_more_num" type="number" name="wprevpro_t_read_more_num" placeholder="30" value="<?php if($template_misc_array['read_more_num']!=''){echo $template_misc_array['read_more_num'];} else {echo "30";}?>" style="width: 4em">
+					
+					<label for="wprevpro_t_read_more_color">&nbsp;&nbsp;<?php _e('Color:', 'wp-google-reviews'); ?>&nbsp;</label>
+					<input type="text" value="<?php echo esc_html($template_misc_array['read_more_color']); ?>" name="wprevpro_t_read_more_color" id="wprevpro_t_read_more_color" class="my-color-field" />
+
 					</div>
 					<p class="description">
 					<?php _e('Allows you to cut off long reviews and add a read more link that will show the rest of the review when clicked.', 'wp-google-reviews'); ?></p>
