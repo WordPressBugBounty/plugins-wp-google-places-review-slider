@@ -51,7 +51,7 @@ class WP_Google_Reviews_Public {
 
 		$this->_token = $plugintoken;
 		$this->version = $version;
-		$this->version = time();
+		//$this->version = time();
 	}
 
 	/**

@@ -246,6 +246,9 @@ foreach ($googleapisarray as $key =>$savedplace) {
 
 </div>
 
+
+<div class="small_message"><p>Do you like this plugin? If so please take a moment to leave a review <a href="https://wordpress.org/plugins/wp-google-reviews/" target="blank">here!</a> If it's missing something then please contact me <a href="https://wpreviewslider.com/contact/" target="blank">here</a>. Thanks!</p><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br></div>
+
 <?php
 	/*
 echo "googlecrawlsarray:";
