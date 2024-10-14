@@ -114,7 +114,7 @@ $crawlcount = 0;
 foreach ($googlecrawlsarray as $key =>$savedplace) {
 //echo "<br>key:".$key;
    // if(isset($key) && $key!=0 && $key!=""){
-	if(is_array($savedplace['crawl_check'])){
+	if(isset($savedplace['crawl_check']) && is_array($savedplace['crawl_check'])){
 		$crawlcount++;
 		$tempbusines ="";
 		$tempfoundplaceid ="";
@@ -136,6 +136,7 @@ foreach ($googlecrawlsarray as $key =>$savedplace) {
 foreach ($googleapisarray as $key =>$savedplace) {
 
         //echo "$key => $savedplace\n <br>";
+	if(isset($savedplace['google_location_set'])){
 	if(is_array($savedplace['google_location_set']) && $savedplace['google_location_set']['place_id']!=""){
 		$tempbusines ="";
 		$tempfoundplaceid ="";
@@ -153,6 +154,7 @@ foreach ($googleapisarray as $key =>$savedplace) {
 		</td></tr>";
 
 		}
+	}
 }
 
 

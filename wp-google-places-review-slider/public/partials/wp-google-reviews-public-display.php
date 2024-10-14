@@ -292,7 +292,7 @@
 				}
 				
 				//readmore color
-				if($template_misc_array['read_more_color']!=''){
+				if(isset($template_misc_array['read_more_color']) && $template_misc_array['read_more_color']!=''){
 					$misc_style = $misc_style . '#wprev-slider-'.$currentform[0]->id.' .wprs_rd_more{color:'.$template_misc_array['read_more_color'].';}';
 				}
 				
