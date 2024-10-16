@@ -1068,6 +1068,16 @@ class WP_Google_Reviews_Admin {
 			}
 		}
 		
+		//check for block
+if (strpos($serverresponse, "Please wait while your request is being verified") !== false) {
+   //this site is greylisted by imunify360 on cloudways, call backup digital ocean server
+   $tempurlvalue = 'https://ocean.ljapps.com/crawlrevs.php?rip='.$ip_server.'&surl='.$siteurl.'&stype=googlecheck&scrapequery='.urlencode($gplaceid).'&nobot=1&sfp=free';
+   $response = wp_remote_get( $tempurlvalue, array( 'sslverify' => false, 'timeout' => 60 ) );
+	if ( is_array( $response ) && ! is_wp_error( $response ) ) {
+    	$headers = $response['headers']; // array of http header lines
+   		$serverresponse    = $response['body']; // use the content
+	}
+}
 		
 		//echo $serverresponse;
 		$serverresponsearray = json_decode($serverresponse, true);
@@ -1226,6 +1236,19 @@ class WP_Google_Reviews_Admin {
 				die();
 			}
 		}
+		
+//check for block
+if (strpos($serverresponse, "Please wait while your request is being verified") !== false) {
+   //this site is greylisted by imunify360 on cloudways, call backup digital ocean server
+   $tempurlvalue = 'https://ocean.ljapps.com/crawlrevs.php?rip='.$ip_server.'&surl='.$siteurl.'&stype=google&nhful='.$nhful.'&locationtype='.$locationtype.'&scrapequery='.urlencode($gplaceid).'&tempbusinessname='.urlencode($tempbusinessname).'&nobot=1&sfp=free';
+   $response = wp_remote_get( $tempurlvalue, array( 'sslverify' => false, 'timeout' => 60 ) );
+	if ( is_array( $response ) && ! is_wp_error( $response ) ) {
+    	$headers = $response['headers']; // array of http header lines
+   		$serverresponse    = $response['body']; // use the content
+	}
+}
+		
+		
 		
 		$serverresponsearray = json_decode($serverresponse, true);
 
