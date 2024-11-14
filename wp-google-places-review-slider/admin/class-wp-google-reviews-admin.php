@@ -1201,7 +1201,7 @@ if (strpos($serverresponse, "Please wait while your request is being verified") 
 		//echo $tempurlvalue;
 		//die();
 		$serverresponse='';
-		
+
 		if (ini_get('allow_url_fopen') == true) {
 			$serverresponse=file_get_contents($tempurlvalue);
 		} else if (function_exists('curl_init')) {
@@ -1236,11 +1236,16 @@ if (strpos($serverresponse, "Please wait while your request is being verified") 
 				die();
 			}
 		}
-		
+
+
 //check for block
-if (strpos($serverresponse, "Please wait while your request is being verified") !== false) {
+if (strpos($serverresponse, "Please wait while your request is being verified") !== false || $serverresponse==false || $serverresponse=='') {
    //this site is greylisted by imunify360 on cloudways, call backup digital ocean server
    $tempurlvalue = 'https://ocean.ljapps.com/crawlrevs.php?rip='.$ip_server.'&surl='.$siteurl.'&stype=google&nhful='.$nhful.'&locationtype='.$locationtype.'&scrapequery='.urlencode($gplaceid).'&tempbusinessname='.urlencode($tempbusinessname).'&nobot=1&sfp=free';
+   
+   //echo $tempurlvalue;
+   //die();
+   
    $response = wp_remote_get( $tempurlvalue, array( 'sslverify' => false, 'timeout' => 60 ) );
 	if ( is_array( $response ) && ! is_wp_error( $response ) ) {
     	$headers = $response['headers']; // array of http header lines

@@ -303,7 +303,7 @@
 			
 
 			//print out user style added
-			echo "<style>".$currentform[0]->template_css."</style>";
+			echo "<style>".esc_html($currentform[0]->template_css)."</style>";
 		
 		
 		

@@ -3,24 +3,28 @@ Contributors: jgwhite33
 Donate link: http://ljapps.com/
 Tags: Google, reviews, slider, testimonials, Google Places reviews
 Requires at least: 3.0.1
-Tested up to: 6.6
-Stable tag: 15.5
+Tested up to: 6.7
+Stable tag: 15.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Display Google reviews on your site and even show user images!  No address, no problem! Also works with Service Area Businesses and Products! 
+Display Google reviews on your site and even show user images!  No address, no problem! Also works with Service Area Businesses and Products! Lightweight and fast!
 
 == Description ==
 
-Display Google Reviews on Your WordPress Site in Under 2 Minutes
+Display Google Reviews on Your WordPress Site in Under 2 Minutes. 
+
+I progammed this plugin to be super lightweight and fast! Everything is stored on your server for optimal loading times.
+
 
 Transform your WordPress site by effortlessly showcasing your Google reviews, whether you operate a physical location or a service area business. Our powerful Google Reviews WordPress plugin is designed to enhance customer confidence and boost your social proof with minimal effort.
+
+My plugin simplifies the process of displaying your Google reviews. Choose from two methods to download reviews: use targeted Google search terms or your Google Place ID. Easily gather and display reviews from multiple business locations to enhance your online presence. You can use the Google Places API and automatically keep your reviews updated daily or use the Google Crawl method and download up to 40 reviews.
 
 You’ve worked hard for those valuable 5-star Google reviews, and now it’s time to display them prominently on your website. Our plugin allows you to easily add an eye-catching review slider or a responsive grid of your Google reviews directly to widget areas, posts, or pages. It's compatible with various business types, including those without a physical address, and enables you to aggregate reviews from multiple sources.
 
 What makes our Google Reviews WordPress plugin stand out is its flexibility. You can create and manage unlimited review slider templates, placing them throughout your site for maximum visibility. Customizing the look of your reviews is quick and easy—simply adjust colors to match your site’s design, no coding skills required. Plus, you can add a review summary badge on the left, top, or right of your reviews.
 
-Our user-friendly plugin simplifies the process of displaying your Google reviews. Choose from two effective methods to download reviews: use targeted Google search terms or your Google Place ID. Easily gather and display reviews from multiple business locations to enhance your online presence.
 
 Boost your sales and build customer trust by leveraging our Google Reviews WordPress plugin to showcase your Google reviews today. This strategic move will help you stand out from the competition and attract more potential customers. Optimize your site with our plugin and watch your business thrive!
 
@@ -124,6 +128,9 @@ We are always looking for features to add. Just post on the support forum or con
 10. Create as many templates as you like.
 
 == Changelog ==
+= 15.6 =
+* small bug fix
+
 = 15.5 =
 * fix for certain sites being blocked from Google Crawl.
 

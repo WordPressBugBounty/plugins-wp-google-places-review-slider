@@ -95,7 +95,7 @@
 		$display_num_rows = htmlentities($_POST['wpfbr_t_display_num_rows']);
 		$display_order = htmlentities($_POST['wpfbr_t_display_order']);
 		$hide_no_text = htmlentities($_POST['wpfbr_t_hidenotext']);
-		$template_css = htmlentities($_POST['wpfbr_template_css']);
+		$template_css = sanitize_textarea_field($_POST['wpfbr_template_css']);
 		
 		$createslider = htmlentities($_POST['wpfbr_t_createslider']);
 		$numslides = htmlentities($_POST['wpfbr_t_numslides']);
@@ -116,7 +116,7 @@
 		$title = sanitize_text_field( $title );
 		$template_type = sanitize_text_field( $template_type );
 		$display_order = sanitize_text_field( $display_order );
-		$template_css = sanitize_text_field( $template_css );
+		$template_css = sanitize_textarea_field( $template_css );
 		$display_order = sanitize_text_field( $display_order );
 
 		
