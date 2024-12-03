@@ -82,7 +82,7 @@ class Template_Functions {
 				} else {
 					$templast = '';
 				}
-				$tempreviewername = $firstname. ' '.$templast;
+				$tempreviewername = stripslashes(strip_tags($review->reviewer_name));
 			}
 		}
 
