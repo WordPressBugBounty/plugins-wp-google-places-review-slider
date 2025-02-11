@@ -70,7 +70,7 @@ class WP_Google_Reviews {
 	public function __construct() {
 
 		$this->_token = 'wp-google-reviews';
-		$this->version = '15.7';
+		$this->version = '15.8';
 		//using this for development
 		//$this->version = time();
 

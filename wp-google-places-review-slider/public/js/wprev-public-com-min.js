@@ -131,6 +131,16 @@ void 0!==jQuery.event.swipe||function(e){"function"==typeof define&&define.amd?d
 						activeClass: 'wprs_unslider-active',
 						}
 					);
+				
+				//close read more on advance
+				slider.on('wprs_unslider.change', function(event, index, slide) {
+					$(thissliderdiv).find('.wprs_rd_more').show();
+					$(thissliderdiv).find('.wprs_rd_more').next("span").css('opacity', '0');
+					setTimeout(function () {
+					  $(thissliderdiv).find('.wprs_rd_more').next("span").hide(500);
+					}, 400);
+				});
+				
 				if(sanimate==true){
 				setTimeout(function(){ 
 					//height of active slide
@@ -139,6 +149,8 @@ void 0!==jQuery.event.swipe||function(e){"function"==typeof define&&define.amd?d
 					$(thissliderdiv).find("li.wprevnextslide").removeClass('wprevnextslide');
 				}, 500);
 				}
+				
+
 				
 				if(sautoplay==true){
 					slider.on('mouseover', function() {slider.data('wprs_unslider').stop();}).on('mouseout', function() {slider.data('wprs_unslider').start();});

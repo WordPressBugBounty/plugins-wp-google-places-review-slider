@@ -1110,6 +1110,8 @@ if(!isset($template_misc_array['bimgsize'])){
 	</div>
 	<div class="wpfbr_margin10 w3-white" id="wpfbr_preview_outer">
 	</div>
+	<div class="wpfbr_margin10 w3-white" id="wpfbr_preview_outer2">
+	</div>
 </div>
 
 <div class="small_message"><p>Do you like this plugin? If so please take a moment to leave a review <a href="https://wordpress.org/plugins/wp-google-reviews/" target="blank">here!</a> If it's missing something then please contact me <a href="http://ljapps.com/contact/" target="blank">here</a>. Thanks!</p><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br></div>
