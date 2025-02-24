@@ -201,7 +201,7 @@
 			$badgeabovewide2 = '';
 			$badgeabovewideclose ='';
 			if($template_misc_array['blocation']=="abovewide"){
-				$badge_style = $badge_style . '.wprev_outer_wb {flex-direction: column !important;}.wprev_badge_div.badgeleft {margin-left: auto !important;margin-right: auto !important;}.wprev_badge_div.badgeleft {margin: 0px 46px !important;}.wprev-google-place {justify-content: space-between !important;align-items: center !important;}.wprev-google-leftboth {display: flex !important;}';
+				$badge_style = $badge_style . '.wprev_outer_wb {flex-direction: column !important;}.wprev_badge_div.badgeleft {margin-left: auto !important;margin-right: auto !important;}.wprev_badge_div.badgeleft {margin: 0px 46px !important;}.wprev-google-place {justify-content: space-between !important;align-items: center !important;}.wprev-google-leftboth {display: flex !important;}  @media only screen and (max-width: 600px) {.wprev-google-place {flex-direction: column;}}';
 				$badgeabovewide1 = '<div class="wprev-google-leftboth">';
 				$badgeabovewide2 = '<div class="wprev-google-right">';
 				$badgeabovewideclose = '</div>'; 
@@ -318,6 +318,8 @@
 				$oneonmobile = "";
 				if($currentform[0]->slidermobileview == "one"){
 					$oneonmobile = "yes";
+					//hide slider dots on mobile view.
+					echo "<style>@media only screen and (max-width: 600px) {nav.wprs_unslider-nav {display: none;}}</style>";
 				}
 				$sliderautoplay = "";
 				$slidespeed = "";
