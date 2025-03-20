@@ -73,10 +73,12 @@
 		
 		if($delplaceid != ''){
 			$table_name_revs = $wpdb->prefix . 'wpfb_reviews';
-			$deleterevs = $wpdb->query("DELETE FROM `".$table_name_revs."` WHERE pageid = '".$delplaceid."'");
+			//$deleterevs = $wpdb->query("DELETE FROM `".$table_name_revs."` WHERE pageid = '".$delplaceid."'");
+			$wpdb->delete( $table_name_revs, array( 'pageid' => $delplaceid ) );
 			
 			$table_name_tots = $wpdb->prefix . 'wpfb_total_averages';
-			$deletetotsavgs = $wpdb->query("DELETE FROM `".$table_name_tots."` WHERE btp_id = '".$delplaceid."'");
+			//$deletetotsavgs = $wpdb->query("DELETE FROM `".$table_name_tots."` WHERE btp_id = '".$delplaceid."'");
+			$wpdb->delete( $table_name_tots, array( 'btp_id' => $delplaceid ) );
 
 		}
 
