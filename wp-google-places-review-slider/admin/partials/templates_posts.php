@@ -165,6 +165,15 @@
 		if(isset($_POST['wprevpro_t_bhpow'])){
 			$templatemiscarray['bhpow']=sanitize_text_field($_POST['wprevpro_t_bhpow']);
 		}
+		if(isset($_POST['wprevpro_t_bobasedon'])){
+			$templatemiscarray['bobasedon']=sanitize_text_field($_POST['wprevpro_t_bobasedon']);
+		}
+		if(isset($_POST['wprevpro_t_borevus'])){
+			$templatemiscarray['borevus']=sanitize_text_field($_POST['wprevpro_t_borevus']);
+		}
+		
+		
+		
 		
 		//more slider options.
 		$templatemiscarray['slideautodelay']=sanitize_text_field($_POST['wpfbr_t_slideautodelay']);
@@ -1080,6 +1089,29 @@ if(!isset($template_misc_array['bimgsize'])){
 					<input type="checkbox" id="wprevpro_t_bhreviews" name="wprevpro_t_bhreviews" value="yes" <?php if($template_misc_array['bhreviews']== "yes"){echo 'checked="checked"';}?>>
 					<label for="wprevpro_t_bhreviews"><?php _e('Hide Reviews', 'wp-google-reviews'); ?></label>
 					</div>
+				</div>
+				</td>
+			</tr>
+			<?php
+			if(!isset($template_misc_array['bobasedon'])){
+				$template_misc_array['bobasedon']="Based on # reviews";
+			}
+			if(!isset($template_misc_array['borevus'])){
+				$template_misc_array['borevus']="Review us on";
+			}
+			?>
+			<tr class="wpfbr_row">
+				<td colspan="2">
+				<div class="badgeinfo">
+
+					<div class="badgeinfosetting badgehide">
+						<div class="bsetlabel"><?php _e('Override "Based on..":', 'wp-google-reviews'); ?></div>
+						<input id="wprevpro_t_bobasedon" type="text" name="wprevpro_t_bobasedon" value="<?php if($template_misc_array['bobasedon']!=""){echo $template_misc_array['bobasedon'];} ?>" style="width: 15em">
+					</div>	
+					<div class="badgeinfosetting badgehide">
+						<div class="bsetlabel"><?php _e('Override "Review us..":', 'wp-google-reviews'); ?></div>
+						<input id="wprevpro_t_borevus" type="text" name="wprevpro_t_borevus" value="<?php if($template_misc_array['borevus']!=""){echo $template_misc_array['borevus'];} ?>" style="width: 15em">
+					</div>						
 				</div>
 				</td>
 			</tr>

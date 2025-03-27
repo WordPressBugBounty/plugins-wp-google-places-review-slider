@@ -1069,15 +1069,15 @@ class WP_Google_Reviews_Admin {
 		}
 		
 		//check for block
-if (strpos($serverresponse, "Please wait while your request is being verified") !== false) {
-   //this site is greylisted by imunify360 on cloudways, call backup digital ocean server
-   $tempurlvalue = 'https://ocean.ljapps.com/crawlrevs.php?rip='.$ip_server.'&surl='.$siteurl.'&stype=googlecheck&scrapequery='.urlencode($gplaceid).'&nobot=1&sfp=free';
-   $response = wp_remote_get( $tempurlvalue, array( 'sslverify' => false, 'timeout' => 60 ) );
-	if ( is_array( $response ) && ! is_wp_error( $response ) ) {
-    	$headers = $response['headers']; // array of http header lines
-   		$serverresponse    = $response['body']; // use the content
-	}
-}
+		if (strpos($serverresponse, "Please wait while your request is being verified") !== false) {
+		   //this site is greylisted by imunify360 on cloudways, call backup digital ocean server
+		   $tempurlvalue = 'https://ocean.ljapps.com/crawlrevs.php?rip='.$ip_server.'&surl='.$siteurl.'&stype=googlecheck&scrapequery='.urlencode($gplaceid).'&nobot=1&sfp=free';
+		   $response = wp_remote_get( $tempurlvalue, array( 'sslverify' => false, 'timeout' => 60 ) );
+			if ( is_array( $response ) && ! is_wp_error( $response ) ) {
+				$headers = $response['headers']; // array of http header lines
+				$serverresponse    = $response['body']; // use the content
+			}
+		}
 		
 		//echo $serverresponse;
 		$serverresponsearray = json_decode($serverresponse, true);
@@ -1238,20 +1238,20 @@ if (strpos($serverresponse, "Please wait while your request is being verified") 
 		}
 
 
-//check for block
-if (strpos($serverresponse, "Please wait while your request is being verified") !== false || $serverresponse==false || $serverresponse=='') {
-   //this site is greylisted by imunify360 on cloudways, call backup digital ocean server
-   $tempurlvalue = 'https://ocean.ljapps.com/crawlrevs.php?rip='.$ip_server.'&surl='.$siteurl.'&stype=google&nhful='.$nhful.'&locationtype='.$locationtype.'&scrapequery='.urlencode($gplaceid).'&tempbusinessname='.urlencode($tempbusinessname).'&nobot=1&sfp=free';
-   
-   //echo $tempurlvalue;
-   //die();
-   
-   $response = wp_remote_get( $tempurlvalue, array( 'sslverify' => false, 'timeout' => 60 ) );
-	if ( is_array( $response ) && ! is_wp_error( $response ) ) {
-    	$headers = $response['headers']; // array of http header lines
-   		$serverresponse    = $response['body']; // use the content
-	}
-}
+		//check for block
+		if (strpos($serverresponse, "Please wait while your request is being verified") !== false || $serverresponse==false || $serverresponse=='') {
+		   //this site is greylisted by imunify360 on cloudways, call backup digital ocean server
+		   $tempurlvalue = 'https://ocean.ljapps.com/crawlrevs.php?rip='.$ip_server.'&surl='.$siteurl.'&stype=google&nhful='.$nhful.'&locationtype='.$locationtype.'&scrapequery='.urlencode($gplaceid).'&tempbusinessname='.urlencode($tempbusinessname).'&nobot=1&sfp=free';
+		   
+		   //echo $tempurlvalue;
+		   //die();
+		   
+		   $response = wp_remote_get( $tempurlvalue, array( 'sslverify' => false, 'timeout' => 60 ) );
+			if ( is_array( $response ) && ! is_wp_error( $response ) ) {
+				$headers = $response['headers']; // array of http header lines
+				$serverresponse    = $response['body']; // use the content
+			}
+		}
 		
 		
 		
@@ -1400,7 +1400,7 @@ if (strpos($serverresponse, "Please wait while your request is being verified") 
 		$results['ackmsg'] =sprintf( __('Success! <b>%d</b> Reviews found. <b>%d</b> New Reviews downloaded. Check Review List page for downloaded reviews. The Pro version can download all your reviews from multiple locations and automatically check for new reviews!', 'wp-google-reviews' ), $numreturned,$i );
 		
 		if(isset($_POST['getrevsplaceid'])){
-			$results['ackmsg'] =sprintf( __('<b>%d</b>New Reviews downloaded', 'wp-google-reviews' ), $i );
+			$results['ackmsg'] =sprintf( __('<b>%d</b> New Reviews downloaded', 'wp-google-reviews' ), $i );
 		}
 		
 		$results = json_encode($results);
@@ -2011,6 +2011,12 @@ if (strpos($serverresponse, "Please wait while your request is being verified") 
 		}
 		if(isset($formarray['wprevpro_t_bhpow'])){
 			$templatemiscarray['bhpow']=sanitize_text_field($formarray['wprevpro_t_bhpow']);
+		}
+		if(isset($formarray['wprevpro_t_bobasedon'])){
+			$templatemiscarray['bobasedon']=sanitize_text_field($formarray['wprevpro_t_bobasedon']);
+		}
+		if(isset($formarray['wprevpro_t_borevus'])){
+			$templatemiscarray['borevus']=sanitize_text_field($formarray['wprevpro_t_borevus']);
 		}
 				//more slider options.
 		$templatemiscarray['slideautodelay']=sanitize_text_field($formarray['wpfbr_t_slideautodelay']);

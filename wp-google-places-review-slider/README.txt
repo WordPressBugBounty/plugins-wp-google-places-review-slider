@@ -4,7 +4,7 @@ Donate link: http://ljapps.com/
 Tags: Google, reviews, slider, testimonials, Google Places reviews
 Requires at least: 3.0.1
 Tested up to: 6.7
-Stable tag: 16.1
+Stable tag: 16.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -128,6 +128,10 @@ We are always looking for features to add. Just post on the support forum or con
 10. Create as many templates as you like.
 
 == Changelog ==
+= 16.2 =
+* small bug fix
+* added abilty to customize the Review us on text and the Based on text for the badge.
+
 = 16.1 =
 * small bug fix
 
