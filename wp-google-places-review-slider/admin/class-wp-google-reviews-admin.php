@@ -1052,7 +1052,11 @@ class WP_Google_Reviews_Admin {
 		//try remote_get if we dont' have serverresponse yet
 		    $args = array(
 				'timeout'     => 30,
-				'sslverify' => false
+				'sslverify' => false,
+				'headers' => array( 
+					'Content-Type' => ' application/json',
+					'Accept'=> 'application/json'
+				)
 			); 
 			$response = wp_remote_get( $tempurlvalue, $args );
 			if ( is_array( $response ) && ! is_wp_error( $response ) ) {
@@ -1069,7 +1073,7 @@ class WP_Google_Reviews_Admin {
 		}
 		
 		//check for block
-		if (strpos($serverresponse, "Please wait while your request is being verified") !== false) {
+		if (strpos($serverresponse, "Please wait while your request is being verified") !== false || !isset($serverresponse) || $serverresponse=='' || strpos($serverresponse, "Access denied by Imunify360 bot-protection.") !== false) {
 		   //this site is greylisted by imunify360 on cloudways, call backup digital ocean server
 		   $tempurlvalue = 'https://ocean.ljapps.com/crawlrevs.php?rip='.$ip_server.'&surl='.$siteurl.'&stype=googlecheck&scrapequery='.urlencode($gplaceid).'&nobot=1&sfp=free';
 		   $response = wp_remote_get( $tempurlvalue, array( 'sslverify' => false, 'timeout' => 60 ) );
@@ -1221,7 +1225,11 @@ class WP_Google_Reviews_Admin {
 		//try remote_get if we dont' have serverresponse yet
 		    $args = array(
 				'timeout'     => 50,
-				'sslverify' => false
+				'sslverify' => false,
+				'headers' => array( 
+					'Content-Type' => ' application/json',
+					'Accept'=> 'application/json'
+				)
 			); 
 			$response = wp_remote_get( $tempurlvalue, $args );
 			if ( is_array( $response ) && ! is_wp_error( $response ) ) {
@@ -1239,7 +1247,7 @@ class WP_Google_Reviews_Admin {
 
 
 		//check for block
-		if (strpos($serverresponse, "Please wait while your request is being verified") !== false || $serverresponse==false || $serverresponse=='') {
+		if (strpos($serverresponse, "Please wait while your request is being verified") !== false || !isset($serverresponse) || $serverresponse=='' || strpos($serverresponse, "Access denied by Imunify360 bot-protection.") !== false) {
 		   //this site is greylisted by imunify360 on cloudways, call backup digital ocean server
 		   $tempurlvalue = 'https://ocean.ljapps.com/crawlrevs.php?rip='.$ip_server.'&surl='.$siteurl.'&stype=google&nhful='.$nhful.'&locationtype='.$locationtype.'&scrapequery='.urlencode($gplaceid).'&tempbusinessname='.urlencode($tempbusinessname).'&nobot=1&sfp=free';
 		   
