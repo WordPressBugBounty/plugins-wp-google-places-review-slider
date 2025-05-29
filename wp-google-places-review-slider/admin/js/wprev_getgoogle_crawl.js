@@ -30,6 +30,8 @@
 	 */
 	 
 	 //document ready
+	 var businessname;
+	 var foundplaceid;
 	 $(function(){
 		 var placeid = '';
 		//function wpfbr_testapikey(pagename) {
@@ -79,6 +81,10 @@
 								$( '#businessimg' ).attr("src", objresponse.img);
 								}
 								$( '#businessname' ).html(objresponse.businessname);
+								businessname = objresponse.businessname;
+								foundplaceid = objresponse.foundplaceid;
+								console.log("businessname:"+businessname);
+								console.log("foundplaceid:"+foundplaceid);
 								$( '#website' ).html(objresponse.website);
 								$( '#googleurl' ).html(objresponse.googleurl);
 								$( '#googleurl' ).attr("href", objresponse.googleurl)
@@ -103,14 +109,16 @@
 		
 		//for downloading on crawl page.
 		$("#downloadreviews").click(function(event){
-			
+			console.log("businessname:"+businessname);
+			//divgoogletestresults
 			//hide button
 			$( this ).hide();
 			//add class wprevloader to parent div
 			$( '#buttonloader2' ).show();
 			$( '#googletestresultstext2' ).html('');
 			
-			var placeid = $("#gplaceid").val();
+			var placeid = foundplaceid;
+			var tempbusinessn  = businessname;
 			var newestorhelpful = $('input[name="sortoption"]:checked').val();
 			if(placeid==''){
 				alert("Please enter your Place ID or Search Terms.");
@@ -119,9 +127,11 @@
 			var data = {
 			action	:	'wpfbr_crawl_placeid_go',
 			gplaceid	:	placeid,
+			tempbusinessname	:	tempbusinessn,
 			nhful	: newestorhelpful,
 			_ajax_nonce		: adminjs_script_vars.wpfb_nonce,
 				};
+			console.log(data);
 			var myajax = jQuery.post(ajaxurl, data, function(response) {
 				console.log(response);
 					    try {

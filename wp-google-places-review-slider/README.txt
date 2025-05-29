@@ -3,8 +3,8 @@ Contributors: jgwhite33
 Donate link: http://ljapps.com/
 Tags: Google, reviews, slider, testimonials, Google Places reviews
 Requires at least: 3.0.1
-Tested up to: 6.7
-Stable tag: 16.4
+Tested up to: 6.8
+Stable tag: 16.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -128,6 +128,9 @@ We are always looking for features to add. Just post on the support forum or con
 10. Create as many templates as you like.
 
 == Changelog ==
+= 16.5 =
+* another crawl fix
+
 = 16.4 =
 * another fix with Crawl being blocked on certain sites.
 

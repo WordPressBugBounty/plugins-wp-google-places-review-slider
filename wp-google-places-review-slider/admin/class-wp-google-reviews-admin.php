@@ -1150,16 +1150,19 @@ class WP_Google_Reviews_Admin {
 		$nhful = trim($_POST['nhful']);	//newest or relevant
 		
 		$savedplaceid ="";
+		$crawlpage=false;
+		
+		//print_r($_POST);
 		
 		if(isset($_POST['gplaceid'])){	//coming from the crawl page
 			$savedplaceid = trim($_POST['gplaceid']);
+			$crawlpage=true;
 		}
 		
 		//if we are coming from getrevs page then we need to urldecode it
 		if(isset($_POST['getrevsplaceid'])){
 			$savedplaceid = trim(urldecode($_POST['getrevsplaceid']));
 		}
-
 		
 		//$checkdetails = json_decode(get_option('wprev_google_crawl_check'),true);
 		$crawlsarray = Array();
@@ -1169,7 +1172,6 @@ class WP_Google_Reviews_Admin {
 		//save newest or most helpful
 		$crawlsarray[$savedplaceid]['nhful'] = $nhful;
 		update_option('wprev_google_crawls',json_encode($crawlsarray) );
-		
 		
 		
 		if($checkdetails['idorquery'] == 'query' && $checkdetails['enteredterms']!=''){
@@ -1200,6 +1202,9 @@ class WP_Google_Reviews_Admin {
 		}
 		$siteurl = urlencode(get_site_url());
 
+		if($crawlpage==true){
+			$gplaceid=$savedplaceid;
+		}
 		
 		$tempurlvalue = 'https://crawl.ljapps.com/crawlrevs?rip='.$ip_server.'&surl='.$siteurl.'&stype=google&nhful='.$nhful.'&locationtype='.$locationtype.'&scrapequery='.urlencode($gplaceid).'&tempbusinessname='.urlencode($tempbusinessname).'&nobot=1&sfp=free';
 		
