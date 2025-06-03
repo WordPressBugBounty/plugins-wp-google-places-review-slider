@@ -1156,6 +1156,8 @@ class WP_Google_Reviews_Admin {
 		
 		if(isset($_POST['gplaceid'])){	//coming from the crawl page
 			$savedplaceid = trim($_POST['gplaceid']);
+			$tempbuname = trim($_POST['tempbusinessname']);
+			$tempfromurl = trim($_POST['gfromurl']);
 			$crawlpage=true;
 		}
 		
@@ -1202,11 +1204,15 @@ class WP_Google_Reviews_Admin {
 		}
 		$siteurl = urlencode(get_site_url());
 
-		if($crawlpage==true){
+		if($crawlpage==true && isset($tempbuname) && $tempbuname!=""){
 			$gplaceid=$savedplaceid;
+			$tempbusinessname=$tempbuname;
+			$checkdetails['googleurl'] = $tempfromurl;
 		}
 		
 		$tempurlvalue = 'https://crawl.ljapps.com/crawlrevs?rip='.$ip_server.'&surl='.$siteurl.'&stype=google&nhful='.$nhful.'&locationtype='.$locationtype.'&scrapequery='.urlencode($gplaceid).'&tempbusinessname='.urlencode($tempbusinessname).'&nobot=1&sfp=free';
+		
+		$results['tempurlvalue'] =$tempurlvalue;
 		
 		//echo $tempurlvalue;
 		//die();
@@ -1373,7 +1379,7 @@ class WP_Google_Reviews_Admin {
 			{
 				$stats[] =array( 
 					'pageid' 			=> $gplaceid, 
-					'pagename' 			=> $checkdetails['businessname'], 
+					'pagename' 			=> $tempbusinessname, 
 					'created_time' 		=> date( "Y-m-d H:i:s", $results['created_time_stamp'] ),
 					'created_time_stamp' 	=> $results['created_time_stamp'],
 					'reviewer_name' 		=> $results['user_name'],
@@ -1405,7 +1411,7 @@ class WP_Google_Reviews_Admin {
 		//update total and avg for badges.
 				if(trim($gplaceid)!=''){
 					$temptype = 'google';
-					$this->updatetotalavgreviews($temptype, $gplaceid, $results['avg'], $results['total'],$checkdetails['businessname']);
+					$this->updatetotalavgreviews($temptype, $gplaceid, $results['avg'], $results['total'],$tempbusinessname);
 				}
 	
 		$results['ackmsg'] =sprintf( __('Success! <b>%d</b> Reviews found. <b>%d</b> New Reviews downloaded. Check Review List page for downloaded reviews. The Pro version can download all your reviews from multiple locations and automatically check for new reviews!', 'wp-google-reviews' ), $numreturned,$i );

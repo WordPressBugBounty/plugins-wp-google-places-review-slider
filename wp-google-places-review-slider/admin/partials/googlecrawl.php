@@ -85,6 +85,7 @@ if(isset($previouscheck['img']) && $previouscheck['img']!='' && $previouscheck['
 				  <div class="w3-rest"><p><strong id='businessname'><?php if($previouscheck['businessname']!=''){echo $previouscheck['businessname'];} ?></strong><br>
 					  <span id='website'><?php if($previouscheck['website']!=''){echo $previouscheck['website'];} ?></span><br>
 					  <span id='reviewtext'><?php if($previouscheck['rating']!=''){echo 'Rated <b>'.$previouscheck['rating'].'</b> out of <b>'.$previouscheck['totalreviews'].'</b>';} ?></span><br>
+					  <span id='placeid'><?php if($previouscheck['foundplaceid']!=''){echo $previouscheck['foundplaceid'];} ?></span><br>
 					  <a id='googleurl' href='<?php if($previouscheck['googleurl']!=''){echo $previouscheck['googleurl'];} ?>' target="_blank"><?php if($previouscheck['googleurl']!=''){echo $previouscheck['googleurl'];} ?></a>
 					</p>
 					</div>
