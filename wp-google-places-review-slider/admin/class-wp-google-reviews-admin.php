@@ -55,7 +55,7 @@ class WP_Google_Reviews_Admin {
 		$this->_default_api_token = "";
 		//$this->version = $version;
 		//for testing==============
-		$this->version = time();
+		//$this->version = time();
 		//===================
 	}
 

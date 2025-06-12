@@ -498,9 +498,27 @@
 					var maxheights = $(thissliderdiv).find(".indrevdiv").map(function (){return $(this).outerHeight();}).get();
 					var maxHeightofslide = Math.max.apply(null, maxheights);if(maxHeightofslide>0){$(thissliderdiv).find(".indrevdiv").css( "min-height", maxHeightofslide );}
 				}
+				
+				missingimgcheck();
 								
 			};
-			
+		
+				
+		function missingimgcheck(){
+				//hide images that fail to load.
+			  $('img.wprev_media_img').each(function () {
+				// If already failed before DOM ready
+				if (!this.complete || this.naturalWidth === 0) {
+				  $(this).addClass('wprev_missing_image');
+				}
+
+				// If it fails after trying to load
+				$(this).on('error', function () {
+				  $(this).addClass('wprev_missing_image');
+				});
+			  });
+		}
+		
 		//simple tooltip for added elements and mobile devices
 		$("#wpfbr_preview_outer").on('mouseenter touchstart', '.wprevtooltip', function(e) {
 			var titleText = $(this).attr('data-wprevtooltip');

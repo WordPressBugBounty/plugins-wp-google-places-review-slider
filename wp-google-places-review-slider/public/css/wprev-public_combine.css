@@ -263,3 +263,7 @@ img.wprev-google-powered-img {
     width: -webkit-fill-available;
 }
 }
+
+.wprev_missing_image{
+	display:none;
+}

@@ -203,6 +203,22 @@ void 0!==jQuery.event.swipe||function(e){"function"==typeof define&&define.amd?d
 				});
 				//setTimeout(function(){ refreshFsLightbox(); }, 1000);
 			}
+
+		}
+		missingimgcheck();
+		function missingimgcheck(){
+				//hide images that fail to load.
+			  $('img.wprev_media_img').each(function () {
+				// If already failed before DOM ready
+				if (!this.complete || this.naturalWidth === 0) {
+				  $(this).addClass('wprev_missing_image');
+				}
+
+				// If it fails after trying to load
+				$(this).on('error', function () {
+				  $(this).addClass('wprev_missing_image');
+				});
+			  });
 		}
 
 		
