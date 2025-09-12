@@ -70,7 +70,7 @@ class WP_Google_Reviews {
 	public function __construct() {
 
 		$this->_token = 'wp-google-reviews';
-		$this->version = '16.7';
+		$this->version = '16.8';
 		//using this for development
 		//$this->version = time();
 
@@ -153,7 +153,7 @@ class WP_Google_Reviews {
 				company_name varchar(100) DEFAULT '' NOT NULL,
 				company_title varchar(100) DEFAULT '' NOT NULL,
 				company_url varchar(100) DEFAULT '' NOT NULL,
-				reviewer_id varchar(50) DEFAULT '' NOT NULL,
+				reviewer_id varchar(100) DEFAULT '' NOT NULL,
 				rating varchar(3) NOT NULL,
 				recommendation_type varchar(12) DEFAULT '' NOT NULL,
 				review_text text NOT NULL,
@@ -417,6 +417,27 @@ class WP_Google_Reviews {
 		$this->loader->add_action( 'wp_ajax_wprp_get_preview', $plugin_admin, 'wprp_previewtemplate_ajax' );
 		//add ajax for saving review template
 		$this->loader->add_action( 'wp_ajax_wprp_save_template', $plugin_admin, 'wprp_savetemplate_ajax' );
+		
+		//add ajax for DataForSEO daily remaining count
+		$this->loader->add_action( 'wp_ajax_wpfbr_dfs_daily_remaining', $plugin_admin, 'wpfbr_ajax_dfs_daily_remaining' );
+		
+		//add ajax for DataForSEO test search
+		$this->loader->add_action( 'wp_ajax_wpfbr_dfs_test_search', $plugin_admin, 'wpfbr_ajax_dfs_test_search' );
+		
+		//add ajax for DataForSEO download reviews
+		$this->loader->add_action( 'wp_ajax_wpfbr_dfs_download_reviews', $plugin_admin, 'wpfbr_ajax_dfs_download_reviews' );
+		
+		//add ajax for DataForSEO poll results
+		$this->loader->add_action( 'wp_ajax_wpfbr_dfs_poll_results', $plugin_admin, 'wpfbr_ajax_dfs_poll_results' );
+		
+		//add ajax for DataForSEO save place ID
+		$this->loader->add_action( 'wp_ajax_wpfbr_dfs_save_place_id', $plugin_admin, 'wpfbr_ajax_dfs_save_place_id' );
+		$this->loader->add_action( 'wp_ajax_wpfbr_dfs_save_task_id', $plugin_admin, 'wpfbr_ajax_dfs_save_task_id' );
+		$this->loader->add_action( 'wp_ajax_wpfbr_dfs_update_task_status', $plugin_admin, 'wpfbr_ajax_dfs_update_task_status' );
+		$this->loader->add_action( 'wp_ajax_wpfbr_dfs_check_existing_task', $plugin_admin, 'wpfbr_ajax_dfs_check_existing_task' );
+		
+		//add cron for cleaning up daily usage data
+		$this->loader->add_action( 'wpgoogle_daily_event', $plugin_admin, 'cleanup_daily_usage' );
 		
 		//cron testing
 		//$ret = $plugin_admin->wpfbr_cron_googlereviews();

@@ -207,18 +207,21 @@ void 0!==jQuery.event.swipe||function(e){"function"==typeof define&&define.amd?d
 		}
 		missingimgcheck();
 		function missingimgcheck(){
-				//hide images that fail to load.
-			  $('img.wprev_media_img').each(function () {
-				// If already failed before DOM ready
-				if (!this.complete || this.naturalWidth === 0) {
-				  $(this).addClass('wprev_missing_image');
-				}
+			//remove images from the dom
+		  $('img.wprev_media_img').each(function () {
+			var $img = $(this);
 
-				// If it fails after trying to load
-				$(this).on('error', function () {
-				  $(this).addClass('wprev_missing_image');
-				});
-			  });
+			// Remove immediately if already broken
+			if (!this.complete || this.naturalWidth === 0) {
+			  $img.remove();
+			  return; // skip binding error event
+			}
+
+			// Remove if load fails after DOM ready
+			$img.on('error', function () {
+			  $img.remove();
+			});
+		  });
 		}
 
 		

@@ -249,9 +249,19 @@ class WP_Google_Reviews_Admin {
 						'ajax_url' => admin_url( 'admin-ajax.php' )
 					)
 				);
-
 			}
-			
+
+			//scripts for crawl page, DFS version DataForSEO version
+			if($_GET['page']=="wp_google-googlecrawl_dfs"){
+				wp_enqueue_script( $this->_token.'getgoogle_crawl_dfs-js', plugin_dir_url( __FILE__ ) . 'js/wprev_getgoogle_crawl_dfs.js', array( 'jquery' ), $this->version, false );
+				//used for ajax
+				wp_localize_script($this->_token.'getgoogle_crawl_dfs-js', 'adminjs_script_vars', 
+					array(
+						'wpfb_nonce'=> wp_create_nonce('randomnoncestring'),
+						'ajax_url' => admin_url( 'admin-ajax.php' )
+					)
+				);
+			}
 			//scripts for templates posts page
 			if($_GET['page']=="wp_google-templates_posts"){
 				//admin js
@@ -307,7 +317,13 @@ class WP_Google_Reviews_Admin {
 		$submenu_slug = 'wp_google-googlecrawl';
 		add_submenu_page('', $submenu_page_title, $submenu_title, $capability, $submenu_slug, array($this,'wp_fb_googlecrawl'));
 		
+		// Now add the submenu page, DFS version DataForSEO version
+		$submenu_page_title = 'WP Google Reviews: Crawl Google';
+		$submenu_title = 'Google Crawl';
+		$submenu_slug = 'wp_google-googlecrawl_dfs';
+		add_submenu_page('', $submenu_page_title, $submenu_title, $capability, $submenu_slug, array($this,'wp_fb_googlecrawl_dfs'));
 		
+
 		// Now add the submenu page for the actual reviews list
 		$submenu_page_title = 'WP Google Reviews: Review List';
 		$submenu_title = 'Review List';
@@ -342,6 +358,9 @@ class WP_Google_Reviews_Admin {
 	}
 	public function wp_fb_googlecrawl() {
 		require_once plugin_dir_path( __FILE__ ) . '/partials/googlecrawl.php';
+	}
+	public function wp_fb_googlecrawl_dfs() {
+		require_once plugin_dir_path( __FILE__ ) . '/partials/googlecrawl_dfs.php';
 	}
 	public function wp_fb_welcome() {
 		require_once plugin_dir_path( __FILE__ ) . '/partials/welcome.php';
@@ -2206,6 +2225,675 @@ class WP_Google_Reviews_Admin {
 		return $this->version;
 	}
 	
+	/**
+	 * DataForSEO AJAX Handlers
+	 */
 	
+	/**
+	 * Get daily remaining reviews count
+	 */
+	public function wpfbr_ajax_dfs_daily_remaining() {
+		check_ajax_referer('randomnoncestring', 'nonce');
+		
+		$user_id = get_current_user_id();
+		$today = date('Y-m-d');
+		$daily_usage = get_user_meta($user_id, 'dfs_daily_reviews_' . $today, true);
+		$daily_usage = $daily_usage ? intval($daily_usage) : 0;
+		$remaining = max(0, 100 - $daily_usage);
+		
+		wp_send_json_success(array(
+			'remaining' => $remaining,
+			'used' => $daily_usage,
+			'limit' => 100
+		));
+	}
+	
+	/**
+	 * Test DataForSEO search
+	 */
+	public function wpfbr_ajax_dfs_test_search() {
+		check_ajax_referer('randomnoncestring', 'nonce');
+		
+		$search_terms = sanitize_text_field($_POST['search_terms']);
+		$location = sanitize_text_field($_POST['location']);
+		$language = sanitize_text_field($_POST['language']);
+		$sort_option = sanitize_text_field($_POST['sort_option']);
+		$edit_place = sanitize_text_field($_POST['edit_place']);
+
+		if (empty($search_terms)) {
+			wp_send_json_error(array('message' => 'Search terms are required'));
+		}
+		
+		// Prepare request to external crawler server
+		$ip_server = isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : urlencode(get_site_url());
+		$siteurl = urlencode(get_site_url());
+		$user_id = get_current_user_id();
+		
+		$crawler_url = 'https://crawl.ljapps.com/crawlrevs?' . http_build_query(array(
+			'rip' => $ip_server,
+			'surl' => $siteurl,
+			'stype' => 'dataforseo',
+			'scrapequery' => $search_terms,
+			'limit' => 10,
+			'pagenum' => 1,
+			'apitoken' => '',
+			'locationtype' => $location,
+			'nhful' => $sort_option,
+			'tempbusinessname' => '',
+			'user_id' => $user_id,
+			'nobot' => 1
+		));
+		
+		// Debug: Log the crawler URL (removed for focus)
+		
+		// Make request to external server
+		$response = wp_remote_get($crawler_url, array(
+			'timeout' => 60,
+			'sslverify' => false,
+			'headers' => array(
+				'Content-Type' => 'application/json',
+				'Accept' => 'application/json'
+			)
+		));
+		
+		// Debug: Log the response (removed for focus)
+		
+		if (is_wp_error($response)) {
+			$error_msg = 'Failed to contact crawler server: ' . $response->get_error_message();
+			// Debug: Log error (removed for focus)
+			wp_send_json_error(array('message' => $error_msg));
+		}
+		
+		$body = wp_remote_retrieve_body($response);
+		$results = json_decode($body, true);
+		
+		if ($results && $results['ack'] === 'crawling') {
+			
+			// Check if task_id is in the main results or nested in result array
+			$task_id = null;
+			if (isset($results['task_id'])) {
+				$task_id = $results['task_id'];
+			} elseif (isset($results['result']['task_id'])) {
+				$task_id = $results['result']['task_id'];
+			}
+			
+			$response_data = array(
+				'task_id' => $task_id,
+				'daily_remaining' => isset($results['daily_remaining']) ? $results['daily_remaining'] : 100
+			);
+			
+			wp_send_json_success($response_data);
+		} elseif ($results && $results['ack'] === 'success') {
+			wp_send_json_success(array(
+				'business_info' => isset($results['business_info']) ? $results['business_info'] : null,
+				'daily_remaining' => isset($results['daily_remaining']) ? $results['daily_remaining'] : 100
+			));
+		} else {
+			// Check for error message in different possible fields
+			$error_msg = 'Unknown error occurred';
+			if (isset($results['ackmessage'])) {
+				$error_msg = $results['ackmessage'];
+			} elseif (isset($results['ackmsg'])) {
+				$error_msg = $results['ackmsg'];
+			} elseif (isset($results['message'])) {
+				$error_msg = $results['message'];
+			}
+			
+			wp_send_json_error(array('message' => $error_msg));
+		}
+	}
+	
+	/**
+	 * Download DataForSEO reviews
+	 */
+	public function wpfbr_ajax_dfs_download_reviews() {
+		check_ajax_referer('randomnoncestring', 'nonce');
+		
+		$search_terms = sanitize_text_field($_POST['search_terms']);
+		$location = sanitize_text_field($_POST['location']);
+		$language = sanitize_text_field($_POST['language']);
+		$sort_option = sanitize_text_field($_POST['sort_option']);
+		$review_count = 20;
+		
+		if (empty($search_terms)) {
+			wp_send_json_error(array('message' => 'Search terms are required'));
+		}
+		
+		if ($review_count <= 0 || $review_count > 100) {
+			wp_send_json_error(array('message' => 'Review count must be between 1 and 100'));
+		}
+		
+		// Prepare request to external crawler server
+		$ip_server = isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : urlencode(get_site_url());
+		$siteurl = urlencode(get_site_url());
+		$user_id = get_current_user_id();
+		
+		$crawler_url = 'https://crawl.ljapps.com/crawlrevs?' . http_build_query(array(
+			'rip' => $ip_server,
+			'surl' => $siteurl,
+			'stype' => 'dataforseo',
+			'scrapequery' => $search_terms,
+			'limit' => $review_count,
+			'pagenum' => 1,
+			'apitoken' => '',
+			'sitetype' => 'dataforseo',
+			'locationtype' => $location,
+			'nhful' => $sort_option,
+			'tempbusinessname' => '',
+			'user_id' => $user_id,
+			'nobot' => 1
+		));
+		
+		// Make request to external server
+		$response = wp_remote_get($crawler_url, array(
+			'timeout' => 120, // Longer timeout for downloads
+			'sslverify' => false,
+			'headers' => array(
+				'Content-Type' => 'application/json',
+				'Accept' => 'application/json'
+			)
+		));
+		
+		if (is_wp_error($response)) {
+			wp_send_json_error(array('message' => 'Failed to contact crawler server: ' . $response->get_error_message()));
+		}
+		
+		$body = wp_remote_retrieve_body($response);
+		$results = json_decode($body, true);
+		
+		if ($results && $results['ack'] === 'success') {
+			// Save reviews to database
+			$place_id = isset($results['business_info']['foundplaceid']) ? $results['business_info']['foundplaceid'] : '';
+			$business_name = isset($results['business_info']['businessname']) ? $results['business_info']['businessname'] : '';
+			
+			$saved_count = $this->save_dataforseo_reviews($results['reviews'], $place_id, $business_name);
+			
+			// Save business info to wprev_google_crawls option
+			if (!empty($results['business_info'])) {
+				// For direct downloads, we need to find the entry by place_id since we don't have task_id
+				$this->save_dataforseo_business_info_by_place_id($place_id, $results['business_info']);
+			}
+			
+			wp_send_json_success(array(
+				'downloaded_count' => $saved_count,
+				'daily_remaining' => $results['daily_remaining'],
+				'message' => "Successfully downloaded {$saved_count} reviews"
+			));
+		} else {
+			$error_msg = isset($results['ackmsg']) ? $results['ackmsg'] : 'Unknown error occurred';
+			wp_send_json_error(array('message' => $error_msg));
+		}
+	}
+	
+	/**
+	 * Poll DataForSEO task results
+	 */
+	public function wpfbr_ajax_dfs_poll_results() {
+		check_ajax_referer('randomnoncestring', 'nonce');
+		
+		$task_id = sanitize_text_field($_POST['task_id']);
+		
+		if (empty($task_id)) {
+			wp_send_json_error(array('message' => 'Task ID is required'));
+		}
+		
+		// Prepare request to external crawler server
+		$ip_server = isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : urlencode(get_site_url());
+		$siteurl = urlencode(get_site_url());
+		$user_id = get_current_user_id();
+		
+		$crawler_url = 'https://crawl.ljapps.com/crawlrevs?' . http_build_query(array(
+			'rip' => $ip_server,
+			'surl' => $siteurl,
+			'user_id' => $user_id,
+			'stype' => 'dataforseo_poll',
+			'task_id' => $task_id,
+			'nobot' => 1
+		));
+		
+		$response = wp_remote_get($crawler_url, array(
+			'timeout' => 30,
+			'sslverify' => false,
+			'headers' => array(
+				'Content-Type' => 'application/json',
+				'Accept' => 'application/json'
+			)
+		));
+		
+		if (is_wp_error($response)) {
+			wp_send_json_error(array('message' => 'Failed to contact crawler server: ' . $response->get_error_message()));
+		}
+		
+		$body = wp_remote_retrieve_body($response);
+		
+		// Handle malformed JSON (multiple JSON objects concatenated)
+		$results = null;
+		if (strpos($body, '}{') !== false) {
+			// Split on }{ and take the first valid JSON object
+			$json_parts = explode('}{', $body);
+			$first_json = $json_parts[0];
+			if (count($json_parts) > 1) {
+				$first_json .= '}';
+			}
+			$results = json_decode($first_json, true);
+		} else {
+			$results = json_decode($body, true);
+		}
+		
+		if ($results && $results['ack'] === 'crawling') {
+			// Check if completed is in the main results or nested in result
+			$completed = false;
+			$business_info = array();
+			$daily_remaining = 100;
+			$total_reviews = 0;
+			
+			if (isset($results['completed']) && $results['completed']) {
+				// Completed at top level
+				$completed = true;
+				$business_info = isset($results['business_info']) ? $results['business_info'] : array();
+				$daily_remaining = isset($results['daily_remaining']) ? $results['daily_remaining'] : 100;
+				$total_reviews = isset($results['total_reviews']) ? $results['total_reviews'] : 0;
+			} elseif (isset($results['result']['completed']) && $results['result']['completed']) {
+				// Completed nested in result
+				$completed = true;
+				$business_info = isset($results['result']['business_info']) ? $results['result']['business_info'] : array();
+				$daily_remaining = isset($results['result']['daily_remaining']) ? $results['result']['daily_remaining'] : 100;
+				$total_reviews = isset($results['result']['total_reviews']) ? $results['result']['total_reviews'] : 0;
+			}
+			
+			if ($completed) {
+				// Task completed successfully - save reviews to database
+				$reviews = array();
+				if (isset($results['reviews']) && is_array($results['reviews'])) {
+					$reviews = $results['reviews'];
+				} elseif (isset($results['result']['reviews']) && is_array($results['result']['reviews'])) {
+					$reviews = $results['result']['reviews'];
+				}
+				
+				// Save reviews to database if we have them
+				$saved_count = 0;
+				if (!empty($reviews)) {
+					// Extract place_id and business name from business_info
+					$place_id = isset($business_info['foundplaceid']) ? $business_info['foundplaceid'] : '';
+					$business_name = isset($business_info['businessname']) ? $business_info['businessname'] : '';
+					
+					$saved_count = $this->save_dataforseo_reviews($reviews, $place_id, $business_name);
+				}
+				
+				// Save business info to wprev_google_crawls option
+				if (!empty($business_info) && !empty($business_name)) {
+					$this->save_dataforseo_business_info($task_id, $business_info);
+				}
+				
+				wp_send_json_success(array(
+					'completed' => true,
+					'business_info' => $business_info,
+					'daily_remaining' => $daily_remaining,
+					'total_reviews' => $total_reviews,
+					'saved_reviews' => $saved_count
+				));
+			} else {
+				// Task still processing
+				wp_send_json_success(array(
+					'completed' => false,
+					'status' => isset($results['status']) ? $results['status'] : 'Processing...'
+				));
+			}
+		} else {
+			// Handle JSON parsing failure or other errors
+			if ($results === null) {
+				$error_msg = 'Invalid response format from server. Please try again.';
+			} else {
+				$error_msg = isset($results['ackmsg']) ? $results['ackmsg'] : 'Unknown error occurred';
+			}
+			wp_send_json_error(array('error' => $error_msg));
+		}
+	}
+	
+	/**
+	 * Save DataForSEO reviews to database
+	 */
+	private function save_dataforseo_reviews($reviews, $place_id = '', $business_name = '') {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'wpfb_reviews';
+		$saved_count = 0;
+		
+		// Use provided place_id and business name, or fallback to defaults
+		$pageid = !empty($place_id) ? $place_id : 'dataforseo_' . time();
+		$pagename = !empty($business_name) ? $business_name : 'DataForSEO Import';
+		
+		foreach ($reviews as $review) {
+			// Check if review already exists
+			$existing = $wpdb->get_var($wpdb->prepare(
+				"SELECT id FROM $table_name WHERE unique_id = %s",
+				$review['unique_id']
+			));
+			
+			if (!$existing) {
+				// Sanitize and truncate long fields to prevent database errors
+				$meta_data = isset($review['meta_data']) ? $review['meta_data'] : '';
+				if (strlen($meta_data) > 10000) { // Truncate if too long
+					$meta_data = substr($meta_data, 0, 20000);
+				}
+				
+				$mediaurls = isset($review['mediaurlsarrayjson']) ? $review['mediaurlsarrayjson'] : '';
+				if (strlen($mediaurls) > 5000) { // Truncate if too long
+					$mediaurls = substr($mediaurls, 0, 10000);
+				}
+				
+				$mediathumburls = isset($review['mediathumburlsarrayjson']) ? $review['mediathumburlsarrayjson'] : '';
+				if (strlen($mediathumburls) > 5000) { // Truncate if too long
+					$mediathumburls = substr($mediathumburls, 0, 10000);
+				}
+				$data = array(
+					'pageid' => sanitize_text_field($pageid),
+					'pagename' => sanitize_text_field($pagename),
+					'created_time' => sanitize_text_field($review['created_time']),
+					'created_time_stamp' => intval(strtotime($review['created_time'])),
+					'reviewer_name' => sanitize_text_field($review['reviewer_name']),
+					'reviewer_email' => '',
+					'company_name' => '',
+					'company_title' => '',
+					'company_url' => '',
+					'reviewer_id' => sanitize_text_field($review['reviewer_id']),
+					'rating' => intval($review['rating']),
+					'recommendation_type' => '',
+					'review_text' => sanitize_textarea_field($review['review_text']),
+					'hide' => 'no',
+					'review_length' => intval($review['review_length']),
+					'review_length_char' => intval($review['review_length_char']),
+					'type' => sanitize_text_field($review['type']),
+					'userpic' => esc_url_raw($review['userpic']),
+					'userpic_small' => esc_url_raw($review['userpic']),
+					'from_name' => sanitize_text_field($review['from_name']),
+					'from_url' => esc_url_raw($review['from_url']),
+					'from_logo' => '',
+					'from_url_review' => esc_url_raw($review['from_url']),
+					'review_title' => sanitize_text_field($review['review_title']),
+					'categories' => '',
+					'posts' => '',
+					'consent' => sanitize_text_field($review['consent']),
+					'userpiclocal' => '',
+					'hidestars' => sanitize_text_field($review['hidestars']),
+					'miscpic' => '',
+					'location' => '',
+					'verified_order' => '',
+					'language_code' => sanitize_text_field($review['language_code']),
+					'unique_id' => sanitize_text_field($review['unique_id']),
+					'meta_data' => sanitize_textarea_field($meta_data),
+					'custom_data' => sanitize_textarea_field($review['custom_data']),
+					'custom_stars' => sanitize_text_field($review['custom_stars']),
+					'owner_response' => sanitize_textarea_field($review['owner_response']),
+					'sort_weight' => intval($review['sort_weight']),
+					'tags' => sanitize_text_field($review['tags']),
+					'mediaurlsarrayjson' => sanitize_textarea_field($mediaurls),
+					'mediathumburlsarrayjson' => sanitize_textarea_field($mediathumburls),
+					'reviewfunnel' => sanitize_text_field($review['reviewfunnel'])
+				);
+				
+				$format = array(
+					'%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'
+				);
+				
+				$result = $wpdb->insert($table_name, $data, $format);
+				
+				if ($result) {
+					$saved_count++;
+				} else {
+					error_log('DataForSEO Save Reviews: Failed to save review ID ' . $review['unique_id'] . ' - ' . $wpdb->last_error);
+				}
+			}
+		}
+		
+		return $saved_count;
+	}
+	
+	/**
+	 * Save DataForSEO business info to wprev_google_crawls option
+	 * 
+	 * @param string $task_id - Task ID
+	 * @param array $business_info - Business information from DataForSEO
+	 */
+	private function save_dataforseo_business_info($task_id, $business_info) {
+		// Get current crawls array
+		$googlecrawlsarray = json_decode(get_option('wprev_google_crawls'), true);
+		if (!is_array($googlecrawlsarray)) {
+			$googlecrawlsarray = array();
+		}
+		
+		// Find the entry with this task_id
+		$found_key = null;
+		foreach ($googlecrawlsarray as $key => $savedplace) {
+			if (isset($savedplace['task_id']) && $savedplace['task_id'] === $task_id) {
+				$found_key = $key;
+				break;
+			}
+		}
+		
+		if ($found_key !== null) {
+			// Update the existing entry with business info
+			$googlecrawlsarray[$found_key]['crawl_check'] = array(
+				'businessname' => isset($business_info['businessname']) ? $business_info['businessname'] : '',
+				'foundplaceid' => isset($business_info['foundplaceid']) ? $business_info['foundplaceid'] : '',
+				'rating' => isset($business_info['rating']) ? $business_info['rating'] : '',
+				'totalreviews' => isset($business_info['totalreviews']) ? $business_info['totalreviews'] : '',
+				'website' => isset($business_info['website']) ? $business_info['website'] : '',
+				'img' => isset($business_info['img']) ? $business_info['img'] : '',
+				'googleurl' => isset($business_info['googleurl']) ? $business_info['googleurl'] : '',
+				'phone' => isset($business_info['phone']) ? $business_info['phone'] : '',
+				'address' => isset($business_info['address']) ? $business_info['address'] : ''
+			);
+			
+			// Update task status to completed
+			$googlecrawlsarray[$found_key]['task_status'] = 'completed';
+			
+			// Save the updated array
+			update_option('wprev_google_crawls', json_encode($googlecrawlsarray));
+		}
+	}
+	
+	/**
+	 * Save DataForSEO business info to wprev_google_crawls option by place_id
+	 * 
+	 * @param string $place_id - Place ID
+	 * @param array $business_info - Business information from DataForSEO
+	 */
+	private function save_dataforseo_business_info_by_place_id($place_id, $business_info) {
+		// Get current crawls array
+		$googlecrawlsarray = json_decode(get_option('wprev_google_crawls'), true);
+		if (!is_array($googlecrawlsarray)) {
+			$googlecrawlsarray = array();
+		}
+		
+		// Find the entry with this place_id
+		$found_key = null;
+		foreach ($googlecrawlsarray as $key => $savedplace) {
+			if (isset($savedplace['enteredidorterms']) && $savedplace['enteredidorterms'] === $place_id) {
+				$found_key = $key;
+				break;
+			}
+		}
+		
+		if ($found_key !== null) {
+			// Update the existing entry with business info
+			$googlecrawlsarray[$found_key]['crawl_check'] = array(
+				'businessname' => isset($business_info['businessname']) ? $business_info['businessname'] : '',
+				'foundplaceid' => isset($business_info['foundplaceid']) ? $business_info['foundplaceid'] : '',
+				'rating' => isset($business_info['rating']) ? $business_info['rating'] : '',
+				'totalreviews' => isset($business_info['totalreviews']) ? $business_info['totalreviews'] : '',
+				'website' => isset($business_info['website']) ? $business_info['website'] : '',
+				'img' => isset($business_info['img']) ? $business_info['img'] : '',
+				'googleurl' => isset($business_info['googleurl']) ? $business_info['googleurl'] : '',
+				'phone' => isset($business_info['phone']) ? $business_info['phone'] : '',
+				'address' => isset($business_info['address']) ? $business_info['address'] : ''
+			);
+			
+			// Update task status to completed
+			$googlecrawlsarray[$found_key]['task_status'] = 'completed';
+			
+			// Save the updated array
+			update_option('wprev_google_crawls', json_encode($googlecrawlsarray));
+		}
+	}
+	
+	/**
+	 * Clean up old daily usage data (called by cron)
+	 */
+	public function cleanup_daily_usage() {
+		global $wpdb;
+		
+		// Get all users with daily usage data older than 7 days
+		$seven_days_ago = date('Y-m-d', strtotime('-7 days'));
+		
+		$users = $wpdb->get_results($wpdb->prepare(
+			"SELECT user_id, meta_key FROM {$wpdb->usermeta} 
+			 WHERE meta_key LIKE 'dfs_daily_reviews_%' 
+			 AND meta_key < %s",
+			'dfs_daily_reviews_' . $seven_days_ago
+		));
+		
+		foreach ($users as $user) {
+			delete_user_meta($user->user_id, $user->meta_key);
+		}
+	}
+
+	/**
+	 * Save DataForSEO place ID setting
+	 */
+	public function wpfbr_ajax_dfs_save_place_id() {
+		// Verify nonce
+		check_ajax_referer('randomnoncestring', 'nonce');
+		
+		// Check user capabilities
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(array('message' => 'Insufficient permissions'));
+		}
+		
+		$place_id = sanitize_text_field($_POST['place_id']);
+		$sort_option = sanitize_text_field($_POST['sort_option']);
+		
+		// Get current crawls array
+		$googlecrawlsarray = json_decode(get_option('wprev_google_crawls'), true);
+		if (!is_array($googlecrawlsarray)) {
+			$googlecrawlsarray = array();
+		}
+		
+		// Remove empty arrays at numeric indices (like [0] => Array())
+		foreach ($googlecrawlsarray as $key => $value) {
+			if (is_numeric($key) && is_array($value) && empty($value)) {
+				unset($googlecrawlsarray[$key]);
+			}
+		}
+		
+		// Update the place ID for the current place
+		if (!isset($googlecrawlsarray[$place_id])) {
+			$googlecrawlsarray[$place_id] = array();
+		}
+		$googlecrawlsarray[$place_id]['enteredidorterms'] = $place_id;
+		$googlecrawlsarray[$place_id]['nhful'] = $sort_option; // Use selected sort option
+		
+		// Save the updated array
+		update_option('wprev_google_crawls', json_encode($googlecrawlsarray));
+		
+		wp_send_json_success(array('message' => 'Place ID saved successfully'));
+	}
+
+	/**
+	 * AJAX handler to save DataForSEO task ID
+	 */
+	public function wpfbr_ajax_dfs_save_task_id() {
+		check_ajax_referer('randomnoncestring', 'nonce');
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(array('message' => 'Insufficient permissions'));
+		}
+		
+		$place_id = sanitize_text_field($_POST['place_id']);
+		$task_id = sanitize_text_field($_POST['task_id']);
+		
+		// Get current crawls array
+		$googlecrawlsarray = json_decode(get_option('wprev_google_crawls'), true);
+		if (!is_array($googlecrawlsarray)) {
+			$googlecrawlsarray = array();
+		}
+		
+		// Update the task ID for the place
+		if (!isset($googlecrawlsarray[$place_id])) {
+			$googlecrawlsarray[$place_id] = array();
+		}
+		$googlecrawlsarray[$place_id]['task_id'] = $task_id;
+		$googlecrawlsarray[$place_id]['task_status'] = 'processing';
+		
+		// Save the updated array
+		update_option('wprev_google_crawls', json_encode($googlecrawlsarray));
+		
+		wp_send_json_success(array('message' => 'Task ID saved successfully'));
+	}
+
+	/**
+	 * AJAX handler to update DataForSEO task status
+	 */
+	public function wpfbr_ajax_dfs_update_task_status() {
+		check_ajax_referer('randomnoncestring', 'nonce');
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(array('message' => 'Insufficient permissions'));
+		}
+		
+		$place_id = sanitize_text_field($_POST['place_id']);
+		$task_status = sanitize_text_field($_POST['task_status']);
+		
+		// Get current crawls array
+		$googlecrawlsarray = json_decode(get_option('wprev_google_crawls'), true);
+		if (!is_array($googlecrawlsarray)) {
+			$googlecrawlsarray = array();
+		}
+		
+		// Update the task status for the place
+		if (isset($googlecrawlsarray[$place_id])) {
+			$googlecrawlsarray[$place_id]['task_status'] = $task_status;
+			
+			// Save the updated array
+			update_option('wprev_google_crawls', json_encode($googlecrawlsarray));
+			
+			wp_send_json_success(array('message' => 'Task status updated successfully'));
+		} else {
+			wp_send_json_error(array('message' => 'Place ID not found'));
+		}
+	}
+
+	/**
+	 * AJAX handler to check for existing DataForSEO task
+	 */
+	public function wpfbr_ajax_dfs_check_existing_task() {
+		check_ajax_referer('randomnoncestring', 'nonce');
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(array('message' => 'Insufficient permissions'));
+		}
+		
+		$place_id = sanitize_text_field($_POST['place_id']);
+		
+		// Get current crawls array
+		$googlecrawlsarray = json_decode(get_option('wprev_google_crawls'), true);
+		if (!is_array($googlecrawlsarray)) {
+			$googlecrawlsarray = array();
+		}
+		
+		// Check if we have a task for this place ID
+		if (isset($googlecrawlsarray[$place_id])) {
+			$task_data = $googlecrawlsarray[$place_id];
+			$task_id = isset($task_data['task_id']) ? $task_data['task_id'] : '';
+			$task_status = isset($task_data['task_status']) ? $task_data['task_status'] : '';
+			
+			wp_send_json_success(array(
+				'task_id' => $task_id,
+				'task_status' => $task_status
+			));
+		} else {
+			wp_send_json_success(array(
+				'task_id' => '',
+				'task_status' => ''
+			));
+		}
+	}
+
 
 }

@@ -18,7 +18,10 @@
     }
 	//$savedplaceid = esc_html(get_option('wprev_google_crawl_placeid'));
 	
-	$currentplace = urldecode($_GET['place']);
+	$currentplace = "";
+	if(isset($_GET['place'])){
+		$currentplace = urldecode($_GET['place']);
+	}
 	$editid="";
 	$editplace ="";
 	if(isset($_GET['ract']) && $_GET['ract']=="edit"){
@@ -28,9 +31,12 @@
 	
 $googlecrawlsarray = Array();
 $googlecrawlsarray[] =Array();
-$googlecrawlsarray = json_decode(get_option('wprev_google_crawls'),true);
 
-$savedplaceid = $googlecrawlsarray[$currentplace]['enteredidorterms'];
+$googlecrawlsarray = json_decode(get_option('wprev_google_crawls'),true);
+$savedplaceid = '';	
+if(isset($googlecrawlsarray[$currentplace]['enteredidorterms'])){
+	$savedplaceid = $googlecrawlsarray[$currentplace]['enteredidorterms'];
+}
 ?>
 <div class="">
 <h1></h1>

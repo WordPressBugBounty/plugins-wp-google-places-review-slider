@@ -76,7 +76,7 @@ class WP_Google_Reviews_Activator {
 				company_name varchar(100) DEFAULT '' NOT NULL,
 				company_title varchar(100) DEFAULT '' NOT NULL,
 				company_url varchar(100) DEFAULT '' NOT NULL,
-				reviewer_id varchar(50) DEFAULT '' NOT NULL,
+				reviewer_id varchar(100) DEFAULT '' NOT NULL,
 				rating varchar(3) NOT NULL,
 				recommendation_type varchar(12) DEFAULT '' NOT NULL,
 				review_text text NOT NULL,
