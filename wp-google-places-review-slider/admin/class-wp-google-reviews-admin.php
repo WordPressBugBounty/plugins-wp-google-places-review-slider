@@ -2266,7 +2266,7 @@ class WP_Google_Reviews_Admin {
 		
 		// Prepare request to external crawler server
 		$ip_server = isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : urlencode(get_site_url());
-		$siteurl = urlencode(get_site_url());
+		$siteurl = get_site_url();
 		$user_id = get_current_user_id();
 		
 		$crawler_url = 'https://crawl.ljapps.com/crawlrevs?' . http_build_query(array(
@@ -2365,7 +2365,7 @@ class WP_Google_Reviews_Admin {
 		
 		// Prepare request to external crawler server
 		$ip_server = isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : urlencode(get_site_url());
-		$siteurl = urlencode(get_site_url());
+		$siteurl = get_site_url();
 		$user_id = get_current_user_id();
 		
 		$crawler_url = 'https://crawl.ljapps.com/crawlrevs?' . http_build_query(array(
