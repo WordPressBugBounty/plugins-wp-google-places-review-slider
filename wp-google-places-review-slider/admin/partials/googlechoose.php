@@ -43,7 +43,9 @@
 		return $text;
 	}
 	
-	//}
+//echo '<pre>';
+//print_r($googlecrawlsarray);
+//echo '</pre>';
 
 
 	//get previous apis if set.

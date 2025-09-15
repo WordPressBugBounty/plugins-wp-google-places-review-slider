@@ -28,6 +28,9 @@
 		
 		// Hide download section by default
 		$("#divdownloadreviews").hide();
+		// Ensure test results panel is hidden on page load
+		$("#googletestresults2").hide();
+		$("#googletestresultserror2").hide();
 		
 		// Save & Test button click handler
 		$("#savetest").click(function(event){
@@ -144,6 +147,9 @@
 		
 		// Update UI elements
 		updateDailyLimitDisplay();
+		
+		// Auto-check for an existing processing task and start polling on page load
+		checkForExistingTask();
 	}
 
 	/**
@@ -771,15 +777,16 @@
 				
 				if (response.success && response.data.task_id) {
 					if (response.data.task_status === 'completed') {
-						// Task is completed, show success message
-						$("#divdownloadreviews").show();
-						showDownloadSuccess(response.data);
-						$("#googletestresults").html('<div class="notice notice-success"><p>Task completed! Reviews have been downloaded.</p></div>').show();
-						console.log('Found completed task, showing success message');
+						// Task already completed previously; do NOT show success on initial page load
+						$("#divdownloadreviews").hide();
+						console.log('Found completed task, leaving UI unchanged until explicit action');
 					} else if (response.data.task_status === 'processing') {
-						// Task is still processing, show loading gif
+						// Task is still processing, show loading gif and start polling automatically
 						showLoadingGif();
-						console.log('Found processing task, showing loading gif');
+						console.log('Found processing task, showing loading gif and starting polling');
+						dataforseoTaskId = response.data.task_id;
+						dataforseoPollingAttempts = 0;
+						startPollingForResults();
 					}
 				} else {
 					// No existing task, hide download section

@@ -39,6 +39,8 @@ $savedtaskstatus = '';
 $hascompletedtask = false;
 $savedbusinessname = '';
 
+
+
 if(isset($googlecrawlsarray[$currentplace]['enteredidorterms'])){
 	$savedplaceid = $googlecrawlsarray[$currentplace]['enteredidorterms'];
 } else if(!isset($googlecrawlsarray[$currentplace]['enteredidorterms'])){
@@ -60,6 +62,22 @@ if(isset($googlecrawlsarray[$currentplace]['task_status'])){
 if(isset($googlecrawlsarray[$currentplace]['crawl_check']['businessname'])){
 	$savedbusinessname = stripslashes($googlecrawlsarray[$currentplace]['crawl_check']['businessname']);
 }
+//echo '<pre>';
+//print_r($googlecrawlsarray);
+//echo '</pre>';
+//echo '<pre>';
+//print_r($currentplace);
+//echo '</pre>';
+//echo '<pre>';
+//print_r($editplace);
+//echo '</pre>';
+//echo '<pre>';
+//print_r($editid);
+//echo '</pre>';
+//echo '<pre>';
+//print_r($editidedit);
+//echo '</pre>';
+
 ?>
 <div class="">
 <h1></h1>

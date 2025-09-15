@@ -4,7 +4,7 @@ Donate link: http://ljapps.com/
 Tags: Google, reviews, slider, testimonials, Google Places reviews
 Requires at least: 3.0.1
 Tested up to: 6.8
-Stable tag: 17.0
+Stable tag: 17.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -128,6 +128,10 @@ We are always looking for features to add. Just post on the support forum or con
 10. Create as many templates as you like.
 
 == Changelog ==
+
+= 17.1 =
+* bug fix for when you leave before you download
+
 = 17.0 =
 * Google download method update/fix.
 
