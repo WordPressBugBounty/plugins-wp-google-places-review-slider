@@ -2276,7 +2276,6 @@ class WP_Google_Reviews_Admin {
 			'scrapequery' => $search_terms,
 			'limit' => 10,
 			'pagenum' => 1,
-			'apitoken' => '',
 			'locationtype' => $location,
 			'nhful' => $sort_option,
 			'tempbusinessname' => '',
@@ -2295,6 +2294,32 @@ class WP_Google_Reviews_Admin {
 				'Accept' => 'application/json'
 			)
 		));
+
+		//check for block
+		$serverresponse  = $response['body']; // use the content
+		//$serverresponse = "Please wait while your request is being verified"; //testing
+		if (strpos($serverresponse, "Please wait while your request is being verified") !== false || !isset($serverresponse) || $serverresponse=='' || strpos($serverresponse, "Access denied by Imunify360 bot-protection.") !== false || strpos($serverresponse, "415 Unsupported Media Type") !== false) {
+			//this site is greylisted by imunify360 on cloudways, call backup digital ocean server
+			//$tempurlvalue = 'https://ocean.ljapps.com/crawlrevs.php?rip='.$ip_server.'&surl='.$siteurl.'&stype=googlecheck&scrapequery='.urlencode($gplaceid).'&nobot=1&sfp=free';
+			$tempurlvalue =	 'https://ocean.ljapps.com/crawlrevs.php?' . http_build_query(array(
+				'rip' => $ip_server,
+				'surl' => $siteurl,
+				'stype' => 'dataforseo',
+				'scrapequery' => $search_terms,
+				'limit' => 10,
+				'pagenum' => 1,
+				'locationtype' => $location,
+				'nhful' => $sort_option,
+				'tempbusinessname' => '',
+				'user_id' => $user_id,
+				'nobot' => 1
+			));
+			$response = wp_remote_get( $tempurlvalue, array( 'sslverify' => false, 'timeout' => 60 ) );
+				if ( is_array( $response ) && ! is_wp_error( $response ) ) {
+					$headers = $response['headers']; // array of http header lines
+					$serverresponse    = $response['body']; // use the content
+				}
+			}
 		
 		// Debug: Log the response (removed for focus)
 		
@@ -2375,8 +2400,6 @@ class WP_Google_Reviews_Admin {
 			'scrapequery' => $search_terms,
 			'limit' => $review_count,
 			'pagenum' => 1,
-			'apitoken' => '',
-			'sitetype' => 'dataforseo',
 			'locationtype' => $location,
 			'nhful' => $sort_option,
 			'tempbusinessname' => '',
@@ -2393,6 +2416,31 @@ class WP_Google_Reviews_Admin {
 				'Accept' => 'application/json'
 			)
 		));
+
+		//check for block
+		$serverresponse    = $response['body']; // use the content
+		//$serverresponse = "Please wait while your request is being verified"; //testing
+		if (strpos($serverresponse, "Please wait while your request is being verified") !== false || !isset($serverresponse) || $serverresponse=='' || strpos($serverresponse, "Access denied by Imunify360 bot-protection.") !== false || strpos($serverresponse, "415 Unsupported Media Type") !== false) {
+			//this site is greylisted by imunify360 on cloudways, call backup digital ocean server
+			$tempurlvalue =	 'https://ocean.ljapps.com/crawlrevs.php?' . http_build_query(array(
+				'rip' => $ip_server,
+				'surl' => $siteurl,
+				'stype' => 'dataforseo',
+				'scrapequery' => $search_terms,
+				'limit' => $review_count,
+				'pagenum' => 1,
+				'locationtype' => $location,
+				'nhful' => $sort_option,
+				'tempbusinessname' => '',
+				'user_id' => $user_id,
+				'nobot' => 1
+			));
+			$response = wp_remote_get( $tempurlvalue, array( 'sslverify' => false, 'timeout' => 60 ) );
+				if ( is_array( $response ) && ! is_wp_error( $response ) ) {
+					$headers = $response['headers']; // array of http header lines
+					$serverresponse    = $response['body']; // use the content
+				}
+		}
 		
 		if (is_wp_error($response)) {
 			wp_send_json_error(array('message' => 'Failed to contact crawler server: ' . $response->get_error_message()));
@@ -2460,6 +2508,26 @@ class WP_Google_Reviews_Admin {
 			)
 		));
 		
+		//check for block
+		$serverresponse    = $response['body']; // use the content
+		//$serverresponse = "Please wait while your request is being verified"; //testing
+		if (strpos($serverresponse, "Please wait while your request is being verified") !== false || !isset($serverresponse) || $serverresponse=='' || strpos($serverresponse, "Access denied by Imunify360 bot-protection.") !== false || strpos($serverresponse, "415 Unsupported Media Type") !== false) {
+			//this site is greylisted by imunify360 on cloudways, call backup digital ocean server
+			$tempurlvalue =	 'https://ocean.ljapps.com/crawlrevs.php?' . http_build_query(array(
+				'rip' => $ip_server,
+				'surl' => $siteurl,
+				'user_id' => $user_id,
+				'stype' => 'dataforseo_poll',
+				'task_id' => $task_id,
+				'nobot' => 1
+			));
+			$response = wp_remote_get( $tempurlvalue, array( 'sslverify' => false, 'timeout' => 60 ) );
+				if ( is_array( $response ) && ! is_wp_error( $response ) ) {
+					$headers = $response['headers']; // array of http header lines
+					$serverresponse    = $response['body']; // use the content
+				}
+		}
+
 		if (is_wp_error($response)) {
 			wp_send_json_error(array('message' => 'Failed to contact crawler server: ' . $response->get_error_message()));
 		}
