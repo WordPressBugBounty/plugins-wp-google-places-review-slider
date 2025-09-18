@@ -16,7 +16,7 @@
  * Plugin Name:       WP Google Review Slider
  * Plugin URI:        https://wpreviewslider.com/
  * Description:       Embed Google reviews on your WordPress site in seconds. Boost SEO, trust, and sales! 
- * Version:           17.2
+ * Version:           17.3
  * Author:            LJ Apps
  * Author URI:        https://wpreviewslider.com
  * License:           GPL-2.0+

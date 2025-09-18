@@ -480,6 +480,9 @@
 						if (response.data.error.includes('Task in Queue') || response.data.error.includes('Task In Queue')) {
 							console.log('Task in queue, continuing to poll...');
 							// Continue polling - don't stop
+						} else if (response.data.error.includes('Task Handed') || response.data.error.includes('Task Handed')) {
+							console.log('Task in queue (handed), continuing to poll...');
+							// Continue polling - don't stop
 						} else {
 							// Task failed with other error
 							console.log('Task failed! Stopping polling and handling error');
