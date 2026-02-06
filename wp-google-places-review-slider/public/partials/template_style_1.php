@@ -98,7 +98,7 @@ for ($x = 0; $x < count($rowarray); $x++) {
 		//star alt tag
 		$altimgtag = $review->rating.' star review';
 		//star html
-		if($review->type=="Facebook" || $review->type=="Google"){
+		if($review->type=="Facebook" || $review->type=="Google" || $review->type=="google"){
 			if($review->rating>0){
 				$middlehtml='';
 				

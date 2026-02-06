@@ -363,7 +363,7 @@ echo $dbmsg;
 					<th scope="col" width="30px" class="manage-column">'.__('ID', 'wp-google-reviews').'</th>
 					<th scope="col" class="manage-column">'.__('Title', 'wp-google-reviews').'</th>
 					<th scope="col" width="170px" class="manage-column">'.__('Date Created', 'wp-google-reviews').'</th>
-					<th scope="col" width="300px" class="manage-column">'.__('Action', 'wp-google-reviews').'</th>
+					<th scope="col" width="400px" class="manage-column">'.__('Action', 'wp-google-reviews').'</th>
 				</tr>
 				</thead>
 			<tbody id="review_list">';
@@ -399,7 +399,7 @@ echo $dbmsg;
 				<th scope="col" class="wpfbr_upgrade_needed manage-column">'.$currentform->id.'</th>
 				<th scope="col" class="wpfbr_upgrade_needed manage-column"><b>'.$currentform->title.'</b></th>
 				<th scope="col" class="wpfbr_upgrade_needed manage-column">'.date("F j, Y",$currentform->created_time_stamp) .'</th>
-				<th scope="col" class="manage-column" templateid="'.$currentform->id.'" templatetype="'.$currentform->template_type.'"><a href="'.$url_tempeditbtn.'" class="button button-primary dashicons-before dashicons-admin-generic"> '.__('Edit', 'wp-google-reviews').'</a> <a href="'.$url_tempdelbtn.'" class="button button-secondary dashicons-before dashicons-trash"> '.__('Delete', 'wp-google-reviews').'</a> <a class="wpfbr_displayshortcode button button-secondary dashicons-before dashicons-visibility"> '.__('Shortcode', 'wp-google-reviews').'</a></th>
+				<th scope="col" class="manage-column" templateid="'.$currentform->id.'" templatetype="'.$currentform->template_type.'"><a href="'.$url_tempeditbtn.'" class="button button-primary dashicons-before dashicons-admin-generic"> '.__('Edit', 'wp-google-reviews').'</a> <a href="'.$url_tempdelbtn.'" class="button button-secondary dashicons-before dashicons-trash"> '.__('Delete', 'wp-google-reviews').'</a> <a class="wpfbr_displayshortcode button button-secondary dashicons-before dashicons-visibility"> '.__('Shortcode/Install', 'wp-google-reviews').'</a></th>
 			</tr>';
 		}
 	}

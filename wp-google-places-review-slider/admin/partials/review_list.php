@@ -23,6 +23,60 @@ global $wpdb;
 $table_name = $wpdb->prefix . 'wpfb_reviews';
 $rowsperpage = 20;
 
+/**
+ * Delete local image files referenced in review media JSON arrays
+ * 
+ * @param string $mediaurls_json JSON string of media URLs
+ * @param string $mediathumburls_json JSON string of thumbnail URLs
+ * @return void
+ */
+function wp_google_reviews_delete_review_images($mediaurls_json, $mediathumburls_json) {
+	$upload_info = wp_upload_dir();
+	if (!is_array($upload_info) || !isset($upload_info['basedir'], $upload_info['baseurl'])) {
+		return;
+	}
+	
+	$base_dir = trailingslashit($upload_info['basedir']);
+	$base_url = trailingslashit($upload_info['baseurl']);
+	
+	// Handle SSL URLs
+	if (is_ssl()) {
+		$base_url = str_replace('http://', 'https://', $base_url);
+	}
+	
+	$review_images_url_prefix = $base_url . 'wp-google-reviews/images/';
+	$review_images_dir_prefix = $base_dir . 'wp-google-reviews/images/';
+	
+	// Process both JSON arrays
+	$json_arrays = array($mediaurls_json, $mediathumburls_json);
+	
+	foreach ($json_arrays as $json_string) {
+		if (empty($json_string)) {
+			continue;
+		}
+		
+		$urls = json_decode($json_string, true);
+		if (!is_array($urls)) {
+			continue;
+		}
+		
+		foreach ($urls as $url) {
+			if (!is_string($url) || $url === '') {
+				continue;
+			}
+			
+			// Only delete files that live under our plugin's images directory
+			if (strpos($url, $review_images_url_prefix) === 0) {
+				$relative = substr($url, strlen($review_images_url_prefix));
+				$filepath = $review_images_dir_prefix . $relative;
+				if (is_file($filepath)) {
+					@unlink($filepath);
+				}
+			}
+		}
+	}
+}
+
 	$dbmsg = "";
 	$html="";
 	$currentreview= new stdClass();
@@ -75,6 +129,12 @@ $rowsperpage = 20;
 		$rid = intval($rid);
 		//for updating
 		if($rid > 0){
+			// Get review data before deleting to remove associated images
+			$review_to_delete = $wpdb->get_row($wpdb->prepare("SELECT mediaurlsarrayjson, mediathumburlsarrayjson FROM `".$table_name."` WHERE id = %d", $rid));
+			if ($review_to_delete) {
+				// Delete associated images
+				wp_google_reviews_delete_review_images($review_to_delete->mediaurlsarrayjson, $review_to_delete->mediathumburlsarrayjson);
+			}
 			$delete = $wpdb->query("DELETE FROM `".$table_name."` WHERE id = ".$rid);
 		}
 	}
@@ -122,6 +182,22 @@ $rowsperpage = 20;
 			$tempquery = "select pagename from ".$reviews_table_name." group by pagename";
 			$pagenamearray = $wpdb->get_col($tempquery);
 
+			// Get reviews for this page name before deleting to remove associated images
+			$reviews_to_delete = array();
+			if (in_array($delpagename2, $pagenamearray)){
+				$reviews_to_delete = $wpdb->get_results($wpdb->prepare("SELECT mediaurlsarrayjson, mediathumburlsarrayjson FROM `".$table_name."` WHERE `pagename` = %s", $delpagename2));
+			}
+			if (in_array($delpagename, $pagenamearray) && empty($reviews_to_delete)){
+				$reviews_to_delete = $wpdb->get_results($wpdb->prepare("SELECT mediaurlsarrayjson, mediathumburlsarrayjson FROM `".$table_name."` WHERE `pagename` = %s", $delpagename));
+			}
+			
+			// Delete images for all reviews
+			if (!empty($reviews_to_delete)) {
+				foreach ($reviews_to_delete as $review) {
+					wp_google_reviews_delete_review_images($review->mediaurlsarrayjson, $review->mediathumburlsarrayjson);
+				}
+			}
+			
 			if (in_array($delpagename2, $pagenamearray)){
 				$delete = $wpdb->query("DELETE FROM `".$table_name."` WHERE `pagename` = '".$delpagename2."'");
 			}
@@ -285,6 +361,15 @@ _e('Search reviews, hide certain reviews, manually add reviews, download a CSV f
 			// This nonce is not valid.
 			die( __( 'Failed security check.', 'wp-google-reviews' ) ); 
 		}
+		
+		// Get all reviews' media data before truncating to remove associated images
+		$all_reviews = $wpdb->get_results("SELECT mediaurlsarrayjson, mediathumburlsarrayjson FROM `".$table_name."`");
+		if (!empty($all_reviews)) {
+			foreach ($all_reviews as $review) {
+				wp_google_reviews_delete_review_images($review->mediaurlsarrayjson, $review->mediathumburlsarrayjson);
+			}
+		}
+		
 		$delete = $wpdb->query("TRUNCATE TABLE `".$table_name."`");
 	}
 	

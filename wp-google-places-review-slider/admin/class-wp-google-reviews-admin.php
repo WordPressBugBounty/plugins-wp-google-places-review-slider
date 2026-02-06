@@ -756,13 +756,13 @@ class WP_Google_Reviews_Admin {
 		global $wpdb, $current_user;
 		//get_currentuserinfo();
 
-		if(!is_user_logged_in())  
-		{
-			$out = __('User not logged in','wpcvt_lang');
-			//header( "Content-Type: application/json" );
+		// Check user capabilities FIRST - prevent Broken Access Control vulnerability
+		if (!current_user_can('manage_options')) {
+			$out = __('Insufficient permissions','wpcvt_lang');
 			echo $out;
 			die();
 		}
+		
 		check_ajax_referer('randomnoncestring', 'wpfb_nonce');
 		
 		//need to get placeid
@@ -1012,6 +1012,12 @@ class WP_Google_Reviews_Admin {
 	
 	//ajax for crawling to check placeid. now calling the crawl.ljapps.com site.
 	public function wpfbr_ajax_crawl_placeid(){
+		// Check user capabilities FIRST - prevent Broken Access Control vulnerability
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(array('message' => 'Insufficient permissions'));
+			return;
+		}
+		
 		check_ajax_referer('randomnoncestring', 'wpfb_nonce');
 		
 		$gplaceid = sanitize_text_field($_POST['gplaceid']);
@@ -1162,6 +1168,12 @@ class WP_Google_Reviews_Admin {
 	
 		//ajax for crawling and downloading reviews
 	public function wpfbr_ajax_crawl_placeid_go(){
+		// Check user capabilities FIRST - prevent Broken Access Control vulnerability
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(array('message' => 'Insufficient permissions'));
+			return;
+		}
+		
 		check_ajax_referer('randomnoncestring', 'wpfb_nonce');
 		global $wpdb;
 		$results['ack'] ='success';
@@ -1486,7 +1498,12 @@ class WP_Google_Reviews_Admin {
 	 * @return  void
 	 */
 	public function wpfbr_ajax_testing_api(){
-		//echo "here";
+		// Check user capabilities FIRST - prevent Broken Access Control vulnerability
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(array('message' => 'Insufficient permissions'));
+			return;
+		}
+		
 		check_ajax_referer('randomnoncestring', 'wpfb_nonce');
 		
 		$apikey = $_POST['apikey'];
@@ -1922,6 +1939,12 @@ class WP_Google_Reviews_Admin {
 	 * @return  void
 	 */
 	public function wprp_previewtemplate_ajax(){
+		// Check user capabilities FIRST - prevent Broken Access Control vulnerability
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(array('message' => 'Insufficient permissions'));
+			return;
+		}
+		
 		$tid = stripslashes($_POST['tid']);
 		check_ajax_referer('randomnoncestring', 'wpfb_nonce');
 		
@@ -1959,6 +1982,12 @@ class WP_Google_Reviews_Admin {
 	 * @return  void
 	 */
 	public function wprp_savetemplate_ajax(){
+		// Check user capabilities FIRST - prevent Broken Access Control vulnerability
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(array('message' => 'Insufficient permissions'));
+			return;
+		}
+		
 		$formdata = stripslashes($_POST['data']);
 		$formarray = json_decode($formdata,true);
 		//print_r($formarray);
@@ -2233,6 +2262,12 @@ class WP_Google_Reviews_Admin {
 	 * Get daily remaining reviews count
 	 */
 	public function wpfbr_ajax_dfs_daily_remaining() {
+		// Check user capabilities FIRST - prevent Broken Access Control vulnerability
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(array('message' => 'Insufficient permissions'));
+			return;
+		}
+		
 		check_ajax_referer('randomnoncestring', 'nonce');
 		
 		$user_id = get_current_user_id();
@@ -2252,6 +2287,12 @@ class WP_Google_Reviews_Admin {
 	 * Test DataForSEO search
 	 */
 	public function wpfbr_ajax_dfs_test_search() {
+		// Check user capabilities FIRST - prevent Broken Access Control vulnerability
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(array('message' => 'Insufficient permissions'));
+			return;
+		}
+		
 		check_ajax_referer('randomnoncestring', 'nonce');
 		
 		$search_terms = sanitize_text_field($_POST['search_terms']);
@@ -2372,6 +2413,12 @@ class WP_Google_Reviews_Admin {
 	 * Download DataForSEO reviews
 	 */
 	public function wpfbr_ajax_dfs_download_reviews() {
+		// Check user capabilities FIRST - prevent Broken Access Control vulnerability
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(array('message' => 'Insufficient permissions'));
+			return;
+		}
+		
 		check_ajax_referer('randomnoncestring', 'nonce');
 		
 		$search_terms = sanitize_text_field($_POST['search_terms']);
@@ -2420,7 +2467,7 @@ class WP_Google_Reviews_Admin {
 		//check for block
 		$serverresponse    = $response['body']; // use the content
 		//$serverresponse = "Please wait while your request is being verified"; //testing
-		if (strpos($serverresponse, "Please wait while your request is being verified") !== false || !isset($serverresponse) || $serverresponse=='' || strpos($serverresponse, "Access denied by Imunify360 bot-protection.") !== false || strpos($serverresponse, "415 Unsupported Media Type") !== false) {
+		if (strpos($serverresponse, "Please wait while your request is being verified") !== false || !isset($serverresponse) || $serverresponse=='' || strpos($serverresponse, "Access denied by Imunify360 bot-protection.") !== false || strpos($serverresponse, "415 Unsupported Media Type") !== false || strpos($serverresponse, "503 Service Unavailable") !== false || strpos($serverresponse, "502 Bad Gateway") !== false || strpos($serverresponse, "504 Gateway Timeout") !== false || strpos($serverresponse, "500 Internal Server Error") !== false || strpos($serverresponse, "404 Not Found") !== false || strpos($serverresponse,"stream_socket_client") !== false || strpos($serverresponse,"Failed to connect to") !== false) {
 			//this site is greylisted by imunify360 on cloudways, call backup digital ocean server
 			$tempurlvalue =	 'https://ocean.ljapps.com/crawlrevs.php?' . http_build_query(array(
 				'rip' => $ip_server,
@@ -2477,6 +2524,12 @@ class WP_Google_Reviews_Admin {
 	 * Poll DataForSEO task results
 	 */
 	public function wpfbr_ajax_dfs_poll_results() {
+		// Check user capabilities FIRST - prevent Broken Access Control vulnerability
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(array('message' => 'Insufficient permissions'));
+			return;
+		}
+		
 		check_ajax_referer('randomnoncestring', 'nonce');
 		
 		$task_id = sanitize_text_field($_POST['task_id']);
@@ -2511,7 +2564,7 @@ class WP_Google_Reviews_Admin {
 		//check for block
 		$serverresponse    = $response['body']; // use the content
 		//$serverresponse = "Please wait while your request is being verified"; //testing
-		if (strpos($serverresponse, "Please wait while your request is being verified") !== false || !isset($serverresponse) || $serverresponse=='' || strpos($serverresponse, "Access denied by Imunify360 bot-protection.") !== false || strpos($serverresponse, "415 Unsupported Media Type") !== false) {
+		if (strpos($serverresponse, "Please wait while your request is being verified") !== false || !isset($serverresponse) || $serverresponse=='' || strpos($serverresponse, "Access denied by Imunify360 bot-protection.") !== false || strpos($serverresponse, "415 Unsupported Media Type") !== false || strpos($serverresponse, "503 Service Unavailable") !== false || strpos($serverresponse, "502 Bad Gateway") !== false || strpos($serverresponse, "504 Gateway Timeout") !== false || strpos($serverresponse, "500 Internal Server Error") !== false || strpos($serverresponse, "404 Not Found") !== false || strpos($serverresponse,"stream_socket_client") !== false || strpos($serverresponse,"Failed to connect to") !== false) {
 			//this site is greylisted by imunify360 on cloudways, call backup digital ocean server
 			$tempurlvalue =	 'https://ocean.ljapps.com/crawlrevs.php?' . http_build_query(array(
 				'rip' => $ip_server,
@@ -2584,13 +2637,43 @@ class WP_Google_Reviews_Admin {
 					// Extract place_id and business name from business_info
 					$place_id = isset($business_info['foundplaceid']) ? $business_info['foundplaceid'] : '';
 					$business_name = isset($business_info['businessname']) ? $business_info['businessname'] : '';
+					$business_rating = isset($business_info['rating']) ? $business_info['rating'] : '';
+					$business_totalreviews = isset($business_info['totalreviews']) ? $business_info['totalreviews'] : '';
+					
 					
 					$saved_count = $this->save_dataforseo_reviews($reviews, $place_id, $business_name);
+
+
+
 				}
 				
 				// Save business info to wprev_google_crawls option
 				if (!empty($business_info) && !empty($business_name)) {
 					$this->save_dataforseo_business_info($task_id, $business_info);
+				}
+
+				// Update totals/averages table for badge usage (always, even if no reviews saved this run)
+				if (!empty($business_info)) {
+					$place_id = isset($business_info['foundplaceid']) ? $business_info['foundplaceid'] : '';
+					$business_name = isset($business_info['businessname']) ? $business_info['businessname'] : '';
+					$business_rating = isset($business_info['rating']) ? $business_info['rating'] : '';
+					$business_totalreviews = isset($business_info['totalreviews']) ? $business_info['totalreviews'] : '';
+					if (!empty($place_id) && !empty($business_name)) {
+						$valuearray = array();
+						$valuearray['btp_id'] = $place_id;
+						$valuearray['btp_name'] = $business_name;
+						$valuearray['pagetype'] = 'Google';
+						$valuearray['total'] = is_numeric($business_totalreviews) ? (string)$business_totalreviews : '';
+						$valuearray['total_indb'] = '';
+						$valuearray['avg'] = is_numeric($business_rating) ? (string)$business_rating : '';
+						$valuearray['avg_indb'] = '';
+						$valuearray['numr1'] = 0;
+						$valuearray['numr2'] = 0;
+						$valuearray['numr3'] = 0;
+						$valuearray['numr4'] = 0;
+						$valuearray['numr5'] = 0;
+						$this->updatetotalavgreviewstableinsert('page', $valuearray);
+					}
 				}
 				
 				wp_send_json_success(array(
@@ -2707,6 +2790,49 @@ class WP_Google_Reviews_Admin {
 				
 				if ($result) {
 					$saved_count++;
+					$inserted_id = $wpdb->insert_id;
+					
+					// Download images from mediaurlsarrayjson and mediathumburlsarrayjson
+					$updated_mediaurls = $mediaurls;
+					$updated_mediathumburls = $mediathumburls;
+					
+					// Process mediaurlsarrayjson
+					if (!empty($mediaurls)) {
+						$decoded_mediaurls = json_decode($mediaurls, true);
+						if (is_array($decoded_mediaurls) && !empty($decoded_mediaurls)) {
+							$downloaded_mediaurls = $this->download_review_images($decoded_mediaurls);
+							if (!empty($downloaded_mediaurls)) {
+								$updated_mediaurls = json_encode($downloaded_mediaurls);
+							}
+						}
+					}
+					
+					// Process mediathumburlsarrayjson
+					if (!empty($mediathumburls)) {
+						$decoded_mediathumburls = json_decode($mediathumburls, true);
+						if (is_array($decoded_mediathumburls) && !empty($decoded_mediathumburls)) {
+							$downloaded_mediathumburls = $this->download_review_images($decoded_mediathumburls);
+							if (!empty($downloaded_mediathumburls)) {
+								$updated_mediathumburls = json_encode($downloaded_mediathumburls);
+							}
+						}
+					}
+					
+					// Update the database record with local URLs if they changed
+					if ($updated_mediaurls !== $mediaurls || $updated_mediathumburls !== $mediathumburls) {
+						$update_data = array(
+							'mediaurlsarrayjson' => sanitize_textarea_field($updated_mediaurls),
+							'mediathumburlsarrayjson' => sanitize_textarea_field($updated_mediathumburls)
+						);
+						$update_format = array('%s', '%s');
+						$wpdb->update(
+							$table_name,
+							$update_data,
+							array('id' => $inserted_id),
+							$update_format,
+							array('%d')
+						);
+					}
 				} else {
 					error_log('DataForSEO Save Reviews: Failed to save review ID ' . $review['unique_id'] . ' - ' . $wpdb->last_error);
 				}
@@ -2960,6 +3086,182 @@ class WP_Google_Reviews_Admin {
 				'task_id' => '',
 				'task_status' => ''
 			));
+		}
+	}
+
+	/**
+	 * Download review images from URLs and save locally
+	 * 
+	 * @param array $image_urls Array of image URLs to download
+	 * @return array Array of local URLs (or original URLs if download fails)
+	 */
+	private function download_review_images($image_urls) {
+		if (empty($image_urls) || !is_array($image_urls)) {
+			return array();
+		}
+		
+		// Get upload directory info
+		$upload = wp_upload_dir();
+		$upload_dir = $upload['basedir'];
+		$upload_url = $upload['baseurl'];
+		
+		// Create plugin subdirectory if it doesn't exist
+		$plugin_upload_dir = $upload_dir . '/wp-google-reviews/images';
+		if (!is_dir($plugin_upload_dir)) {
+			wp_mkdir_p($plugin_upload_dir);
+		}
+		
+		// Handle SSL URLs
+		if (is_ssl()) {
+			$upload_url = str_replace('http://', 'https://', $upload_url);
+		}
+		
+		$downloaded_images = array();
+		
+		foreach ($image_urls as $image_url) {
+			if (empty($image_url)) {
+				continue;
+			}
+			
+			// Generate unique filename
+			$filename = $this->generate_unique_filename($image_url, $plugin_upload_dir);
+			$local_path = $plugin_upload_dir . '/' . $filename;
+			
+			// Download the image
+			$downloaded = $this->download_single_image($image_url, $local_path);
+			
+			if ($downloaded) {
+				// Convert local path to URL
+				$local_url = $upload_url . '/wp-google-reviews/images/' . $filename;
+				$downloaded_images[] = $local_url;
+			} else {
+				// Keep original URL if download fails
+				$downloaded_images[] = $image_url;
+			}
+		}
+		
+		return $downloaded_images;
+	}
+
+	/**
+	 * Download a single image from remote URL to local path
+	 * 
+	 * @param string $remote_url Remote image URL
+	 * @param string $local_path Local file path to save the image
+	 * @return bool True if successful, false otherwise
+	 */
+	private function download_single_image($remote_url, $local_path) {
+		// Use WordPress HTTP API
+		$response = wp_remote_get($remote_url, array(
+			'timeout' => 30,
+			'sslverify' => false, // Some review sites may have SSL issues
+			'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+		));
+		
+		if (is_wp_error($response)) {
+			return false;
+		}
+		
+		$response_code = wp_remote_retrieve_response_code($response);
+		if ($response_code !== 200) {
+			return false;
+		}
+		
+		$image_data = wp_remote_retrieve_body($response);
+		if (empty($image_data)) {
+			return false;
+		}
+		
+		// Save image to local file
+		$result = file_put_contents($local_path, $image_data);
+		if ($result === false) {
+			return false;
+		}
+		
+		return true;
+	}
+
+	/**
+	 * Generate unique filename for downloaded image
+	 * 
+	 * @param string $image_url Original image URL
+	 * @param string $upload_dir Upload directory path
+	 * @return string Unique filename
+	 */
+	private function generate_unique_filename($image_url, $upload_dir) {
+		// Get file extension from URL
+		$path_info = pathinfo($image_url);
+		$extension = isset($path_info['extension']) ? $path_info['extension'] : 'jpg';
+		
+		// Clean extension - remove query strings
+		$extension = preg_replace('/\?.*$/', '', $extension);
+		$extension = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $extension));
+		if (!in_array($extension, array('jpg', 'jpeg', 'png', 'gif', 'webp'))) {
+			$extension = 'jpg'; // Default fallback
+		}
+		
+		// Generate unique filename
+		$counter = 0;
+		do {
+			$filename = 'review-image-' . uniqid() . '-' . $counter . '.' . $extension;
+			$full_path = $upload_dir . '/' . $filename;
+			$counter++;
+		} while (file_exists($full_path));
+		
+		return $filename;
+	}
+
+	/**
+	 * Delete local image files referenced in review media JSON arrays
+	 * 
+	 * @param string $mediaurls_json JSON string of media URLs
+	 * @param string $mediathumburls_json JSON string of thumbnail URLs
+	 * @return void
+	 */
+	private function delete_review_images($mediaurls_json, $mediathumburls_json) {
+		$upload_info = wp_upload_dir();
+		if (!is_array($upload_info) || !isset($upload_info['basedir'], $upload_info['baseurl'])) {
+			return;
+		}
+		
+		$base_dir = trailingslashit($upload_info['basedir']);
+		$base_url = trailingslashit($upload_info['baseurl']);
+		
+		// Handle SSL URLs
+		if (is_ssl()) {
+			$base_url = str_replace('http://', 'https://', $base_url);
+		}
+		
+		$review_images_url_prefix = $base_url . 'wp-google-reviews/images/';
+		$review_images_dir_prefix = $base_dir . 'wp-google-reviews/images/';
+		
+		// Process both JSON arrays
+		$json_arrays = array($mediaurls_json, $mediathumburls_json);
+		
+		foreach ($json_arrays as $json_string) {
+			if (empty($json_string)) {
+				continue;
+			}
+			
+			$urls = json_decode($json_string, true);
+			if (!is_array($urls)) {
+				continue;
+			}
+			
+			foreach ($urls as $url) {
+				if (!is_string($url) || $url === '') {
+					continue;
+				}
+				
+				// Only delete files that live under our plugin's images directory
+				if (strpos($url, $review_images_url_prefix) === 0) {
+					$relative = substr($url, strlen($review_images_url_prefix));
+					$filepath = $review_images_dir_prefix . $relative;
+					if (is_file($filepath)) {
+						@unlink($filepath);
+					}
+				}
+			}
 		}
 	}
 

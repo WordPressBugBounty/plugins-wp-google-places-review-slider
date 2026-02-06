@@ -3,8 +3,8 @@ Contributors: jgwhite33
 Donate link: http://ljapps.com/
 Tags: Google, reviews, slider, testimonials, Google Places reviews
 Requires at least: 3.0.1
-Tested up to: 6.8
-Stable tag: 17.3
+Tested up to: 6.9
+Stable tag: 17.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -128,6 +128,15 @@ We are always looking for features to add. Just post on the support forum or con
 10. Create as many templates as you like.
 
 == Changelog ==
+= 17.7 =
+* missing image fix for review media
+
+= 17.6 =
+* small bug fix
+
+= 17.4 =
+* Fix for badge totals not updating. 
+
 = 17.3 =
 * faster download speed for crawl
 
