@@ -42,6 +42,26 @@ div#update_form_msg_div {
 .badgeinfosetting.checkboxes label {
     cursor: pointer;
 }
+#wpfbr_new_template .badgeinfosetting:not(.checkboxes) {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+#wpfbr_new_template .badgeinfosetting:not(.checkboxes) .bsetlabel {
+    flex: 0 0 auto;
+    margin: 0;
+}
+#wpfbr_new_template #upload_licon_button {
+    height: 32px;
+    min-height: 32px;
+    padding: 0 12px;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+    vertical-align: middle;
+}
 .divmoreslidersettings {
     padding: 12px 4px 2px;
 }
@@ -293,6 +313,35 @@ div#wpfbr_new_template {
     box-shadow: 0 1px 1px rgba(0,0,0,0.04);
     padding: 10px;
 	display: none;
+}
+#wpfbr_new_template input[type="text"],
+#wpfbr_new_template input[type="number"],
+#wpfbr_new_template select {
+    height: 32px;
+    min-height: 32px;
+    box-sizing: border-box;
+    line-height: 1.4;
+}
+#wpfbr_new_template select {
+    padding: 0 24px 0 8px;
+}
+#wpfbr_new_template .wp-picker-container .wp-color-result.button {
+    height: 32px;
+    min-height: 32px;
+    box-sizing: border-box;
+}
+#wpfbr_new_template table.form-table > tbody > tr.wpfbr_row:first-child th,
+#wpfbr_new_template table.form-table > tbody > tr.wpfbr_row:first-child td {
+    vertical-align: middle;
+}
+#wpfbr_new_template table.form-table > tbody > tr.wpfbr_row:first-child th {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    white-space: nowrap;
+}
+#wpfbr_new_template #wpfbr_template_title {
+    margin: 0;
+    vertical-align: middle;
 }
 .wpfbr_template_thumb{
     width: 200px;

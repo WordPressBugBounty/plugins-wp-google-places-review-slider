@@ -1,25 +1,26 @@
 === WP Google Review Slider ===
 Contributors: jgwhite33
 Donate link: http://ljapps.com/
-Tags: Google, reviews, slider, testimonials, Google Places reviews
+Tags: google reviews, business reviews, social proof, testimonial slider, gmb reviews
 Requires at least: 3.0.1
-Tested up to: 6.9
-Stable tag: 17.7
+Tested up to: 7.0
+Stable tag: 17.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Display Google reviews on your site and even show user images!  No address, no problem! Also works with Service Area Businesses and Products! Lightweight and fast!
+Display Google reviews on your site with a slider or grid. Reviews are saved locally on your server for fast loading. No address? No problem — works with service area businesses, multiple locations, and product reviews.
 
 == Description ==
 
-Display Google Reviews on Your WordPress Site in Under 2 Minutes. 
+Display Google Reviews on Your WordPress Site in Under 2 Minutes.
 
-I progammed this plugin to be super lightweight and fast! Everything is stored on your server for optimal loading times.
+Unlike plugins that load reviews from Google on every page view, this plugin downloads your Google Business Profile (GMB) reviews once and stores them in your WordPress database on your own server. Your site serves reviews locally for fast loading, better performance, and a smoother visitor experience.
 
+Transform your WordPress site by effortlessly showcasing your Google reviews, whether you operate a physical location or a service area business. Many review plugins struggle with businesses that do not have a street address — this one does not. Service area businesses, Google product reviews, and multi-location setups are supported.
 
-Transform your WordPress site by effortlessly showcasing your Google reviews, whether you operate a physical location or a service area business. Our powerful Google Reviews WordPress plugin is designed to enhance customer confidence and boost your social proof with minimal effort.
+Need reviews from more than one location? Add multiple Google locations and download reviews from each one. Many competing plugins make multi-location setup difficult or impossible in the free version — this plugin makes it straightforward to gather reviews from different locations and display them on your site.
 
-My plugin simplifies the process of displaying your Google reviews. Choose from two methods to download reviews: use targeted Google search terms or your Google Place ID. Easily gather and display reviews from multiple business locations to enhance your online presence. You can use the Google Places API and automatically keep your reviews updated daily or use the Google Crawl method and download up to 40 reviews.
+Choose from two methods to download reviews: use targeted Google search terms or your Google Place ID. You can use the Google Places API and automatically keep your reviews updated daily, or use the Google Crawl method and download up to 40 reviews.
 
 You’ve worked hard for those valuable 5-star Google reviews, and now it’s time to display them prominently on your website. Our plugin allows you to easily add an eye-catching review slider or a responsive grid of your Google reviews directly to widget areas, posts, or pages. It's compatible with various business types, including those without a physical address, and enables you to aggregate reviews from multiple sources.
 
@@ -30,7 +31,7 @@ Boost your sales and build customer trust by leveraging our Google Reviews WordP
 
 Unlock the Power of Google Reviews with Our Google Reviews WordPress plugin!
 
-###Why show Google Reviews on your site?
+### Why show Google Reviews on your site?
 
 Many successful businesses leverage Google reviews to attract new customers and enhance their online presence. If you’re not using Google reviews on your website, you’re missing out on a powerful and cost-effective marketing strategy. 
 
@@ -48,7 +49,9 @@ By implementing these tips, you can effectively showcase your Google reviews and
 
 ### Google Reviews WordPress Plugin Feature List:
 
-* Download your Google reviews and securely store them in your database.
+* Download your Google reviews and securely store them in your WordPress database on your server for fast local loading.
+* Add multiple business locations and download reviews from each — easier than many competing plugins.
+* Works with service area businesses and businesses without a physical street address.
 * Gather reviews from various locations for a comprehensive collection.
 * Create an engaging slider that showcases your Google reviews, similar to an image slider.
 * Prefer not to use sliders? Opt for a responsive grid or list format to display Google reviews instead.
@@ -105,9 +108,29 @@ Check out our other free versions!
 
 1. Upload `wp-google-reviews` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Look for the WP FB Reviews menu item in your admin.
+3. Look for the WP Google Reviews menu item in your admin.
 
 == Frequently Asked Questions ==
+
+= Are reviews stored on my server? =
+
+Yes. After you download reviews from Google, they are saved in your WordPress database on your own server. Your site displays those stored reviews locally instead of calling Google every time someone visits a page, which helps pages load faster.
+
+= Does this work for service area businesses without a physical address? =
+
+Yes. Many review plugins only work well for businesses with a street address. This plugin also supports service area businesses, so you can download and display Google reviews even if your business does not have a public storefront address.
+
+= Can I use reviews from multiple locations? =
+
+Yes. You can add multiple Google locations and download reviews from each one. This makes it much easier to manage multi-location businesses than many other Google review plugins.
+
+= How do I find my Google Place ID? =
+
+You can find your Place ID using the official Google Place ID Finder tool, or search for your business directly on the plugin's Get Google Reviews page.
+
+= Can I filter out low-star reviews? =
+
+Yes. In your template settings you can set a minimum rating so only the reviews you want to show are displayed.
 
 = How do I request a new feature? =
 
@@ -122,12 +145,15 @@ We are always looking for features to add. Just post on the support forum or con
 4. Lots of customizable options. Even input CSS if you want.
 5. Easily add a badge to the left, above, or right side of the reviews. Or hide the reviews completely!
 6. Badge above the reviews.
-7. Completely customize the Bage look.
+7. Completely customize the badge look.
 8. Add multiple download locations.
 9. All your reviews show up in a list.
 10. Create as many templates as you like.
 
 == Changelog ==
+= 17.8 =
+* Updated styling for WPv7.
+
 = 17.7 =
 * missing image fix for review media
 
