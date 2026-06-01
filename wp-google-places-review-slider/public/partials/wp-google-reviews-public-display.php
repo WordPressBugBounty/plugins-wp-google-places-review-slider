@@ -223,14 +223,14 @@
 			//change based on text if set
 			$basedontext = 'Based on <span class="wprev_btot">'.$badgetotal.'</span> reviews';
 			if($template_misc_array['bobasedon']!=""){
-				$basedontext = $template_misc_array['bobasedon'];
+				$basedontext = esc_html( $template_misc_array['bobasedon'] );
 			}
 			$basedontext = str_replace("#",'<span class="wprev_btot">'.$badgetotal.'</span>',$basedontext);
 			
 			//change review us on text
 			$reviewusontext = 'Review us on';
 			if($template_misc_array['borevus']!=""){
-				$reviewusontext = $template_misc_array['borevus'];
+				$reviewusontext = esc_html( $template_misc_array['borevus'] );
 			}
 
 

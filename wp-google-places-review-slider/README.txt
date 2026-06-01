@@ -4,7 +4,7 @@ Donate link: http://ljapps.com/
 Tags: google reviews, business reviews, social proof, testimonial slider, gmb reviews
 Requires at least: 3.0.1
 Tested up to: 7.0
-Stable tag: 17.8
+Stable tag: 17.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,6 +136,10 @@ Yes. In your template settings you can set a minimum rating so only the reviews 
 
 We are always looking for features to add. Just post on the support forum or contact us on the bottom of this [page.](http://ljapps.com/wp-review-slider-pro/)
 
+= Where do I report security bugs found in this plugin? =
+
+Please report security bugs found in the source code of the wp-google-places-review-slider plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/d433bf96-0e60-49ba-8012-4f93dc9bcd07). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
+
 
 == Screenshots ==
 
@@ -151,6 +155,9 @@ We are always looking for features to add. Just post on the support forum or con
 10. Create as many templates as you like.
 
 == Changelog ==
+= 17.9 =
+* Security: escape review content on output to prevent stored XSS.
+
 = 17.8 =
 * Updated styling for WPv7.
 

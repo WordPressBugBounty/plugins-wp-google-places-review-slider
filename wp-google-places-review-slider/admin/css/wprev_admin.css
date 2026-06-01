@@ -22,9 +22,9 @@ div#update_form_msg_div {
     display: none;
 }
 .wprevpro_btnicononlyhelp::before {
-    padding-top: 0px;
+    padding-top: 0;
     cursor: pointer;
-    margin-top: -2px;
+    margin-top: 0;
 }
 .badgeinfo {
     display: flex;
@@ -107,8 +107,8 @@ span.nav-tab.nav-tab-active {
     cursor: pointer;
 }
 .dashicons-before::after {
-    padding-top: 3px;
-    padding-right: 0px;
+    padding-top: 0;
+    padding-right: 0;
 }
 .dashicons, .dashicons-before:after {
     font-family: dashicons;
@@ -125,7 +125,7 @@ span.nav-tab.nav-tab-active {
     width: 20px;
     height: 20px;
     font-size: 20px;
-    vertical-align: text-bottom;
+    vertical-align: middle;
     text-align: center;
     transition: color .1s ease-in;
 }
@@ -133,7 +133,7 @@ span.nav-tab.nav-tab-active {
     content: "\f139";
 }
 .dashicons-before:after, .dashicons-before:before {
-    vertical-align: text-bottom;
+    vertical-align: middle;
 }
 
 
@@ -267,7 +267,55 @@ div#setting-error-settings_updated {
 .popup-close:hover { color: #333; }
 
 #popup_bobytext2 {
-    font-weight: bold;
+    margin-top: 12px;
+    font-weight: normal;
+}
+#popup_review_list #popup_bobytext2 .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    height: 28px;
+    min-height: 28px;
+    padding: 0 12px;
+    margin: 0 8px 8px 0;
+    box-sizing: border-box;
+    line-height: 1.2;
+    text-decoration: none;
+}
+#popup_review_list #popup_bobytext2 p {
+    margin: 12px 0 8px;
+}
+#popup_review_list #popup_bobytext2 .button.dashicons-before::before {
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+#popup_review_list #popup_bobytext2 a.button.dashicons-no {
+    background: #d63638;
+    border-color: #d63638;
+    color: #fff;
+}
+#popup_review_list #popup_bobytext2 a.button.dashicons-no:hover,
+#popup_review_list #popup_bobytext2 a.button.dashicons-no:focus {
+    background: #b32d2e;
+    border-color: #b32d2e;
+    color: #fff;
+}
+#popup_review_list #popup_bobytext2 a.button.dashicons-cart {
+    background: #2271b1;
+    border-color: #2271b1;
+    color: #fff;
+}
+#popup_review_list #popup_bobytext2 a.button.dashicons-cart:hover,
+#popup_review_list #popup_bobytext2 a.button.dashicons-cart:focus {
+    background: #135e96;
+    border-color: #135e96;
+    color: #fff;
 }
 /*---------------review list page-------------*/
 .editrev {
@@ -293,11 +341,13 @@ div#setting-error-settings_updated {
     margin-bottom: 20px;
 }
 .wpfbr_btnicononly {
-    padding-left: 4px !important;
-	padding-right: 3px !important;
+    width: 28px;
+    min-width: 28px;
+    max-width: 28px;
+    padding: 0 !important;
 }
 .dashicons-before::before {
-    padding-top: 3px;
+    padding-top: 0;
     padding-right: 2px;
 }
 #wpfb_review_list_pagination_bar {
@@ -420,10 +470,24 @@ font-size: 1.1em;
     color: #717171;
     font-size: 13px;
 }
-#wp_rev_maindiv .button, #wp_rev_maindiv .button-secondary {
+#wp_rev_maindiv .button,
+#wp_rev_maindiv .button-secondary,
+#wp_rev_maindiv a.button,
+#wp_rev_maindiv input.button,
+#wp_fb-settings .button,
+#wp_fb-settings .button-secondary,
+#wp_fb-settings a.button,
+#wp_fb-settings input.button {
     border-color: #ccc;
     background: #f6f7f7;
 	color: #505050;
+    height: 28px;
+    min-height: 28px;
+    max-height: 28px;
+    padding-top: 0;
+    padding-bottom: 0;
+    box-sizing: border-box;
+    line-height: 1;
 }
 img.wprev_headerimg {
     margin-bottom: 10px;
@@ -432,6 +496,32 @@ img.wprev_headerimg {
 #wp_rev_maindiv form p.description, #newreviewform p.description{
 	font-size:14px;
 	margin: .4em 0;
+}
+#wp_rev_maindiv #newtemplateform input[type="submit"].button,
+#wp_rev_maindiv #newtemplateform a.button,
+#wp_rev_maindiv #wpfbr_submittemplatebtn,
+#wp_rev_maindiv #wpfbr_addnewtemplate_cancel,
+#wp_rev_maindiv #wprevpro_addnewtemplate_update {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 28px;
+    min-height: 28px;
+    max-height: 28px;
+    padding: 0 12px;
+    margin: 0 6px 0 0;
+    box-sizing: border-box;
+    line-height: 1;
+    vertical-align: middle;
+    -webkit-appearance: none;
+    appearance: none;
+}
+#wp_rev_maindiv #newtemplateform input[type="submit"].button-primary,
+#wp_rev_maindiv #wpfbr_submittemplatebtn,
+#wp_rev_maindiv #wprevpro_addnewtemplate_update {
+    background: #2271b1;
+    border-color: #2271b1;
+    color: #fff;
 }
 .wppro_choose {
     margin-left: -5px;
@@ -487,4 +577,63 @@ img.wprev_wpproimg {
 }
 tr.hiddenrow {
     background-color: #9c9c9c !important;
+}
+
+/* WP 7 admin: center dashicons in buttons */
+#wp_rev_maindiv .button.dashicons-before,
+#wp_rev_maindiv a.button.dashicons-before,
+#wp_rev_maindiv .button.dashicons-after,
+#wp_rev_maindiv a.button.dashicons-after,
+#wp_fb-settings .button.dashicons-before,
+#wp_fb-settings a.button.dashicons-before {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    line-height: 1.2;
+}
+
+#wp_rev_maindiv .button.dashicons-before::before,
+#wp_rev_maindiv a.button.dashicons-before::before,
+#wp_fb-settings .button.dashicons-before::before,
+#wp_fb-settings a.button.dashicons-before::before {
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+    vertical-align: middle;
+    position: relative;
+    top: auto;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+#wp_rev_maindiv .button.dashicons-after::after,
+#wp_rev_maindiv a.button.dashicons-after::after {
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+    vertical-align: middle;
+    position: relative;
+    top: auto;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+#wp_rev_maindiv .wpfbr_btnicononly.button.dashicons-before,
+#wp_rev_maindiv .wprevpro_btnicononlyhelp.button.dashicons-before {
+    padding: 0 !important;
+}
+
+#wp_rev_maindiv .wpfbr_margin10:has(> .button),
+#wp_rev_maindiv .wpfbr_margin10:has(> a.button),
+#wp_fb-settings .wpfbr_margin10:has(> .button),
+#wp_fb-settings .wpfbr_margin10:has(> a.button) {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
 }

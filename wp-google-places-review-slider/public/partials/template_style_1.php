@@ -52,7 +52,7 @@ for ($x = 0; $x < count($rowarray); $x++) {
 				$userpic = $review->userpic;
 			}
 		}
-		$userpichtml = '<img src="'.$userpic.'" alt="'.stripslashes($review->reviewer_name).' Avatar" class="wprevpro_t1_IMG_4" loading="lazy" />';
+		$userpichtml = '<img src="'.esc_url( $userpic ).'" alt="'.esc_attr( wp_unslash( $review->reviewer_name ) ).' Avatar" class="wprevpro_t1_IMG_4" loading="lazy" />';
 		
 		if(isset($template_misc_array['avataropt']) && $template_misc_array['avataropt']=='hide'){
 			$userpichtml = '';
@@ -71,7 +71,7 @@ for ($x = 0; $x < count($rowarray); $x++) {
 				$burl="https://www.yelp.com";
 			}
 			$starfile = "yelp_stars_".$review->rating.".png";
-			$yelp_logo = '<a href="'.$burl.'" target="_blank" rel="nofollow"><img src="'.$imgs_url.'yelp_outline.png" alt="" class="wprevpro_t1_yelp_logo"></a>';
+			$yelp_logo = '<a href="'.esc_url( $burl ).'" target="_blank" rel="nofollow"><img src="'.$imgs_url.'yelp_outline.png" alt="" class="wprevpro_t1_yelp_logo"></a>';
 		} else {
 			$starfile = "stars_".$review->rating."_yellow.png";
 			$yelp_logo ="";
@@ -86,10 +86,10 @@ for ($x = 0; $x < count($rowarray); $x++) {
 			 if($review->type=="Facebook") {
 				//facebook logo
 				$burl = "https://www.facebook.com/pg/".$review->pageid."/reviews/";
-				$yelp_logo = '<a href="'.$burl.'" target="_blank" rel="nofollow"><img src="'.$imgs_url.'facebook_small_icon.png" alt="" class="wprevpro_t1_fb_logo sitetype_'.$review->type.'"></a>';
+				$yelp_logo = '<a href="'.esc_url( $burl ).'" target="_blank" rel="nofollow"><img src="'.$imgs_url.'facebook_small_icon.png" alt="" class="wprevpro_t1_fb_logo sitetype_'.$review->type.'"></a>';
 			} else if($review->type=="Google") {
 			 $burl = $review->from_url;
-			$yelp_logo = '<a href="'.$burl.'" target="_blank" rel="nofollow noreferrer" class="wprevpro_t1_site_logo_a"><img src="'.$imgs_url.''.$typelower.'_small_icon.png" alt="'.$review->type.' Logo" class="wprevpro_t1_site_logo siteicon sitetype_'.$review->type.'"></a>';
+			$yelp_logo = '<a href="'.esc_url( $burl ).'" target="_blank" rel="nofollow noreferrer" class="wprevpro_t1_site_logo_a"><img src="'.$imgs_url.''.$typelower.'_small_icon.png" alt="'.$review->type.' Logo" class="wprevpro_t1_site_logo siteicon sitetype_'.$review->type.'"></a>';
 			}
 		}
 		
@@ -223,11 +223,11 @@ for ($x = 0; $x < count($rowarray); $x++) {
 		<div class="wprevpro_t1_DIV_1<?php if(	$currentform[0]->template_type=="widget"){echo ' marginb10';}?> w3_wprs-col l<?php echo $perrow; ?>">
 			<div class="indrevdiv wprevpro_t1_DIV_2 wprev_preview_bg1_T<?php echo $currentform[0]->style; ?><?php if($iswidget){echo "_widget";} ?> wprev_preview_tcolor1_T<?php echo $currentform[0]->style; ?> wprev_preview_bradius_T<?php echo $currentform[0]->style; ?><?php if($iswidget){echo "_widget";} ?>">
 				<p class="wprevpro_t1_P_3 wprev_preview_tcolor1_T<?php echo $currentform[0]->style; ?><?php if($iswidget){echo "_widget";} ?>">
-					<span class="wprevpro_star_imgs_T<?php echo $currentform[0]->style; ?><?php if($iswidget){echo "_widget";} ?>"><?php echo $starhtml; ?></span><?php echo $verifiedhtml; ?><?php echo stripslashes($reviewtext); ?>
+					<span class="wprevpro_star_imgs_T<?php echo $currentform[0]->style; ?><?php if($iswidget){echo "_widget";} ?>"><?php echo $starhtml; ?></span><?php echo $verifiedhtml; ?><?php echo wp_kses_post( wp_unslash( $reviewtext ) ); ?>
 				</p>
 				<?php echo $media; ?>
 				<?php echo $yelp_logo; ?>
-			</div><span class="wprevpro_t1_A_8"><?php echo $userpichtml; ?></span> <span class="wprevpro_t1_SPAN_5 wprev_preview_tcolor2_T<?php echo $currentform[0]->style; ?><?php if($iswidget){echo "_widget";} ?>"><?php echo stripslashes($tempreviewername); ?><br/><span class="wprev_showdate_T<?php echo $currentform[0]->style; ?><?php if($iswidget){echo "_widget";} ?>"><?php echo $datehtml; ?></span> </span>
+			</div><span class="wprevpro_t1_A_8"><?php echo $userpichtml; ?></span> <span class="wprevpro_t1_SPAN_5 wprev_preview_tcolor2_T<?php echo $currentform[0]->style; ?><?php if($iswidget){echo "_widget";} ?>"><?php echo wp_kses_post( wp_unslash( $tempreviewername ) ); ?><br/><span class="wprev_showdate_T<?php echo $currentform[0]->style; ?><?php if($iswidget){echo "_widget";} ?>"><?php echo $datehtml; ?></span> </span>
 		</div>
 	<?php
 	}
