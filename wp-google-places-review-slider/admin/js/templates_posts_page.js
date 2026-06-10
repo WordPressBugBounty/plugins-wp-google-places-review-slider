@@ -33,6 +33,8 @@
 	$(function(){
 	
 		var prestyle = "";
+		var isNewTemplateForm = false;
+		var isResettingColors = false;
 		//color picker
 		var myOptions = {
 			// a callback to fire whenever the color changes to a valid color
@@ -41,6 +43,9 @@
 				var element = event.target;
 				var curid = $(element).attr('id');
 				$( element ).val(color)
+				if(isResettingColors){
+					return;
+				}
 				//manuall change after css. hack since jquery can't access before and after elements    border-top: 30px solid #943939;
 				if(curid=='wprevpro_template_misc_bgcolor1'){
 					prestyle = "<style>.wprevpro_t1_DIV_2::after{ border-top: 30px solid "+color+"; }</style>";
@@ -67,15 +72,32 @@
 		var avatarimg = imagehref;
 		var verified1 = '<span class="verifiedloc1 wprevpro_verified_svg wprevtooltip" data-wprevtooltip="Verified on Google"><span class="svgicons svg-wprsp-verified"></span></span>';
 		
+		var displayname = 'John '+lastnamehtml;
+		
 		var style1html ='<div class="wprevpro_t1_outer_div w3_wprs-row-padding">	\
 							<div class="wprevpro_t1_DIV_1 w3_wprs-col">	\
 								<div class="wprevpro_t1_DIV_2 wprev_preview_bg1 wprev_preview_bradius">	\
 									<p class="wprevpro_t1_P_3 wprev_preview_tcolor1">	\
 										'+starhtml+''+verified1+''+sampltext+'		</p>	\
 										<img id="wprev_showicon" src="'+iconhref+'" alt="Google Logo" class="wprevpro_t1_site_logo siteicon">	\
-								</div><span class="wprevpro_t1_A_8"><img src="'+avatarimg+'" alt="thumb" class="wprevpro_t1_IMG_4 wprev_avatar_opt"></span> <span class="wprevpro_t1_SPAN_5 wprev_preview_tcolor2">John '+lastnamehtml+'<br>'+datehtml+' </span>	\
+								</div><span class="wprevpro_t1_A_8"><img src="'+avatarimg+'" alt="thumb" class="wprevpro_t1_IMG_4 wprev_avatar_opt"></span> <span class="wprevpro_t1_SPAN_5 wprev_preview_tcolor2">'+displayname+'<br>'+datehtml+' </span>	\
 							</div>	\
 							</div>';
+
+		var style6html = '<div class="wprevpro_t6_outer_div w3_wprs-row-padding">	\
+							<div class="wpproslider_t6_DIV_1 w3_wprs-col l12">	\
+								<div class="wpproslider_t6_DIV_2 wprev_preview_bg1 wprev_preview_bradius">	\
+									<div class="wpproslider_t6_DIV_2_top" style="line-height:24px;">	\
+										<div class="wpproslider_t6_DIV_3L"><img src="'+avatarimg+'" class="wprev_avatar_opt wpproslider_t6_IMG_2"></div>	\
+										<div class="wpproslider_t6_DIV_3">	\
+											<div class="wpproslider_t6_STRONG_5 wprev_preview_tcolor2 t6displayname">'+displayname+'</div>	\
+											<div class="wpproslider_t6_star_DIV">'+starhtml+''+verified1+'</div>	\
+											<div class="wpproslider_t6_SPAN_6 wprev_preview_tcolor2 t6datediv">'+datehtml+'</div>	\
+										</div>	\
+									</div>	\
+									<div class="wpproslider_t6_DIV_4"><p class="wpproslider_t6_P_4 wprev_preview_tcolor1">'+sampltext+'</p></div>	\
+									<div class="wpproslider_t6_DIV_3_logo"><img id="wprev_showicon" src="'+iconhref+'" alt="Google Logo" class="wprevpro_t6_site_logo siteicon"></div>	\
+								</div></div></div>';
 		
 		changepreviewhtml();
 
@@ -84,6 +106,7 @@
 			resetcolors();
 		});
 		function resetcolors(){
+				isResettingColors = true;
 				var templatenum = $( "#wprevpro_template_style" ).val();
 				//reset colors to default
 				if(templatenum=='1'){
@@ -99,17 +122,31 @@
 					$('#wprevpro_template_misc_bgcolor2').iris('color', '#ffffff');
 					$( "#wprevpro_template_misc_tcolor1" ).iris('color','#777777');
 					$( "#wprevpro_template_misc_tcolor2" ).iris('color','#555555');
+				} else if(templatenum=='6'){
+					$( "#wprevpro_template_misc_bradius" ).val('0');
+					$( "#wprevpro_template_misc_bgcolor1" ).val('#fdfdfd');
+					$( "#wprevpro_template_misc_bgcolor2" ).val('#eeeeee');
+					$( "#wprevpro_template_misc_tcolor1" ).val('#555555');
+					$( "#wprevpro_template_misc_tcolor2" ).val('#555555');
+					prestyle="";
+					$('#wprevpro_template_misc_bgcolor1').iris('color', '#fdfdfd');
+					$('#wprevpro_template_misc_bgcolor2').iris('color', '#eeeeee');
+					$( "#wprevpro_template_misc_tcolor1" ).iris('color','#555555');
+					$( "#wprevpro_template_misc_tcolor2" ).iris('color','#555555');
 				}
+				isResettingColors = false;
+				changepreviewhtml();
 		}
 
 		
 		//on template num change
 		$( "#wprevpro_template_style" ).change(function() {
-				//reset colors if not editing, otherwise leave alone
-				if($( "#edittid" ).val()==""){
+				//reset colors on new templates (auto-save sets edittid, so track form state separately)
+				if(isNewTemplateForm || $( "#edittid" ).val()==""){
 				resetcolors();
-				}
+				} else {
 				changepreviewhtml();
+				}
 		});
 		
 		$( "#wprevpro_template_misc_showstars" ).change(function() {
@@ -127,7 +164,19 @@
 		$( "#wprevpro_template_misc_bgcolor1" ).change(function() {
 				changepreviewhtml();
 		});
+		$( "#wprevpro_template_misc_bgcolor2" ).change(function() {
+				changepreviewhtml();
+		});
 		$( "#wprevpro_template_misc_tcolor1" ).change(function() {
+				changepreviewhtml();
+		});
+		$( "#wprevpro_template_misc_tcolor2" ).change(function() {
+				changepreviewhtml();
+		});
+		$( "#wprevpro_template_misc_tfont1" ).on('change keyup', function() {
+				changepreviewhtml();
+		});
+		$( "#wprevpro_template_misc_tfont2" ).on('change keyup', function() {
 				changepreviewhtml();
 		});
 		$( "#wprevpro_template_misc_avataropt" ).change(function() {
@@ -158,13 +207,18 @@
 			var tcolor1 = $( "#wprevpro_template_misc_tcolor1" ).val();
 			var tcolor2 = $( "#wprevpro_template_misc_tcolor2" ).val();
 			var tcolor3 = $( "#wprevpro_template_misc_tcolor3" ).val();
+			var tfont1 = $( "#wprevpro_template_misc_tfont1" ).val();
+			var tfont2 = $( "#wprevpro_template_misc_tfont2" ).val();
 			var avataropt = $( "#wprevpro_template_misc_avataropt" ).val();
 			var verified = $( "#wprevpro_template_misc_verified" ).val();
 			var lastname = $( "#wprevpro_template_misc_lastname" ).val();
-			
+
+			prestyle = "";
+			if(templatenum=='1'){
+				prestyle = "<style>.wprevpro_t1_DIV_2::after{ border-top: 30px solid "+bg1+"; }</style>";
+			}
 			if($( "#wpfbr_template_css" ).val()!=""){
-				var customcss = '<style>'+$( "#wpfbr_template_css" ).val()+'</style>';
-				prestyle =  prestyle + customcss;
+				prestyle += '<style>'+$( "#wpfbr_template_css" ).val()+'</style>';
 			}
 			
 				var temphtml;
@@ -173,6 +227,12 @@
 					//hide background 2 select
 					$( ".wprevpre_bgcolor2" ).hide();
 					$( ".wprevpre_tcolor3" ).hide();
+					$( '.wprev_preview_bg1' ).css( "border", '' );
+				} else if(templatenum=='6'){
+					$( "#wprevpro_template_preview" ).html(prestyle+style6html);
+					$( ".wprevpre_bgcolor2" ).show();
+					$( ".wprevpre_tcolor3" ).hide();
+					$( '.wprev_preview_bg1' ).css( "border", '1px solid '+bg2 );
 				}
 			//now hide and show things based on values in select boxes
 			if($( "#wprevpro_template_misc_showstars" ).val()=="no"){
@@ -196,16 +256,35 @@
 			$( '.wprev_preview_bg2' ).css( "background", bg2 );
 			$( '.wprev_preview_tcolor1' ).css( "color", tcolor1 );
 			$( '.wprev_preview_tcolor2' ).css( "color", tcolor2 );
+			if(tfont1 > 0){
+				$( '.wprev_preview_tcolor1' ).css( {"font-size": tfont1+"px", "line-height": "normal"} );
+			} else {
+				$( '.wprev_preview_tcolor1' ).css( {"font-size": "", "line-height": ""} );
+			}
+			if(tfont2 > 0){
+				$( '.wprev_preview_tcolor2' ).css( {"font-size": tfont2+"px", "line-height": "normal"} );
+			} else {
+				$( '.wprev_preview_tcolor2' ).css( {"font-size": "", "line-height": ""} );
+			}
 			
 			if(avataropt=='hide'){
 				//set to display none
 				$( ".wprev_avatar_opt" ).hide();
+				if(templatenum=='6'){
+					$( ".wpproslider_t6_DIV_3L" ).hide();
+				}
 			} else if(avataropt=='mystery'){
 				//set img src
 				$(".wprev_avatar_opt").attr("src",imagehrefmystery);
 			} else if(avataropt=='init'){
 				//set img src
 				$(".wprev_avatar_opt").attr("src",'https://avatar.oxro.io/avatar.svg?name=J');
+			} else {
+				$(".wprev_avatar_opt").attr("src",imagehref);
+				$( ".wprev_avatar_opt" ).show();
+				if(templatenum=='6'){
+					$( ".wpproslider_t6_DIV_3L" ).show();
+				}
 			}
 			
 			//for hiding and showing verified star in preview
@@ -218,11 +297,14 @@
 			//last name format
 			//alert(lastname);
 			if(lastname=="show"){
-				$("#wprev_lastname").html("Doe");
+				$("#wprev_lastname").html("Doe").show();
+				$(".t6displayname").html('John '+lastnamehtml);
 			} else if(lastname=="hide"){
 				$( "#wprev_lastname" ).hide();
+				$(".t6displayname").html('John');
 			} else if(lastname=="initial"){
-				$("#wprev_lastname").html("D.");
+				$("#wprev_lastname").html("D.").show();
+				$(".t6displayname").html('John '+lastnamehtml);
 			}
 			
 		}
@@ -285,6 +367,7 @@
 		//hide or show new template form ----------
 		var checkedittemplate = getParameterByName('taction'); // "lorem"
 		if(checkedittemplate=="edit"){
+			isNewTemplateForm = false;
 			jQuery("#wpfbr_new_template").show("slow");
 			checkwidgetradio();
 			showtemplatepreview();
@@ -294,6 +377,7 @@
 		}
 		
 		$( "#wpfbr_addnewtemplate" ).click(function() {
+		  isNewTemplateForm = true;
 		  jQuery("#wpfbr_new_template").show("slow");
 		  //go ahead and save the template with all the defaults so we can show the preview right away.
 		  $( "#wprevpro_addnewtemplate_update" ).click();
@@ -303,6 +387,7 @@
 		  //}, 1000);
 		});	
 		$( "#wpfbr_addnewtemplate_cancel" ).click(function() {
+		  isNewTemplateForm = false;
 		  jQuery("#wpfbr_new_template").hide("slow");
 		  //reload page without taction and tid
 		  setTimeout(function(){ 
@@ -500,23 +585,61 @@
 				}
 				
 				missingimgcheck();
+				initPreviewLightbox();
 								
 			};
 		
 				
 		function missingimgcheck(){
-				//hide images that fail to load.
-			  $('img.wprev_media_img').each(function () {
-				// If already failed before DOM ready
-				if (!this.complete || this.naturalWidth === 0) {
-				  $(this).addClass('wprev_missing_image');
+				// Hide images that fail to load (scope to preview only).
+			  $('#wpfbr_preview_outer img.wprev_media_img').each(function () {
+				var img = this;
+				var $img = $(this);
+
+				function markMissing() {
+				  $img.addClass('wprev_missing_image');
 				}
 
-				// If it fails after trying to load
-				$(this).on('error', function () {
-				  $(this).addClass('wprev_missing_image');
-				});
+				// Already finished loading.
+				if (img.complete) {
+				  if (img.naturalWidth === 0) {
+					markMissing();
+				  }
+				  return;
+				}
+
+				// Still loading — only hide if the load actually fails.
+				$img.one('error', markMissing);
 			  });
+		}
+
+		function initPreviewLightbox(){
+			var $preview = $('#wpfbr_preview_outer');
+			if (!$preview.find('.wprev_media_div').length) {
+				return;
+			}
+
+			var pluginsUrl = '';
+			if (typeof wprevpublicjs_script_vars !== 'undefined' && wprevpublicjs_script_vars.wprevpluginsurl) {
+				pluginsUrl = wprevpublicjs_script_vars.wprevpluginsurl;
+			} else if (typeof adminjs_script_vars !== 'undefined' && adminjs_script_vars.pluginsUrl) {
+				pluginsUrl = adminjs_script_vars.pluginsUrl;
+			}
+			if (!pluginsUrl) {
+				return;
+			}
+
+			function bindLightbox() {
+				if (typeof refreshFsLightbox === 'function') {
+					refreshFsLightbox();
+				}
+			}
+
+			if (typeof refreshFsLightbox === 'function') {
+				bindLightbox();
+			} else {
+				$.getScript(pluginsUrl + '/public/js/fslightbox.js', bindLightbox);
+			}
 		}
 		
 		//simple tooltip for added elements and mobile devices

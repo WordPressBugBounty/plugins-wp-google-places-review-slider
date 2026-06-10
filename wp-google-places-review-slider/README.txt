@@ -4,7 +4,7 @@ Donate link: http://ljapps.com/
 Tags: google reviews, business reviews, social proof, testimonial slider, gmb reviews
 Requires at least: 3.0.1
 Tested up to: 7.0
-Stable tag: 17.9
+Stable tag: 18.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -155,6 +155,11 @@ Please report security bugs found in the source code of the wp-google-places-rev
 10. Create as many templates as you like.
 
 == Changelog ==
+= 18.0 = 
+* Template Style 6 added. 
+* Badge border option and font size option for templates.
+* More security hardening.
+
 = 17.9 =
 * Security: escape review content on output to prevent stored XSS.
 

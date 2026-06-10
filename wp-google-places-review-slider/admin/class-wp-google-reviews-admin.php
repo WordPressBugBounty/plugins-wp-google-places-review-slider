@@ -880,21 +880,21 @@ class WP_Google_Reviews_Admin {
 				$reviewlength=1;
 			}
 						
+			// Sanitize the reviewer name once and use it for BOTH the de-dup
+			// check and the insert, so repeat imports do not create duplicates.
+			$sanitized_reviewer_name = WP_Google_Reviews_Sanitize::sanitize_reviewer_name( $item['author_name'] );
+
 			//check to see if row is in db already
-			$checkrow = $wpdb->get_var( "SELECT id FROM ".$table_name." WHERE reviewer_name = \"".$item['author_name']."\" AND  review_length = '".$reviewlength."'" );
-			
-			$slashedusername = addslashes($item['author_name']);
-			
-			$checkrow2 = $wpdb->get_var( "SELECT id FROM ".$table_name." WHERE reviewer_name = '".$slashedusername."' AND  review_length = '".$reviewlength."'" );
-						
-			if( empty( $checkrow ) && empty( $checkrow2 ) )
+			$checkrow = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM ".$table_name." WHERE reviewer_name = %s AND review_length = %s", $sanitized_reviewer_name, $reviewlength ) );
+
+			if( empty( $checkrow ) )
 			{
-				$stats[] =array( 
+				$stats[] = WP_Google_Reviews_Sanitize::sanitize_review_row( array( 
 					'pageid' 			=> $response['result']['place_id'], 
 					'pagename' 			=> $response['result']['name'], 
 					'created_time' 		=> date( "Y-m-d H:i:s", $item['time'] ),
 					'created_time_stamp' 	=> $item['time'],
-					'reviewer_name' 		=> $item['author_name'],
+					'reviewer_name' 		=> $sanitized_reviewer_name,
 					'reviewer_id' 		=> $intreviewer_id,
 					'rating' 			=> $item['rating'],
 					'review_text' 		=> $item['text'],
@@ -903,7 +903,7 @@ class WP_Google_Reviews_Admin {
 					'type' 			=> 'Google',
 					'userpic'			=> $item['profile_photo_url'],
 					'from_url' =>$response['result']['url']
-				);
+				) );
 			}
 		}
 		$i = 0;
@@ -1145,11 +1145,15 @@ class WP_Google_Reviews_Admin {
 			
 		}
 		
+		// Sanitize crawl details before storing/echoing to neutralize XSS in the
+		// admin crawl UI and the JS that renders these values.
+		$businessdetails = WP_Google_Reviews_Sanitize::sanitize_crawl_business( $businessdetails );
+
 		$tempbusinessdetails = $businessdetails;
 		//$tempbusinessdetails['img']="";
 
 		$results = json_encode($businessdetails);
-		
+	
 		update_option('wprev_google_crawl_check',$results );
 		
 				//get all saved crawls and add or update if needed.
@@ -1397,23 +1401,21 @@ class WP_Google_Reviews_Admin {
 				$mediaurlsarrayjson = $review['mediaurlsarrayjson'];
 			}
 
+			// Sanitize the reviewer name once and use it for BOTH the de-dup
+			// check and the insert, so repeat imports do not create duplicates.
+			$sanitized_reviewer_name = WP_Google_Reviews_Sanitize::sanitize_reviewer_name( $results['user_name'] );
+
 			//check to see if row is in db already
-			$checkrow = $wpdb->get_var( "SELECT id FROM ".$table_name." WHERE reviewer_name = \"".$results['user_name']."\" AND  review_length = '".$results['reviewlength']."'" );
-			
-			//$checkrow = $wpdb->get_var( "SELECT id FROM ".$table_name." WHERE reviewer_name = '".$results['user_name']."' AND review_length = '".$results['reviewlength']."'" );
-			
-			$slashedusername = addslashes($results['user_name']);
-			
-			$checkrow2 = $wpdb->get_var( "SELECT id FROM ".$table_name." WHERE reviewer_name = '".$slashedusername."' AND  review_length = '".$results['reviewlength']."'" );
-						
-			if( empty( $checkrow ) && empty( $checkrow2 ) )
+			$checkrow = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM ".$table_name." WHERE reviewer_name = %s AND review_length = %s", $sanitized_reviewer_name, $results['reviewlength'] ) );
+
+			if( empty( $checkrow ) )
 			{
-				$stats[] =array( 
+				$stats[] = WP_Google_Reviews_Sanitize::sanitize_review_row( array( 
 					'pageid' 			=> $gplaceid, 
 					'pagename' 			=> $tempbusinessname, 
 					'created_time' 		=> date( "Y-m-d H:i:s", $results['created_time_stamp'] ),
 					'created_time_stamp' 	=> $results['created_time_stamp'],
-					'reviewer_name' 		=> $results['user_name'],
+					'reviewer_name' 		=> $sanitized_reviewer_name,
 					'reviewer_id' 		=> $results['reviewer_id'],
 					'rating' 			=> $results['rating'],
 					'review_text' 		=> $results['review_text'],
@@ -1423,7 +1425,7 @@ class WP_Google_Reviews_Admin {
 					'userpic'			=> $results['userpic'],
 					'from_url' 			=> $checkdetails['googleurl'],
 					'mediaurlsarrayjson' => $mediaurlsarrayjson,
-				);
+				) );
 			}
 			
 			$x++;
@@ -1686,10 +1688,10 @@ class WP_Google_Reviews_Admin {
 			
 			$avatarhtml = '';
 			if(isset($review->userpic) && $review->userpic!=''){
-				$avatarhtml = '<img alt="" src="'.$review->userpic.'" class="wprev_dash_avatar" height="40" width="40">';
+				$avatarhtml = '<img alt="" src="'.esc_url($review->userpic).'" class="wprev_dash_avatar" height="40" width="40">';
 			}
 			
-			echo '<li><div class="wprev_dash_revdiv">'.$avatarhtml.'<div class="wprev_dash_stars">'.$starhtml.'</div><h4 class="wprev_dash_name">'.$review->reviewer_name.' - <span class="wprev_dash_timeago">'.$daysagohtml.'</span></h4><p class="wprev_dash_text">'.$reviewtext.'</p></div></li>';
+			echo '<li><div class="wprev_dash_revdiv">'.$avatarhtml.'<div class="wprev_dash_stars">'.$starhtml.'</div><h4 class="wprev_dash_name">'.esc_html($review->reviewer_name).' - <span class="wprev_dash_timeago">'.esc_html($daysagohtml).'</span></h4><p class="wprev_dash_text">'.esc_html($reviewtext).'</p></div></li>';
 			
 		}
 		echo '</ul>';
@@ -2045,6 +2047,10 @@ class WP_Google_Reviews_Admin {
 		$templatemiscarray['tcolor2']=sanitize_hex_color($formarray['wprevpro_template_misc_tcolor2']);
 		$templatemiscarray['tcolor3']=sanitize_hex_color($formarray['wprevpro_template_misc_tcolor3']);
 		$templatemiscarray['bradius']=sanitize_text_field($formarray['wprevpro_template_misc_bradius']);
+		$tfont1_val = isset( $formarray['wprevpro_template_misc_tfont1'] ) ? absint( $formarray['wprevpro_template_misc_tfont1'] ) : 0;
+		$tfont2_val = isset( $formarray['wprevpro_template_misc_tfont2'] ) ? absint( $formarray['wprevpro_template_misc_tfont2'] ) : 0;
+		$templatemiscarray['tfont1'] = $tfont1_val > 0 ? (string) $tfont1_val : '';
+		$templatemiscarray['tfont2'] = $tfont2_val > 0 ? (string) $tfont2_val : '';
 		$templatemiscarray['showmedia']=sanitize_text_field($formarray['wprevpro_t_showmedia']);
 		$templatemiscarray['verified']=sanitize_text_field($formarray['wprevpro_template_misc_verified']);
 		$templatemiscarray['lastnameformat']=sanitize_text_field($formarray['wprevpro_template_misc_lastname']);
@@ -2102,9 +2108,11 @@ class WP_Google_Reviews_Admin {
 		$templatemiscarray['bshape']=sanitize_text_field($formarray['wprevpro_t_bshape']);
 		$templatemiscarray['bimgsize']=sanitize_text_field($formarray['wprevpro_t_bimgsize']);
 		$templatemiscarray['bbradius']=sanitize_text_field($formarray['wprevpro_t_bbradius']);
-		$templatemiscarray['bbkcolor']=sanitize_text_field($formarray['wprevpro_t_bbkcolor']);
+		$templatemiscarray['bbwidth']=sanitize_text_field($formarray['wprevpro_t_bbwidth']);
+		$templatemiscarray['bbcolor']=WP_Google_Reviews_Sanitize::sanitize_css_color($formarray['wprevpro_t_bbcolor']);
+		$templatemiscarray['bbkcolor']=WP_Google_Reviews_Sanitize::sanitize_css_color($formarray['wprevpro_t_bbkcolor']);
 		$templatemiscarray['bbtnurl']=sanitize_text_field($formarray['wprevpro_t_bbtnurl']);
-		$templatemiscarray['bbtncolor']=sanitize_text_field($formarray['wprevpro_t_bbtncolor']);
+		$templatemiscarray['bbtncolor']=WP_Google_Reviews_Sanitize::sanitize_css_color($formarray['wprevpro_t_bbtncolor']);
 		$templatemiscarray['bimgurl']=sanitize_text_field($formarray['wprevpro_t_bimgurl']);
 		$templatemiscarray['bname']=sanitize_text_field($formarray['wprevpro_t_bname']);
 		$templatemiscarray['bnameurl']=sanitize_text_field($formarray['wprevpro_t_bnameurl']);
@@ -2112,7 +2120,7 @@ class WP_Google_Reviews_Admin {
 		
 		//read more
 		$templatemiscarray['read_more_num']=sanitize_text_field($formarray['wprevpro_t_read_more_num']);
-		$templatemiscarray['read_more_color']=sanitize_text_field($formarray['wprevpro_t_read_more_color']);
+		$templatemiscarray['read_more_color']=WP_Google_Reviews_Sanitize::sanitize_css_color($formarray['wprevpro_t_read_more_color']);
 
 
 		$templatemiscjson = json_encode($templatemiscarray);

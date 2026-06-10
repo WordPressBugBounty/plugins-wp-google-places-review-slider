@@ -70,7 +70,7 @@ class WP_Google_Reviews {
 	public function __construct() {
 
 		$this->_token = 'wp-google-reviews';
-		$this->version = '17.9';
+		$this->version = '18.0';
 		//using this for development
 		//$this->version = time();
 
@@ -177,10 +177,10 @@ class WP_Google_Reviews {
 				location varchar(500) DEFAULT '' NOT NULL,
 				verified_order varchar(10) DEFAULT '' NOT NULL,
 				language_code varchar(10) DEFAULT '' NOT NULL,
-				unique_id tinytext DEFAULT '' NOT NULL,
-				meta_data text DEFAULT '' NOT NULL,
-				custom_data text DEFAULT '' NOT NULL,
-				custom_stars text DEFAULT '' NOT NULL,
+				unique_id tinytext NOT NULL,
+				meta_data text NOT NULL,
+				custom_data text NOT NULL,
+				custom_stars text NOT NULL,
 				owner_response text NOT NULL,
 				sort_weight int(5) NOT NULL,
 				tags text NOT NULL,
@@ -228,7 +228,7 @@ class WP_Google_Reviews {
 				sliderheight varchar(3) DEFAULT '' NOT NULL,
 				slidermobileview varchar(5) DEFAULT '' NOT NULL,
 				showreviewsbyid varchar(600) DEFAULT '' NOT NULL,
-				template_misc text DEFAULT '' NOT NULL,
+				template_misc text NOT NULL,
 				read_more varchar(3) DEFAULT '' NOT NULL,
 				read_more_num int(4) NOT NULL,
 				read_more_text varchar(20) DEFAULT '' NOT NULL,
@@ -239,7 +239,7 @@ class WP_Google_Reviews {
 				google_snippet_name varchar(500) DEFAULT '' NOT NULL,
 				google_snippet_desc varchar(1000) DEFAULT '' NOT NULL,
 				google_snippet_business_image varchar(500) DEFAULT '' NOT NULL,
-				google_snippet_more text DEFAULT '' NOT NULL,
+				google_snippet_more text NOT NULL,
 				cache_settings varchar(5) DEFAULT '' NOT NULL,
 				review_same_height varchar(3) DEFAULT '' NOT NULL,
 				add_profile_link varchar(3) DEFAULT '' NOT NULL,
@@ -316,6 +316,11 @@ class WP_Google_Reviews {
 		 * of the plugin.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-google-reviews-i18n.php';
+
+		/**
+		 * Shared sanitization / safe-output helpers (used by admin and public).
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-google-reviews-sanitize.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.

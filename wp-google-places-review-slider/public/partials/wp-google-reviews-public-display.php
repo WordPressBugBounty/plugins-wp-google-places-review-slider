@@ -20,11 +20,14 @@
  	//Get the form--------------------------
 	$tid = htmlentities($a['tid']);
 	$tid = intval($tid);
-	$currentform = $wpdb->get_results("SELECT * FROM $table_name WHERE id = ".$tid);
-	$template_misc_array = json_decode($currentform[0]->template_misc, true);
+	$currentform = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table_name WHERE id = %d", $tid ) );
 	
 	//check to make sure template found
 	if(isset($currentform[0])){
+		$template_misc_array = json_decode($currentform[0]->template_misc, true);
+		if ( ! is_array( $template_misc_array ) ) {
+			$template_misc_array = array();
+		}
 		
 		//use values from currentform to get reviews from db
 		$table_name = $wpdb->prefix . 'wpfb_reviews';
@@ -130,9 +133,14 @@
 			$butnlinkurl = $template_misc_array['bbtnurl'];
 			$bnameurl = $template_misc_array['bnameurl'];
 			
-			$bbtncolor = esc_html($template_misc_array['bbtncolor']);
-			$bbackgroundcolor = esc_html($template_misc_array['bbkcolor']);
-			$bborderradius = intval(esc_html($template_misc_array['bbradius']));
+			$bbtncolor = WP_Google_Reviews_Sanitize::sanitize_css_color($template_misc_array['bbtncolor']);
+			$bbackgroundcolor = WP_Google_Reviews_Sanitize::sanitize_css_color($template_misc_array['bbkcolor']);
+			$bborderradius = intval($template_misc_array['bbradius']);
+			$bborderwidth = isset($template_misc_array['bbwidth']) ? absint($template_misc_array['bbwidth']) : 0;
+			$bbordercolor = '';
+			if(isset($template_misc_array['bbcolor']) && $template_misc_array['bbcolor'] !== ''){
+				$bbordercolor = WP_Google_Reviews_Sanitize::sanitize_css_color($template_misc_array['bbcolor']);
+			}
 			$bdropsh = esc_html($template_misc_array['bdropsh']);
 			$bcenter = esc_html($template_misc_array['bcenter']);	//center the image above and center text below.
 			$bshape = esc_html($template_misc_array['bshape']);	//round or square
@@ -162,11 +170,20 @@
 			$badge_style = $badge_style . 'a.wprev-google-wr-a {background: '.$bbtncolor.' !important;}';
 			$badge_style = $badge_style . 'a.wprev-google-wr-a:hover {background: '.$bbtncolor.'de !important;}';
 
-			$badge_style = $badge_style . '.wprev-google-place {background: '.$bbackgroundcolor.' !important;border-radius:'.$bborderradius.'px !important;}';
+			$badge_place_style = 'background: '.$bbackgroundcolor.' !important;border-radius:'.$bborderradius.'px !important;';
+			if($bborderwidth > 0){
+				if($bbordercolor === ''){
+					$bbordercolor = '#eeeeee';
+				}
+				$badge_place_style .= 'border:'.$bborderwidth.'px solid '.$bbordercolor.' !important;';
+			} else {
+				$badge_place_style .= 'border:none !important;';
+			}
+			$badge_style = $badge_style . '.wprev-google-place {'.$badge_place_style.'}';
 			if($bdropsh=="yes"){
 				$badge_style = $badge_style . '.wprev-google-place {box-shadow: rgba(0, 0, 0, .08) 2px 2px 3px 0px !important;}';
 			} else {
-				$badge_style = $badge_style . '.wprev-google-place {box-shadow: rgba(0, 0, 0, .00) 0px 0px 0px 0px !important; border: 0px solid #f5f5f5 !important;}';
+				$badge_style = $badge_style . '.wprev-google-place {box-shadow: none !important;}';
 			}
 			if($bcenter=="yes" && $template_misc_array['blocation']!="abovewide"){
 				$badge_style = $badge_style . '.wprev-google-place {flex-direction: column !important;align-items: center !important;}';
@@ -194,6 +211,14 @@
 			if($template_misc_array['blocation']=="leftmid" || $template_misc_array['blocation']=="rightmid" ){
 				$badge_style = $badge_style . '.wprev_outer_wb {align-items: center !important;}';
 			}
+			// Style 6 adds 15px outer margin on the review row; normalize when badge is beside slider.
+			$wprev_outer_wb_class = 'wprev_outer_wb';
+			if($currentform[0]->style == "6"){
+				$badge_side_locations = array( 'left', 'right', 'leftmid', 'rightmid' );
+				if(in_array($template_misc_array['blocation'], $badge_side_locations, true)){
+					$wprev_outer_wb_class .= ' wprev_badge_style6_side';
+				}
+			}
 			//if this is above then we slightly change html again
 			if($template_misc_array['blocation']=="above"){
 				$badge_style = $badge_style . '.wprev_outer_wb {flex-direction: column !important;}.wprev_badge_div.badgeleft {margin-left: auto !important;margin-right: auto !important;}';
@@ -211,12 +236,15 @@
 			
 			$bimgsize = 50;
 			if(isset($template_misc_array['bimgsize']) &&  $template_misc_array['bimgsize']>0){
-				$bimgsize =$template_misc_array['bimgsize'];
+				$bimgsize = absint($template_misc_array['bimgsize']);
 				$badge_style = $badge_style . 'img.sprev-google-left-src {min-width: '.$bimgsize.'px !important;min-height: '.$bimgsize.'px !important;}';
 			}
 			
 			echo "<style>".$badge_style."</style>";
-			echo '<div class="wprev_outer_wb">'; 
+			if(!isset($wprev_outer_wb_class)){
+				$wprev_outer_wb_class = 'wprev_outer_wb';
+			}
+			echo '<div class="'.esc_attr($wprev_outer_wb_class).'">'; 
 			
 			//print_r($template_misc_array);
 			
@@ -269,51 +297,10 @@
 		$totalreviewschunked = array_chunk($totalreviews, $reviewsperpage);
 		
 		
-//add styles from template misc here
+//add styles from template misc here (all color/number values sanitized for CSS context)
 			if(is_array($template_misc_array)){
-				$misc_style ="";
-				
-				//hide stars and/or date
-				if($template_misc_array['showstars']=="no"){
-					$misc_style = $misc_style . '#wprev-slider-'.$currentform[0]->id.' .wprevpro_star_imgs_T'.$currentform[0]->style.' {display: none;}';
-				}
-				//if($template_misc_array['showdate']=="no"){	//doing this by not adding code now
-				//	$misc_style = $misc_style . '#wprev-slider-'.$currentform[0]->id.' .wprev_showdate_T'.$currentform[0]->style.' {display: none;}';
-				//}
-				
-				$misc_style = $misc_style . '#wprev-slider-'.$currentform[0]->id.' .wprev_preview_bradius_T'.$currentform[0]->style.' {border-radius: '.$template_misc_array['bradius'].'px;}';
-				if($template_misc_array['bgcolor1']!=''){
-					$misc_style = $misc_style . '#wprev-slider-'.$currentform[0]->id.' .wprev_preview_bg1_T'.$currentform[0]->style.' {background:'.$template_misc_array['bgcolor1'].';}';
-				}
-				if($template_misc_array['bgcolor2']!=''){
-					$misc_style = $misc_style . '#wprev-slider-'.$currentform[0]->id.' .wprev_preview_bg2_T'.$currentform[0]->style.' {background:'.$template_misc_array['bgcolor2'].';}';
-				}
-				if($template_misc_array['tcolor1']!=''){
-					$misc_style = $misc_style . '#wprev-slider-'.$currentform[0]->id.' .wprev_preview_tcolor1_T'.$currentform[0]->style.' {color:'.$template_misc_array['tcolor1'].';}';
-				}
-				if($template_misc_array['tcolor2']!=''){
-					$misc_style = $misc_style . '#wprev-slider-'.$currentform[0]->id.' .wprev_preview_tcolor2_T'.$currentform[0]->style.' {color:'.$template_misc_array['tcolor2'].';}';
-				}
-				
-				//style specific mods 	div > p
-				if($currentform[0]->style=="1"){
-					$misc_style = $misc_style . '#wprev-slider-'.$currentform[0]->id.' .wprev_preview_bg1_T'.$currentform[0]->style.'::after{ border-top: 30px solid '.$template_misc_array['bgcolor1'].'; }';
-				}
-				if($currentform[0]->style=="2"){
-					$misc_style = $misc_style . '#wprev-slider-'.$currentform[0]->id.' .wprev_preview_bg1_T'.$currentform[0]->style.' {border-bottom:3px solid '.$template_misc_array['bgcolor2'].'}';
-				}
-				if($currentform[0]->style=="3"){
-					$misc_style = $misc_style . '#wprev-slider-'.$currentform[0]->id.' .wprev_preview_tcolor3_T'.$currentform[0]->style.' {text-shadow:'.$template_misc_array['tcolor3'].' 1px 1px 0px;}';
-				}
-				if($currentform[0]->style=="4"){
-					$misc_style = $misc_style . '#wprev-slider-'.$currentform[0]->id.' .wprev_preview_tcolor3_T'.$currentform[0]->style.' {color:'.$template_misc_array['tcolor3'].';}';
-				}
-				
-				//readmore color
-				if(isset($template_misc_array['read_more_color']) && $template_misc_array['read_more_color']!=''){
-					$misc_style = $misc_style . '#wprev-slider-'.$currentform[0]->id.' .wprs_rd_more{color:'.$template_misc_array['read_more_color'].';}';
-				}
-				
+				$misc_style = WP_Google_Reviews_Sanitize::build_template_misc_style( $currentform[0]->id, $currentform[0]->style, $template_misc_array, '', true );
+
 				//------------------------
 				echo "<style>".$misc_style."</style>";
 			}
@@ -407,7 +394,9 @@
 				if($currentform[0]->style=="1"){
 				$iswidget=false;
 					include(plugin_dir_path( __FILE__ ) . '/template_style_1.php');
-				//require_once plugin_dir_path( __FILE__ ) . '/template_style_1.php';
+				} else if($currentform[0]->style=="6"){
+				$iswidget=false;
+					include(plugin_dir_path( __FILE__ ) . '/template_style_6.php');
 				}
 			
 			//if making slide show then end loop here

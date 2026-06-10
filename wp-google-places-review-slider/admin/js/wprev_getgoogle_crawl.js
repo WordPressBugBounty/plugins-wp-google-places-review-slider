@@ -81,16 +81,16 @@
 								if(objresponse.img && objresponse.img!=''){
 								$( '#businessimg' ).attr("src", objresponse.img);
 								}
-								$( '#businessname' ).html(objresponse.businessname);
+								$( '#businessname' ).text(objresponse.businessname);
 								businessname = objresponse.businessname;
 								foundplaceid = objresponse.foundplaceid;
 								fromurl = objresponse.googleurl;
 								console.log("businessname:"+businessname);
 								console.log("foundplaceid:"+foundplaceid);
 								
-								$( '#placeid' ).html(objresponse.foundplaceid);
-								$( '#website' ).html(objresponse.website);
-								$( '#googleurl' ).html(objresponse.googleurl);
+								$( '#placeid' ).text(objresponse.foundplaceid);
+								$( '#website' ).text(objresponse.website);
+								$( '#googleurl' ).text(objresponse.googleurl);
 								$( '#googleurl' ).attr("href", objresponse.googleurl)
 								$( '#reviewtext' ).html('Rated <b>'+objresponse.rating+' out of '+objresponse.totalreviews);
 								$( '#downloadreviews' ).show();

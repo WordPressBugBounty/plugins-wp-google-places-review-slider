@@ -133,6 +133,10 @@
 		$templatemiscarray['tcolor2']=sanitize_hex_color($_POST['wprevpro_template_misc_tcolor2']);
 		$templatemiscarray['tcolor3']=sanitize_hex_color($_POST['wprevpro_template_misc_tcolor3']);
 		$templatemiscarray['bradius']=sanitize_text_field($_POST['wprevpro_template_misc_bradius']);
+		$tfont1_val = isset( $_POST['wprevpro_template_misc_tfont1'] ) ? absint( $_POST['wprevpro_template_misc_tfont1'] ) : 0;
+		$tfont2_val = isset( $_POST['wprevpro_template_misc_tfont2'] ) ? absint( $_POST['wprevpro_template_misc_tfont2'] ) : 0;
+		$templatemiscarray['tfont1'] = $tfont1_val > 0 ? (string) $tfont1_val : '';
+		$templatemiscarray['tfont2'] = $tfont2_val > 0 ? (string) $tfont2_val : '';
 		$templatemiscarray['showmedia']=sanitize_text_field($_POST['wprevpro_t_showmedia']);
 		$templatemiscarray['verified']=sanitize_text_field($_POST['wprevpro_template_misc_verified']);
 		$templatemiscarray['lastnameformat']=sanitize_text_field($_POST['wprevpro_template_misc_lastname']);
@@ -192,9 +196,11 @@
 		}
 		
 		$templatemiscarray['bbradius']=sanitize_text_field($_POST['wprevpro_t_bbradius']);
-		$templatemiscarray['bbkcolor']=sanitize_text_field($_POST['wprevpro_t_bbkcolor']);
+		$templatemiscarray['bbwidth']=sanitize_text_field($_POST['wprevpro_t_bbwidth']);
+		$templatemiscarray['bbcolor']=WP_Google_Reviews_Sanitize::sanitize_css_color($_POST['wprevpro_t_bbcolor']);
+		$templatemiscarray['bbkcolor']=WP_Google_Reviews_Sanitize::sanitize_css_color($_POST['wprevpro_t_bbkcolor']);
 		$templatemiscarray['bbtnurl']=sanitize_text_field($_POST['wprevpro_t_bbtnurl']);
-		$templatemiscarray['bbtncolor']=sanitize_text_field($_POST['wprevpro_t_bbtncolor']);
+		$templatemiscarray['bbtncolor']=WP_Google_Reviews_Sanitize::sanitize_css_color($_POST['wprevpro_t_bbtncolor']);
 		$templatemiscarray['bimgurl']=sanitize_text_field($_POST['wprevpro_t_bimgurl']);
 		$templatemiscarray['bshape']=sanitize_text_field($_POST['wprevpro_t_bshape']);
 		$templatemiscarray['bimgsize']=sanitize_text_field($_POST['wprevpro_t_bimgsize']);
@@ -204,7 +210,7 @@
 
 		//read more
 		$templatemiscarray['read_more_num']=sanitize_text_field($_POST['wprevpro_t_read_more_num']);
-		$templatemiscarray['read_more_color']=sanitize_text_field($_POST['wprevpro_t_read_more_color']);
+		$templatemiscarray['read_more_color']=WP_Google_Reviews_Sanitize::sanitize_css_color($_POST['wprevpro_t_read_more_color']);
 
 
 		$templatemiscjson = json_encode($templatemiscarray);
@@ -497,12 +503,20 @@ echo $dbmsg;
 								<div class="wprevpre_temp_label_row wprevpre_tcolor3">
 								<?php _e('Text Color 3:', 'wp-google-reviews'); ?>
 								</div>
+								<div class="wprevpre_temp_label_row">
+								<?php _e('Review Font Size:', 'wp-google-reviews'); ?>
+								</div>
+								<div class="wprevpre_temp_label_row">
+								<?php _e('Name/Date Font Size:', 'wp-google-reviews'); ?>
+								</div>
 							</div>
 							<div class="w3_wprs-col s6">
 								<div class="wprevpre_temp_label_row">
 									<select name="wprevpro_template_style" id="wprevpro_template_style">
-									  <option value="1" <?php if($currenttemplate->style=='1' || $currenttemplate->style==""){echo "selected";} ?>>Style 1</option>
+									  <option value="1" <?php if($currenttemplate->style=='1' || $currenttemplate->style==""){echo "selected";} ?>><?php _e('Style', 'wp-google-reviews'); ?> 1</option>
+									  <option value="6" <?php if($currenttemplate->style=='6'){echo "selected";} ?>><?php _e('Style', 'wp-google-reviews'); ?> 6</option>
 									</select>
+									<a href="https://wpreviewslider.com/features/#templatedivid" target="_blank" rel="noopener noreferrer" style="font-size: 11px; margin-left: 8px; vertical-align: middle; display: inline-block; line-height: 1.2;"><?php echo wp_kses( __( 'Pro Version<br>Styles...', 'wp-google-reviews' ), array( 'br' => array() ) ); ?></a>
 								</div>
 				<?php
 				//echo $currenttemplate->template_misc;
@@ -530,6 +544,12 @@ echo $dbmsg;
 				}
 				if(!isset($template_misc_array['lastnameformat'])){
 					$template_misc_array['lastnameformat']='show';
+				}
+				if(!isset($template_misc_array['tfont1'])){
+					$template_misc_array['tfont1']='';
+				}
+				if(!isset($template_misc_array['tfont2'])){
+					$template_misc_array['tfont2']='';
 				}
 				?>
 								<div class="wprevpre_temp_label_row">
@@ -593,6 +613,12 @@ echo $dbmsg;
 								</div>
 								<div class="wprevpre_temp_label_row wprevpre_tcolor3">
 									<input type="text" value="<?php echo esc_html($template_misc_array['tcolor3']); ?>" name="wprevpro_template_misc_tcolor3" id="wprevpro_template_misc_tcolor3" class="my-color-field" />
+								</div>
+								<div class="wprevpre_temp_label_row">
+									<input type="number" value="<?php echo esc_attr($template_misc_array['tfont1']); ?>" style="width: 4em;min-width: 4em;" min="0" name="wprevpro_template_misc_tfont1" id="wprevpro_template_misc_tfont1" />px
+								</div>
+								<div class="wprevpre_temp_label_row">
+									<input type="number" value="<?php echo esc_attr($template_misc_array['tfont2']); ?>" style="width: 4em;min-width: 4em;" min="0" name="wprevpro_template_misc_tfont2" id="wprevpro_template_misc_tfont2" />px
 								</div>
 								
 								
@@ -947,6 +973,12 @@ if(!isset($template_misc_array['bbkcolor'])){
 if(!isset($template_misc_array['bbradius'])){
 	$template_misc_array['bbradius']="0";
 }
+if(!isset($template_misc_array['bbwidth'])){
+	$template_misc_array['bbwidth']="0";
+}
+if(!isset($template_misc_array['bbcolor'])){
+	$template_misc_array['bbcolor']="#eeeeee";
+}
 if(!isset($template_misc_array['bshape'])){
 	$template_misc_array['bshape']="";
 }
@@ -1021,7 +1053,15 @@ if(!isset($template_misc_array['bimgsize'])){
 					</div>
 					<div class="badgeinfosetting">
 						<div class="bsetlabel"><?php _e('Border Radius:', 'wp-google-reviews'); ?></div>
-						<input id="wprevpro_t_bbradius" type="number" name="wprevpro_t_bbradius" value="<?php if($template_misc_array['bbradius']!=""){echo $template_misc_array['bbradius'];} ?>" style="width: 7em">
+						<input id="wprevpro_t_bbradius" type="number" min="0" name="wprevpro_t_bbradius" value="<?php if($template_misc_array['bbradius']!=""){echo esc_attr($template_misc_array['bbradius']);} ?>" style="width: 7em">
+					</div>
+					<div class="badgeinfosetting">
+						<div class="bsetlabel"><?php _e('Border Size:', 'wp-google-reviews'); ?></div>
+						<input id="wprevpro_t_bbwidth" type="number" min="0" name="wprevpro_t_bbwidth" value="<?php if($template_misc_array['bbwidth']!=""){echo esc_attr($template_misc_array['bbwidth']);} ?>" style="width: 7em">
+					</div>
+					<div class="badgeinfosetting">
+						<div class="bsetlabel"><?php _e('Border Color:', 'wp-google-reviews'); ?></div>
+						<input type="text" data-alpha="true" value="<?php if($template_misc_array['bbcolor']!=""){echo esc_attr($template_misc_array['bbcolor']);} ?>" name="wprevpro_t_bbcolor" id="wprevpro_t_bbcolor" class="my-color-field" />
 					</div>
 				</div>
 				</td>

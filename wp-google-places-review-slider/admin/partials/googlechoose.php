@@ -157,12 +157,12 @@ foreach ($googlecrawlsarray as $key =>$savedplace) {
 		$tempfoundplaceid = limit_text($tempfoundplaceid);
 		$placeid_link = '';
 		if($tempfoundplaceid != '' && strpos($tempfoundplaceid, 'ChIJ') === 0) {
-			$placeid_link = '<a href="https://search.google.com/local/reviews?placeid='.urlencode($tempfoundplaceid).'" target="_blank" style="color: #1976d2; text-decoration: none;">'.$tempfoundplaceid.'</a>';
+			$placeid_link = '<a href="https://search.google.com/local/reviews?placeid='.urlencode($tempfoundplaceid).'" target="_blank" style="color: #1976d2; text-decoration: none;">'.esc_html($tempfoundplaceid).'</a>';
 		} else {
-			$placeid_link = $tempfoundplaceid;
+			$placeid_link = esc_html($tempfoundplaceid);
 		}
 		
-		echo "<tr><td> ".limit_text($tempbusiness) ."</td><td>".$placeid_link."</td><td> Crawl : ".$savedplace['nhful'] ."</td><td> 
+		echo "<tr><td> ".esc_html(limit_text($tempbusiness)) ."</td><td>".$placeid_link."</td><td> Crawl : ".esc_html($savedplace['nhful']) ."</td><td> 
 		<a class='w3-button w3-red w3-padding-small' href='?page=wp_google-googlesettings&ract=del&place=".urlencode($key)."&placeid=".urlencode($tempfoundplaceid)."&type=crawl'>Delete</a>
 		<a class='w3-button w3-green w3-padding-small' href='".$urlgooglegooglecrawl."&ract=edit&place=".urlencode($key)."&placeid=".urlencode($tempfoundplaceid)."'>Get Reviews</a>
 		&nbsp;<img class='buttonloader2 loadinggifchoosepage' width='20' height='20' src='".plugin_dir_url( __FILE__ )."loading.gif' style='display:none;'><span class='googletestresults2'></span>
@@ -205,12 +205,12 @@ foreach ($googlecrawlsarray as $key => $savedplace) {
 		$tempfoundplaceid = limit_text($tempfoundplaceid);
 		$placeid_link = '';
 		if($tempfoundplaceid != '' && strpos($tempfoundplaceid, 'ChIJ') === 0) {
-			$placeid_link = '<a href="https://search.google.com/local/reviews?placeid='.urlencode($tempfoundplaceid).'" target="_blank" style="color: #1976d2; text-decoration: none;">'.$tempfoundplaceid.'</a>';
+			$placeid_link = '<a href="https://search.google.com/local/reviews?placeid='.urlencode($tempfoundplaceid).'" target="_blank" style="color: #1976d2; text-decoration: none;">'.esc_html($tempfoundplaceid).'</a>';
 		} else {
-			$placeid_link = $tempfoundplaceid;
+			$placeid_link = esc_html($tempfoundplaceid);
 		}
 		
-		echo "<tr><td> ".limit_text($tempbusiness) ."</td><td>".$placeid_link."</td><td> Crawl Method : ".$nhful ."</td><td> 
+		echo "<tr><td> ".esc_html(limit_text($tempbusiness)) ."</td><td>".$placeid_link."</td><td> Crawl Method : ".esc_html($nhful) ."</td><td> 
 		<a class='w3-button w3-red w3-padding-small' href='?page=wp_google-googlesettings&ract=del&place=".urlencode($key)."&placeid=".urlencode($tempfoundplaceid)."&type=crawl'>Delete</a>
 		<a class='w3-button w3-green w3-padding-small' href='".$urlgooglegooglecrawl."&ract=edit&place=".urlencode($key)."&placeid=".urlencode($tempfoundplaceid)."'>Get Reviews</a>
 		&nbsp;<img class='buttonloader2 loadinggifchoosepage' width='20' height='20' src='".plugin_dir_url( __FILE__ )."loading.gif' style='display:none;'><span class='googletestresults2'></span>
@@ -230,12 +230,12 @@ foreach ($googlecrawlsarray as $key => $savedplace) {
 		$tempfoundplaceid = limit_text($tempfoundplaceid);
 		$placeid_link = '';
 		if($tempfoundplaceid != '' && strpos($tempfoundplaceid, 'ChIJ') === 0) {
-			$placeid_link = '<a href="https://search.google.com/local/reviews?placeid='.urlencode($tempfoundplaceid).'" target="_blank" style="color: #1976d2; text-decoration: none;">'.$tempfoundplaceid.'</a>';
+			$placeid_link = '<a href="https://search.google.com/local/reviews?placeid='.urlencode($tempfoundplaceid).'" target="_blank" style="color: #1976d2; text-decoration: none;">'.esc_html($tempfoundplaceid).'</a>';
 		} else {
-			$placeid_link = $tempfoundplaceid;
+			$placeid_link = esc_html($tempfoundplaceid);
 		}
 		
-		echo "<tr><td> ".limit_text($tempbusiness) ."</td><td>".$placeid_link."</td><td> Old Crawl Method : ".$nhful ."</td><td> 
+		echo "<tr><td> ".esc_html(limit_text($tempbusiness)) ."</td><td>".$placeid_link."</td><td> Old Crawl Method : ".esc_html($nhful) ."</td><td> 
 		<a class='w3-button w3-red w3-padding-small' href='?page=wp_google-googlesettings&ract=del&place=".urlencode($key)."&placeid=".urlencode($tempfoundplaceid)."&type=crawl'>Delete</a>
 		<a class='w3-button w3-green w3-padding-small' href='".$urlgooglegooglecrawl."&ract=edit&place=".urlencode($key)."&placeid=".urlencode($tempfoundplaceid)."'>Get Reviews</a>
 		&nbsp;<img class='buttonloader2 loadinggifchoosepage' width='20' height='20' src='".plugin_dir_url( __FILE__ )."loading.gif' style='display:none;'><span class='googletestresults2'></span>
@@ -262,15 +262,15 @@ foreach ($googleapisarray as $key =>$savedplace) {
 		$tempfoundplaceid = limit_text($tempfoundplaceid);
 		$placeid_link = '';
 		if($tempfoundplaceid != '' && strpos($tempfoundplaceid, 'ChIJ') === 0) {
-			$placeid_link = '<a href="https://search.google.com/local/reviews?placeid='.urlencode($tempfoundplaceid).'" target="_blank" style="color: #1976d2; text-decoration: none;">'.$tempfoundplaceid.'</a>';
+			$placeid_link = '<a href="https://search.google.com/local/reviews?placeid='.urlencode($tempfoundplaceid).'" target="_blank" style="color: #1976d2; text-decoration: none;">'.esc_html($tempfoundplaceid).'</a>';
 		} else {
-			$placeid_link = $tempfoundplaceid;
+			$placeid_link = esc_html($tempfoundplaceid);
 		}
 		
-		echo "<tr><td> ".limit_text($tempbusiness) ."</td><td>".$placeid_link."</td><td> Places API : ".$savedplace['google_location_sort'] ."</td><td> 
+		echo "<tr><td> ".esc_html(limit_text($tempbusiness)) ."</td><td>".$placeid_link."</td><td> Places API : ".esc_html($savedplace['google_location_sort']) ."</td><td> 
 		<a class='w3-button w3-red w3-padding-small' href='?page=wp_google-googlesettings&ract=del&place=".urlencode($key)."&placeid=".urlencode($tempfoundplaceid)."&type=api'>Delete</a>
 		<a class='w3-button w3-dark-grey w3-padding-small' href='".$urlgoogleapi."&ract=edit&placeid=".urlencode($key)."'>Edit</a>
-		<a onclick='getgooglereviewsfunction(\"".$key."\")' class='w3-button w3-green w3-padding-small' data-type='api' data-placeid='".$key."' data-place='".urlencode($tempbusiness)."' data-nhful='".urlencode($nhful)."'>Download Reviews</a>&nbsp;<img class='buttonloader2 loadinggifchoosepage' width='20' height='20' src='".plugin_dir_url( __FILE__ )."loading.gif' style='display:none;'><span class='googletestresults2'></span>
+		<a onclick='getgooglereviewsfunction(\"".esc_js($key)."\")' class='w3-button w3-green w3-padding-small' data-type='api' data-placeid='".esc_attr($key)."' data-place='".urlencode($tempbusiness)."' data-nhful='".urlencode($nhful)."'>Download Reviews</a>&nbsp;<img class='buttonloader2 loadinggifchoosepage' width='20' height='20' src='".plugin_dir_url( __FILE__ )."loading.gif' style='display:none;'><span class='googletestresults2'></span>
 		</td></tr>";
 
 		}

@@ -131,51 +131,16 @@
 				$rowarray[0]=$totalreviewstemp;
 			}
 			
-			//add styles from template misc here
+			//add styles from template misc here (all color/number values sanitized for CSS context)
 			$template_misc_array = json_decode($currentform[0]->template_misc, true);
 			if(is_array($template_misc_array)){
-				$misc_style ="";
-				//hide stars and/or date
-				if($template_misc_array['showstars']=="no"){
-					$misc_style = $misc_style . '.wprevpro_star_imgs_T'.$currentform[0]->style.'_widget {display: none;}';
-				}
-				//if($template_misc_array['showdate']=="no"){
-				//	$misc_style = $misc_style . '.wprev_showdate_T'.$currentform[0]->style.'_widget {display: none;}';
-				//}
-				
-				$misc_style = $misc_style . '.wprev_preview_bradius_T'.$currentform[0]->style.'_widget {border-radius: '.$template_misc_array['bradius'].'px;}';
-				if($template_misc_array['bgcolor1']!=''){
-				$misc_style = $misc_style . '.wprev_preview_bg1_T'.$currentform[0]->style.'_widget {background:'.$template_misc_array['bgcolor1'].';}';
-				}
-				if($template_misc_array['bgcolor2']!=''){
-				$misc_style = $misc_style . '.wprev_preview_bg2_T'.$currentform[0]->style.'_widget {background:'.$template_misc_array['bgcolor2'].';}';
-				}
-				if($template_misc_array['tcolor1']!=''){
-				$misc_style = $misc_style . '.wprev_preview_tcolor1_T'.$currentform[0]->style.'_widget {color:'.$template_misc_array['tcolor1'].';}';
-				}
-				if($template_misc_array['tcolor2']!=''){
-				$misc_style = $misc_style . '.wprev_preview_tcolor2_T'.$currentform[0]->style.'_widget {color:'.$template_misc_array['tcolor2'].';}';
-				}
-				
-				//style specific mods
-				if($currentform[0]->style=="1"){
-					$misc_style = $misc_style . '.wprev_preview_bg1_T'.$currentform[0]->style.'_widget::after{ border-top: 30px solid '.$template_misc_array['bgcolor1'].'; }';
-				}
-				if($currentform[0]->style=="2"){
-					$misc_style = $misc_style . '.wprev_preview_bg1_T'.$currentform[0]->style.'_widget {border-bottom:3px solid '.$template_misc_array['bgcolor2'].'}';
-				}
-				if($currentform[0]->style=="3"){
-					$misc_style = $misc_style . '.wprev_preview_tcolor3_T'.$currentform[0]->style.'_widget {text-shadow:'.$template_misc_array['tcolor3'].' 1px 1px 0px;}';
-				}
-				if($currentform[0]->style=="4"){
-					$misc_style = $misc_style . '.wprev_preview_tcolor3_T'.$currentform[0]->style.'_widget {color:'.$template_misc_array['tcolor3'].';}';
-				}
-				
+				$misc_style = WP_Google_Reviews_Sanitize::build_template_misc_style( $currentform[0]->id, $currentform[0]->style, $template_misc_array, '_widget', false );
+
 				echo "<style>".$misc_style."</style>";
 			}
 
 			//print out user style added
-			echo "<style>".$currentform[0]->template_css."</style>";
+			echo "<style>".esc_html($currentform[0]->template_css)."</style>";
 			 
 			//if making slide show
 			if($makingslideshow){
@@ -186,6 +151,9 @@
 				if($currentform[0]->style=="1"){
 				$iswidget=true;
 					include(plugin_dir_path( __FILE__ ) . '/template_style_1.php');
+				} else if($currentform[0]->style=="6"){
+				$iswidget=true;
+					include(plugin_dir_path( __FILE__ ) . '/template_style_6.php');
 				}
 			
 			//if making slide show then end loop here

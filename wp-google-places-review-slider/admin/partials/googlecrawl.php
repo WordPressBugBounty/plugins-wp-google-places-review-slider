@@ -58,7 +58,7 @@ include("tabmenu.php");
     <h4>Google Search Terms or Place ID:</h4>
   </div>
   <div class=" w3-cell w3-cell-middle w3-padding-small">
-    <input id="gplaceid" style="width: 300px;" value="<?php echo stripslashes($savedplaceid); ?>" class="w3-input w3-border w3-round" type="text" placeholder="e.g.: ChIJOUW7JL0RYogRgDxol-LP_sU">
+    <input id="gplaceid" style="width: 300px;" value="<?php echo esc_attr(stripslashes($savedplaceid)); ?>" class="w3-input w3-border w3-round" type="text" placeholder="e.g.: ChIJOUW7JL0RYogRgDxol-LP_sU">
   </div>
   <div class=" w3-cell w3-cell-middle w3-padding-small">
     <button id="savetest" data-editplace="<?php echo urlencode($editplace); ?>" type="button" class="w3-btn w3-padding-small2 w3-green w3-small" style="width:120px">Save & Test &nbsp; ❯</button><div id="buttonloader" style="display:none;" class="wprevloader"></div>
@@ -87,12 +87,12 @@ if(isset($previouscheck['img']) && $previouscheck['img']!='' && $previouscheck['
 		<div class="w3-card-4">
 			<div class="w3-container">
 				<div class="w3-row">
-				  <div class="w3-col" style="width:85px"><img id='businessimg' src="<?php echo $tempimg; ?>" alt="location logo" class="w3-circle"></div>
-				  <div class="w3-rest"><p><strong id='businessname'><?php if($previouscheck['businessname']!=''){echo $previouscheck['businessname'];} ?></strong><br>
-					  <span id='website'><?php if($previouscheck['website']!=''){echo $previouscheck['website'];} ?></span><br>
-					  <span id='reviewtext'><?php if($previouscheck['rating']!=''){echo 'Rated <b>'.$previouscheck['rating'].'</b> out of <b>'.$previouscheck['totalreviews'].'</b>';} ?></span><br>
-					  <span id='placeid'><?php if($previouscheck['foundplaceid']!=''){echo $previouscheck['foundplaceid'];} ?></span><br>
-					  <a id='googleurl' href='<?php if($previouscheck['googleurl']!=''){echo $previouscheck['googleurl'];} ?>' target="_blank"><?php if($previouscheck['googleurl']!=''){echo $previouscheck['googleurl'];} ?></a>
+				  <div class="w3-col" style="width:85px"><img id='businessimg' src="<?php echo esc_url($tempimg); ?>" alt="location logo" class="w3-circle"></div>
+				  <div class="w3-rest"><p><strong id='businessname'><?php if($previouscheck['businessname']!=''){echo esc_html($previouscheck['businessname']);} ?></strong><br>
+					  <span id='website'><?php if($previouscheck['website']!=''){echo esc_html($previouscheck['website']);} ?></span><br>
+					  <span id='reviewtext'><?php if($previouscheck['rating']!=''){echo 'Rated <b>'.esc_html($previouscheck['rating']).'</b> out of <b>'.esc_html($previouscheck['totalreviews']).'</b>';} ?></span><br>
+					  <span id='placeid'><?php if($previouscheck['foundplaceid']!=''){echo esc_html($previouscheck['foundplaceid']);} ?></span><br>
+					  <a id='googleurl' href='<?php if($previouscheck['googleurl']!=''){echo esc_url($previouscheck['googleurl']);} ?>' target="_blank"><?php if($previouscheck['googleurl']!=''){echo esc_html($previouscheck['googleurl']);} ?></a>
 					</p>
 					</div>
 				</div>

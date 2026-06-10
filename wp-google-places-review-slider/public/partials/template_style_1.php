@@ -81,15 +81,15 @@ for ($x = 0; $x < count($rowarray); $x++) {
 		if($template_misc_array['showicon']=="no"){
 			$yelp_logo = '';
 		} else if($template_misc_array['showicon']=="yes"){
-			 $yelp_logo = '<img src="'.$imgs_url.''.$typelower.'_small_icon.png" alt="'.$review->type.' Logo" class="wprevpro_t1_site_logo siteicon sitetype_'.$review->type.'">';
+			 $yelp_logo = '<img src="'.$imgs_url.''.$typelower.'_small_icon.png" alt="'.esc_attr($review->type).' Logo" class="wprevpro_t1_site_logo siteicon sitetype_'.esc_attr($review->type).'">';
 		 } else {
 			 if($review->type=="Facebook") {
 				//facebook logo
 				$burl = "https://www.facebook.com/pg/".$review->pageid."/reviews/";
-				$yelp_logo = '<a href="'.esc_url( $burl ).'" target="_blank" rel="nofollow"><img src="'.$imgs_url.'facebook_small_icon.png" alt="" class="wprevpro_t1_fb_logo sitetype_'.$review->type.'"></a>';
+				$yelp_logo = '<a href="'.esc_url( $burl ).'" target="_blank" rel="nofollow"><img src="'.$imgs_url.'facebook_small_icon.png" alt="" class="wprevpro_t1_fb_logo sitetype_'.esc_attr($review->type).'"></a>';
 			} else if($review->type=="Google") {
 			 $burl = $review->from_url;
-			$yelp_logo = '<a href="'.esc_url( $burl ).'" target="_blank" rel="nofollow noreferrer" class="wprevpro_t1_site_logo_a"><img src="'.$imgs_url.''.$typelower.'_small_icon.png" alt="'.$review->type.' Logo" class="wprevpro_t1_site_logo siteicon sitetype_'.$review->type.'"></a>';
+			$yelp_logo = '<a href="'.esc_url( $burl ).'" target="_blank" rel="nofollow noreferrer" class="wprevpro_t1_site_logo_a"><img src="'.$imgs_url.''.$typelower.'_small_icon.png" alt="'.esc_attr($review->type).' Logo" class="wprevpro_t1_site_logo siteicon sitetype_'.esc_attr($review->type).'"></a>';
 			}
 		}
 		
@@ -213,7 +213,7 @@ for ($x = 0; $x < count($rowarray); $x++) {
 		//add verified if needed.
 		$verifiedhtml = '';
 		if(isset($template_misc_array['verified']) && $template_misc_array['verified']=="yes1"){
-			$verifiedhtml = '<span class="verifiedloc1 wprevpro_verified_svg wprevtooltip" data-wprevtooltip="Verified on '.$review->type.'"><span class="svgicons svg-wprsp-verified"></span></span>';
+			$verifiedhtml = '<span class="verifiedloc1 wprevpro_verified_svg wprevtooltip" data-wprevtooltip="Verified on '.esc_attr($review->type).'"><span class="svgicons svg-wprsp-verified"></span></span>';
 		}
 		
 		//media

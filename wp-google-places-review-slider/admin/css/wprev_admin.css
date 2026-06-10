@@ -80,6 +80,17 @@ div#wpfbr_loading_prev_div {
 div#wpfbr_preview_outer {
     padding-bottom: 30px;
 }
+div#wpfbr_preview_outer a.wprev_media_img_a,
+div#wpfbr_preview_outer a.wprev_media_img_a:hover,
+div#wpfbr_preview_outer a.wprev_media_img_a:active,
+div#wpfbr_preview_outer a.wprev_media_img_a:focus,
+div#wpfbr_preview_outer a.wprev_media_img_a:focus-visible {
+	border: none !important;
+	outline: none !important;
+	box-shadow: none !important;
+	color: inherit !important;
+	text-decoration: none !important;
+}
 img#loadingpreview {
     height: 20px;
     display: block;
@@ -352,6 +363,19 @@ div#setting-error-settings_updated {
 }
 #wpfb_review_list_pagination_bar {
     margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+#wpfb_review_list_pagination_bar .button,
+#wpfb_review_list_pagination_bar a.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    padding: 0 8px;
+    line-height: 1;
+    text-decoration: none;
 }
 a.button.blue_grey {
     background: #cccccc;
@@ -432,6 +456,19 @@ input#wprevpro_filter_table_name {
 }
 div#wprevpro_list_pagination_bar {
     margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+div#wprevpro_list_pagination_bar .button,
+div#wprevpro_list_pagination_bar a.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    padding: 0 8px;
+    line-height: 1;
+    text-decoration: none;
 }
 th.wprevpro_tablesort.manage-column {
     cursor: pointer;
