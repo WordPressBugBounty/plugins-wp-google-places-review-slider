@@ -879,7 +879,7 @@ echo $dbmsg;
 						if($template_misc_array['filtersource']==$currentlocation->pageid){
 							$selected = "selected";
 						}
-						echo '<option value="'.$currentlocation->pageid.'" '.$selected.'>'.$currentlocation->pagename.'</option>';
+						echo '<option value="'.esc_attr($currentlocation->pageid).'" '.$selected.'>'.esc_html($currentlocation->pagename).'</option>';
 					
 					}
 					?>

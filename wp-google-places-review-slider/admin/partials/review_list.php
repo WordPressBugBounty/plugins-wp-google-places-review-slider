@@ -299,7 +299,7 @@ _e('Search reviews, hide certain reviews, manually add reviews, download a CSV f
 				//if this is a not a manual review or new one then disable this
 					$tempdisable = 'readonly';
 				?>
-					<textarea name="wprevpro_nr_text" id="wprevpro_nr_text" cols="50" rows="4" <?php echo $tempdisable; ?>><?php echo $currentreview->review_text; ?></textarea>
+					<textarea name="wprevpro_nr_text" id="wprevpro_nr_text" cols="50" rows="4" <?php echo $tempdisable; ?>><?php echo esc_textarea($currentreview->review_text); ?></textarea>
 				</td>
 			</tr>
 			<tr class="wprevpro_row">
@@ -307,7 +307,7 @@ _e('Search reviews, hide certain reviews, manually add reviews, download a CSV f
 					<?php _e('Reviewer Name:', 'wp-google-reviews'); ?>
 				</th>
 				<td>
-					<input id="wprevpro_nr_name" data-custom="custom" type="text" name="wprevpro_nr_name" placeholder="" value="<?php echo $currentreview->reviewer_name; ?>" required <?php echo $tempdisable; ?>>
+					<input id="wprevpro_nr_name" data-custom="custom" type="text" name="wprevpro_nr_name" placeholder="" value="<?php echo esc_attr($currentreview->reviewer_name); ?>" required <?php echo $tempdisable; ?>>
 					<p class="description">
 					<?php _e('Enter the name of the person who wrote this review.', 'wp-google-reviews'); ?>		</p>
 				</td>
@@ -317,7 +317,7 @@ _e('Search reviews, hide certain reviews, manually add reviews, download a CSV f
 					<?php _e('Reviewer Pic URL:', 'wp-google-reviews'); ?>
 				</th>
 				<td>
-					<input id="wprevpro_nr_avatar_url" data-custom="custom" type="text" name="wprevpro_nr_avatar_url" placeholder="" value="<?php if($currentreview->userpic!=""){echo $currentreview->userpic; } else {echo plugin_dir_url( __FILE__ ) . 'google_mystery_man.png';} ?>"> <a id="upload_avatar_button" class="button"><?php _e('Upload', 'wp-google-reviews'); ?></a>
+					<input id="wprevpro_nr_avatar_url" data-custom="custom" type="text" name="wprevpro_nr_avatar_url" placeholder="" value="<?php if($currentreview->userpic!=""){echo esc_url($currentreview->userpic); } else {echo esc_url(plugin_dir_url( __FILE__ ) . 'google_mystery_man.png');} ?>"> <a id="upload_avatar_button" class="button"><?php _e('Upload', 'wp-google-reviews'); ?></a>
 					<br><p class="description">
 					<?php _e('Avatar for the person who wrote the review. Click the following image to insert generic avatar URL.', 'wp-google-reviews'); ?>
 					</p>
@@ -325,7 +325,7 @@ _e('Search reviews, hide certain reviews, manually add reviews, download a CSV f
 					<img src="<?php echo plugin_dir_url( __FILE__ ); ?>google_mystery_man.png" alt="thumb" class="rlimg default_avatar_img">&nbsp;&nbsp;&nbsp;
 					</div>
 					</br>
-					<img class="" height="100px" id="avatar_preview" src="<?php if($currentreview->userpic!=""){echo $currentreview->userpic; } else {echo plugin_dir_url( __FILE__ ) . 'google_mystery_man.png';} ?>">
+					<img class="" height="100px" id="avatar_preview" src="<?php if($currentreview->userpic!=""){echo esc_url($currentreview->userpic); } else {echo esc_url(plugin_dir_url( __FILE__ ) . 'google_mystery_man.png');} ?>">
 				</td>
 			</tr>
 			<tr class="wprevpro_row">
@@ -333,7 +333,7 @@ _e('Search reviews, hide certain reviews, manually add reviews, download a CSV f
 					<?php _e('Review Date:', 'wp-google-reviews'); ?>
 				</th>
 				<td>
-					<input id="wprevpro_nr_date" data-custom="custom" type="text" name="wprevpro_nr_date" placeholder="" value="<?php if($currentreview->created_time!=""){echo $currentreview->created_time; } else {echo date("Y-m-d H:i:s",current_time( 'timestamp' ));} ?>" required readonly>
+					<input id="wprevpro_nr_date" data-custom="custom" type="text" name="wprevpro_nr_date" placeholder="" value="<?php if($currentreview->created_time!=""){echo esc_attr($currentreview->created_time); } else {echo esc_attr(date("Y-m-d H:i:s",current_time( 'timestamp' )));} ?>" required readonly>
 				</td>
 			</tr>
 		</tbody>
@@ -343,8 +343,8 @@ _e('Search reviews, hide certain reviews, manually add reviews, download a CSV f
 	wp_nonce_field( 'wprevpro_save_review');
 	$customlastsaveoption = get_option('wprevpro_customlastsave');
 	?>
-	<input type="hidden" name="editrid" id="editrid"  value="<?php echo $currentreview->id; ?>">
-	<input type="hidden" name="editrtype" id="editrtype"  value="<?php echo $currentreview->type; ?>">
+	<input type="hidden" name="editrid" id="editrid"  value="<?php echo esc_attr($currentreview->id); ?>">
+	<input type="hidden" name="editrtype" id="editrtype"  value="<?php echo esc_attr($currentreview->type); ?>">
 	<input type="submit" name="wprevpro_submitreviewbtn" id="wprevpro_submitreviewbtn" class="button button-primary" value="<?php _e('Save Review', 'wp-google-reviews'); ?>">
 	<a id="wprevpro_addnewreview_cancel" class="button button-secondary"><?php _e('Cancel', 'wp-google-reviews'); ?></a>
 </form>
@@ -484,9 +484,9 @@ _e('Search reviews, hide certain reviews, manually add reviews, download a CSV f
 
 				//user image
 				if($reviewsrow->userpic!=""){
-					$userpic = '<img style="-webkit-user-select: none; width:50px;" src="'.$reviewsrow->userpic.'">';
+					$userpic = '<img style="-webkit-user-select: none; width:50px;" src="'.esc_url($reviewsrow->userpic).'">';
 				} else {
-				$userpic = '<img style="-webkit-user-select: none; width:50px;" src="https://graph.facebook.com/v2.2/'.$reviewsrow->reviewer_id.'/picture?type=square">';
+				$userpic = '<img style="-webkit-user-select: none; width:50px;" src="'.esc_url('https://graph.facebook.com/v2.2/'.$reviewsrow->reviewer_id.'/picture?type=square').'">';
 				}
 				//user profile link
 				$profilelink = '';
@@ -494,7 +494,7 @@ _e('Search reviews, hide certain reviews, manually add reviews, download a CSV f
 					$profilelink = "http://facebook.com/".$reviewsrow->reviewer_id;
 				}
 				if($profilelink){
-					$userpic = '<a href="'.$profilelink.'" target=_blank>'.$userpic.'</a>';
+					$userpic = '<a href="'.esc_url($profilelink).'" target=_blank>'.$userpic.'</a>';
 				}
 				$editurl = add_query_arg( 'editrev', $reviewsrow->id,$currenturl );
 				$deleteurl = add_query_arg( 'deleterev', $reviewsrow->id,$currenturl );
@@ -518,18 +518,18 @@ _e('Search reviews, hide certain reviews, manually add reviews, download a CSV f
 					$mediahtml = $mediahtml.'</div>';
 				}
 				
-				$html .= '<tr id="'.$reviewsrow->id.'" class="'.$hiddentrclass.'">
+				$html .= '<tr id="'.esc_attr($reviewsrow->id).'" class="'.esc_attr($hiddentrclass).'">
 						<th scope="col" class="manage-column"><a title="edit" alt="edit" href="'.$editurl.'">'.$editicon.'</a><br><a title="delete" alt="delete" href="'.$deleteurl.'">'.$deleteicon.'</a><br>
 						<a title="hide/unhide" alt="hide/unhide" href="'.$hideurl.'">'.$hideicon.'</a>
 						</th>
 						<th scope="col" class="manage-column">'.$userpic.'</th>
-						<th scope="col" class="manage-column">'.$reviewsrow->reviewer_name.'</th>
-						<th scope="col" class="manage-column">'.$reviewsrow->rating.'</th>
-						<th scope="col" class="manage-column"><span title="'.$reviewsrow->review_text.'">'.$reviewsrow->review_text.$mediahtml.'</span></th>
-						<th scope="col" class="manage-column">'.$reviewsrow->created_time.'</th>
-						<th scope="col" class="manage-column">'.$reviewsrow->review_length.'</th>
-						<th scope="col" class="manage-column">'.$reviewsrow->pagename.'</th>
-						<th scope="col" class="manage-column">'.$reviewsrow->type.'</th>
+						<th scope="col" class="manage-column">'.esc_html($reviewsrow->reviewer_name).'</th>
+						<th scope="col" class="manage-column">'.esc_html($reviewsrow->rating).'</th>
+						<th scope="col" class="manage-column"><span title="'.esc_attr($reviewsrow->review_text).'">'.esc_html($reviewsrow->review_text).$mediahtml.'</span></th>
+						<th scope="col" class="manage-column">'.esc_html($reviewsrow->created_time).'</th>
+						<th scope="col" class="manage-column">'.esc_html($reviewsrow->review_length).'</th>
+						<th scope="col" class="manage-column">'.esc_html($reviewsrow->pagename).'</th>
+						<th scope="col" class="manage-column">'.esc_html($reviewsrow->type).'</th>
 					</tr>';
 			}
 		} else {
