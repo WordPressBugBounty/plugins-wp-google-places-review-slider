@@ -582,6 +582,14 @@ span.locationlabel {
 font-size: 14px;
 color: #646970;
 }
+.wprevdescription a{
+color: #0073aa;
+text-decoration: none;
+}
+.wprevdescription a:hover{
+color: #005a87;
+text-decoration: underline;
+}
 .wprevloader {
 border: 5px solid #f3f3f3;
     border-top: 5px solid #3498db;

@@ -64,8 +64,8 @@ include("tabmenu.php");
     <button id="savetest" data-editplace="<?php echo urlencode($editplace); ?>" type="button" class="w3-btn w3-padding-small2 w3-green w3-small" style="width:120px">Save & Test &nbsp; ❯</button><div id="buttonloader" style="display:none;" class="wprevloader"></div>
   </div>
   <div class="w3-padding-small"><span class="wprevdescription">
-  <?php _e('Need help finding your', 'wp-google-reviews'); ?><a href="https://ljapps.com/wp-content/uploads/2021/08/google_search_terms.mp4" target="_blank" style="text-decoration: none;">
-<?php _e('Google Search Terms', 'wp-google-reviews'); ?></a> <?php _e('or', 'wp-google-reviews'); ?> <a href="https://ljapps.com/two-methods-to-find-your-google-place-id/" target="_blank" style="text-decoration: none;">
+  <?php _e('Need help finding your', 'wp-google-reviews'); ?> <a href="https://ljapps.com/wp-content/uploads/2021/08/google_search_terms.mp4" target="_blank">
+<?php _e('Google Search Terms', 'wp-google-reviews'); ?></a> <?php _e('or', 'wp-google-reviews'); ?> <a href="https://ljapps.com/two-methods-to-find-your-google-place-id/" target="_blank">
 <?php _e('Place ID?', 'wp-google-reviews'); ?></a></span>
 </div>
 </div>

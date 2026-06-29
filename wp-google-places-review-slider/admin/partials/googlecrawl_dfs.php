@@ -18,14 +18,14 @@
     }
 	
 	$currentplace = "";
-	if(isset($_GET['place'])){
-		$currentplace = urldecode($_GET['place']);
+	if ( isset( $_GET['place'] ) ) {
+		$currentplace = sanitize_text_field( wp_unslash( urldecode( $_GET['place'] ) ) );
 	}
 	$editid="";
 	$editplace ="";
-	if(isset($_GET['ract']) && $_GET['ract']=="edit"){
+	if ( isset( $_GET['ract'] ) && 'edit' === sanitize_text_field( wp_unslash( $_GET['ract'] ) ) ) {
 		$editidedit="edit";
-		$editplace = urldecode($_GET['place']);
+		$editplace = $currentplace;
 	}
 	
 $googlecrawlsarray = Array();
@@ -106,12 +106,12 @@ include("tabmenu.php");
     <h4>Google Search Terms or Place ID:</h4>
   </div>
   <div class=" w3-cell w3-cell-middle w3-padding-small">
-    <input id="gplaceid" style="width: 300px;" value="<?php echo stripslashes($savedplaceid); ?>" class="w3-input w3-border w3-round" type="text" placeholder="e.g.: ChIJOUW7JL0RYogRgDxol-LP_sU">
+    <input id="gplaceid" style="width: 300px;" value="<?php echo esc_attr( stripslashes( $savedplaceid ) ); ?>" class="w3-input w3-border w3-round" type="text" placeholder="e.g.: ChIJOUW7JL0RYogRgDxol-LP_sU">
   </div>
 
   <div class="w3-padding-small"><span class="wprevdescription">
-  <?php _e('Need help finding your', 'wp-google-reviews'); ?><a href="https://ljapps.com/wp-content/uploads/2021/08/google_search_terms.mp4" target="_blank" style="text-decoration: none;">
-<?php _e('Google Search Terms', 'wp-google-reviews'); ?></a> <?php _e('or', 'wp-google-reviews'); ?> <a href="https://ljapps.com/two-methods-to-find-your-google-place-id/" target="_blank" style="text-decoration: none;">
+  <?php _e('Need help finding your', 'wp-google-reviews'); ?> <a href="https://ljapps.com/wp-content/uploads/2021/08/google_search_terms.mp4" target="_blank">
+<?php _e('Google Search Terms', 'wp-google-reviews'); ?></a> <?php _e('or', 'wp-google-reviews'); ?> <a href="https://ljapps.com/two-methods-to-find-your-google-place-id/" target="_blank">
 <?php _e('Place ID?', 'wp-google-reviews'); ?></a></span>
 </div>
 
@@ -143,12 +143,12 @@ include("tabmenu.php");
 			<i class="fa fa-download"></i> Download Completed Task
 		</button>
 		
-		<button id="savetest" data-editplace="<?php echo urlencode($editplace); ?>" type="button" class="w3-btn w3-padding-small2 w3-orange w3-small" style="width:150px">
+		<button id="savetest" data-editplace="<?php echo esc_attr( $editplace ); ?>" type="button" class="w3-btn w3-padding-small2 w3-orange w3-small" style="width:150px">
 			<i class="fa fa-refresh"></i> Submit New Task
 		</button>
 	<?php else: ?>
 		<!-- Show normal submit button for new tasks -->
-		<button id="savetest" data-editplace="<?php echo urlencode($editplace); ?>" type="button" class="w3-btn w3-padding-small2 w3-green w3-small" style="width:120px">Submit Task&nbsp; ❯</button>
+		<button id="savetest" data-editplace="<?php echo esc_attr( $editplace ); ?>" type="button" class="w3-btn w3-padding-small2 w3-green w3-small" style="width:120px">Submit Task&nbsp; ❯</button>
 	<?php endif; ?>
 	<div id="buttonloader" style="display: none;margin: 10px 0;" class="wprevloader w3-row-padding"></div>
   </div>
