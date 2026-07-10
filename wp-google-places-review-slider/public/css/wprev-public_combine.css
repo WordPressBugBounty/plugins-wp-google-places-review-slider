@@ -41,7 +41,7 @@ a.wprs_rd_more {
     margin: 0px !important;
 }
 span.wprs_rd_more_text {
-    display: inline;
+    display: none;
 	transition: opacity 1s;
 	opacity: 0;
 }

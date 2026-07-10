@@ -16,7 +16,7 @@
  * Plugin Name:       WP Google Review Slider
  * Plugin URI:        https://wpreviewslider.com/
  * Description:       Display Google reviews on your site with a slider or grid. Reviews are saved locally on your server for fast loading. No address? No problem — works with service area businesses, multiple locations, and product reviews.
- * Version:           18.2
+ * Version:           18.3
  * Author:            LJ Apps
  * Author URI:        https://wpreviewslider.com
  * License:           GPL-2.0+
