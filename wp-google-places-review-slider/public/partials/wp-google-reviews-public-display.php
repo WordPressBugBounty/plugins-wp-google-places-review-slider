@@ -201,7 +201,7 @@
 			if($templaceid!=""){
 				//grab average and total for each from avg total
 				$table_name_avg = $wpdb->prefix . 'wpfb_total_averages';
-				$currentlocation = $wpdb->get_results("SELECT * FROM $table_name_avg WHERE `pagetype` = 'Google' AND `btp_id` = '".$templaceid."' LIMIT 1");
+				$currentlocation = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table_name_avg WHERE `pagetype` = 'Google' AND `btp_id` = %s LIMIT 1", $templaceid ) );
 				
 				$badgeavg = $currentlocation[0]->avg;
 				$badgetotal = intval($currentlocation[0]->total);
