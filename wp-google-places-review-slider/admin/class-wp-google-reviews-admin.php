@@ -2057,7 +2057,7 @@ class WP_Google_Reviews_Admin {
 		
 		//badge options
 		$templatemiscarray['blocation']=sanitize_text_field($formarray['wprevpro_t_blocation']);
-		$templatemiscarray['filtersource']=sanitize_text_field($formarray['wprevpro_t_filtersource']);
+		$templatemiscarray['filtersource']=WP_Google_Reviews_Sanitize::sanitize_filtersource( isset( $formarray['wprevpro_t_filtersource'] ) ? $formarray['wprevpro_t_filtersource'] : '' );
 		
 		if(isset($formarray['wprevpro_t_bhreviews'])){
 			$templatemiscarray['bhreviews']=sanitize_text_field($formarray['wprevpro_t_bhreviews']);

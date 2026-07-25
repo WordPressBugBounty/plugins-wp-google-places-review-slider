@@ -80,12 +80,12 @@
 			$ratingquery ="";
 		}
 		
-		//location filter if set
-		$sourcelocationfilter ="";
-		if(isset($template_misc_array['filtersource']) && $template_misc_array['filtersource']!=""){
-			$sourcelocationfilter = " AND pageid = '".$template_misc_array['filtersource']."'";
+		// Location filter if set — always bound via prepare (never concatenated).
+		$filtersource = '';
+		if ( isset( $template_misc_array['filtersource'] ) && $template_misc_array['filtersource'] !== '' ) {
+			$filtersource = sanitize_text_field( $template_misc_array['filtersource'] );
 		}
-		
+
 		//if we are hiding all reviews in badge settings then do not even look for them.
 		//hide all the reviews!
 		if(!isset($template_misc_array['bhreviews'])){
@@ -94,12 +94,44 @@
 		if($template_misc_array['bhreviews']=="yes"){
 			$totalreviews = Array();
 		} else {
-			$totalreviews = $wpdb->get_results(
-				$wpdb->prepare("SELECT * FROM ".$table_name."
-				WHERE id>%d AND review_length >= %d AND type = %s AND hide != %s" .$ratingquery.$sourcelocationfilter."
-				ORDER BY ".$sorttable." ".$sortdir." 
-				LIMIT ".$tablelimit." ", "0","$rlength","$rtype","yes")
-			);
+			// Whitelist ORDER BY clause (display_order is an admin select, not free text).
+			if ( $currentform[0]->display_order == 'random' ) {
+				$order_by_sql = 'RAND()';
+			} else {
+				$order_by_sql = 'created_time_stamp DESC';
+			}
+			$tablelimit = absint( $tablelimit );
+
+			if ( $filtersource !== '' ) {
+				$totalreviews = $wpdb->get_results(
+					$wpdb->prepare(
+						"SELECT * FROM {$table_name}
+						WHERE id > %d AND review_length >= %d AND type = %s AND hide != %s" . $ratingquery . " AND pageid = %s
+						ORDER BY {$order_by_sql}
+						LIMIT %d",
+						0,
+						$rlength,
+						$rtype,
+						'yes',
+						$filtersource,
+						$tablelimit
+					)
+				);
+			} else {
+				$totalreviews = $wpdb->get_results(
+					$wpdb->prepare(
+						"SELECT * FROM {$table_name}
+						WHERE id > %d AND review_length >= %d AND type = %s AND hide != %s" . $ratingquery . "
+						ORDER BY {$order_by_sql}
+						LIMIT %d",
+						0,
+						$rlength,
+						$rtype,
+						'yes',
+						$tablelimit
+					)
+				);
+			}
 		}
 
 		//if we are adding a badge then wrap the slider in another outer div with flex box and add another div beside slider.

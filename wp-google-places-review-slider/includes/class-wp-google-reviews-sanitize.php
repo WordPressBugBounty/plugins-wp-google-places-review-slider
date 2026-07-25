@@ -159,6 +159,36 @@ class WP_Google_Reviews_Sanitize {
 	}
 
 	/**
+	 * Sanitize a template location filter (pageid / filtersource).
+	 *
+	 * Empty values are allowed (no filter). Non-empty values must match an
+	 * existing Google pageid in the reviews table — the same source list used
+	 * by the template "Choose Source" dropdown — so SQL payloads cannot be stored.
+	 *
+	 * @param string $pageid Raw filtersource / pageid value.
+	 * @return string Sanitized pageid, or '' if empty/invalid.
+	 */
+	public static function sanitize_filtersource( $pageid ) {
+		$pageid = sanitize_text_field( (string) $pageid );
+
+		if ( '' === $pageid ) {
+			return '';
+		}
+
+		global $wpdb;
+		$table = $wpdb->prefix . 'wpfb_reviews';
+		$valid = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT pageid FROM {$table} WHERE type = %s AND pageid = %s LIMIT 1",
+				'Google',
+				$pageid
+			)
+		);
+
+		return ( null !== $valid && false !== $valid && '' !== $valid ) ? (string) $valid : '';
+	}
+
+	/**
 	 * Build the inline <style> rules for a review template from its
 	 * template_misc settings, sanitizing every color/number value.
 	 *

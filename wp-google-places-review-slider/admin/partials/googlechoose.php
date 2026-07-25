@@ -57,35 +57,38 @@
 	
 
 	//check if we need to delete a source here
-	if(isset($_GET['ract']) && $_GET['ract']=="del"){
-		
-		$delplace = urldecode($_GET['place']);
-		$delplaceid = urldecode($_GET['placeid']);
-		
-		if($_GET['type']=="crawl"){
-			unset($googlecrawlsarray[$delplace]);
-			update_option('wprev_google_crawls',json_encode($googlecrawlsarray) );
-		} else if($_GET['type']=="api"){
-			unset($googleapisarray[$delplaceid]);
-			update_option('wprev_google_apis',json_encode($googleapisarray) );
+	if ( isset( $_GET['ract'] ) && $_GET['ract'] === 'del' ) {
+		// CSRF protection — mirrors template delete (tdel_) pattern.
+		check_admin_referer( 'wprev_del_google_source' );
+
+		// Preserve exact option-array keys (do not use sanitize_text_field — it
+		// collapses whitespace and would break deletes for multi-word crawl keys).
+		$delplace = isset( $_GET['place'] ) ? wp_unslash( $_GET['place'] ) : '';
+		$delplace = is_string( $delplace ) ? wp_strip_all_tags( $delplace ) : '';
+		$delplaceid = isset( $_GET['placeid'] ) ? wp_unslash( $_GET['placeid'] ) : '';
+		$delplaceid = is_string( $delplaceid ) ? wp_strip_all_tags( $delplaceid ) : '';
+		$deltype = isset( $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ) : '';
+
+		if ( $deltype === 'crawl' && $delplace !== '' ) {
+			unset( $googlecrawlsarray[ $delplace ] );
+			update_option( 'wprev_google_crawls', json_encode( $googlecrawlsarray ) );
+		} elseif ( $deltype === 'api' && $delplaceid !== '' ) {
+			unset( $googleapisarray[ $delplaceid ] );
+			update_option( 'wprev_google_apis', json_encode( $googleapisarray ) );
 		}
 		//remove all reviews from this place id and delete from total and avg table.
 		//==========================
 		global $wpdb;
-		
-		if($delplaceid != ''){
-			$table_name_revs = $wpdb->prefix . 'wpfb_reviews';
-			//$deleterevs = $wpdb->query("DELETE FROM `".$table_name_revs."` WHERE pageid = '".$delplaceid."'");
-			$wpdb->delete( $table_name_revs, array( 'pageid' => $delplaceid ) );
-			
-			$table_name_tots = $wpdb->prefix . 'wpfb_total_averages';
-			//$deletetotsavgs = $wpdb->query("DELETE FROM `".$table_name_tots."` WHERE btp_id = '".$delplaceid."'");
-			$wpdb->delete( $table_name_tots, array( 'btp_id' => $delplaceid ) );
 
+		if ( $delplaceid !== '' ) {
+			$table_name_revs = $wpdb->prefix . 'wpfb_reviews';
+			$wpdb->delete( $table_name_revs, array( 'pageid' => $delplaceid ) );
+
+			$table_name_tots = $wpdb->prefix . 'wpfb_total_averages';
+			$wpdb->delete( $table_name_tots, array( 'btp_id' => $delplaceid ) );
 		}
 
-		$googlecrawlsarray = json_decode(get_option('wprev_google_crawls'),true);
-		
+		$googlecrawlsarray = json_decode( get_option( 'wprev_google_crawls' ), true );
 	}
 
 //echo $googlecrawlsarray;
@@ -162,8 +165,21 @@ foreach ($googlecrawlsarray as $key =>$savedplace) {
 			$placeid_link = esc_html($tempfoundplaceid);
 		}
 		
+		$delete_url = wp_nonce_url(
+			add_query_arg(
+				array(
+					'page'    => 'wp_google-googlesettings',
+					'ract'    => 'del',
+					'place'   => $key,
+					'placeid' => $tempfoundplaceid,
+					'type'    => 'crawl',
+				),
+				admin_url( 'admin.php' )
+			),
+			'wprev_del_google_source'
+		);
 		echo "<tr><td> ".esc_html(limit_text($tempbusiness)) ."</td><td>".$placeid_link."</td><td> Crawl : ".esc_html($savedplace['nhful']) ."</td><td> 
-		<a class='w3-button w3-red w3-padding-small' href='?page=wp_google-googlesettings&ract=del&place=".urlencode($key)."&placeid=".urlencode($tempfoundplaceid)."&type=crawl'>Delete</a>
+		<a class='w3-button w3-red w3-padding-small' href='".esc_url( $delete_url )."'>Delete</a>
 		<a class='w3-button w3-green w3-padding-small' href='".$urlgooglegooglecrawl."&ract=edit&place=".urlencode($key)."&placeid=".urlencode($tempfoundplaceid)."'>Get Reviews</a>
 		&nbsp;<img class='buttonloader2 loadinggifchoosepage' width='20' height='20' src='".plugin_dir_url( __FILE__ )."loading.gif' style='display:none;'><span class='googletestresults2'></span>
 		</td></tr>";
@@ -210,8 +226,21 @@ foreach ($googlecrawlsarray as $key => $savedplace) {
 			$placeid_link = esc_html($tempfoundplaceid);
 		}
 		
+		$delete_url = wp_nonce_url(
+			add_query_arg(
+				array(
+					'page'    => 'wp_google-googlesettings',
+					'ract'    => 'del',
+					'place'   => $key,
+					'placeid' => $tempfoundplaceid,
+					'type'    => 'crawl',
+				),
+				admin_url( 'admin.php' )
+			),
+			'wprev_del_google_source'
+		);
 		echo "<tr><td> ".esc_html(limit_text($tempbusiness)) ."</td><td>".$placeid_link."</td><td> Crawl Method : ".esc_html($nhful) ."</td><td> 
-		<a class='w3-button w3-red w3-padding-small' href='?page=wp_google-googlesettings&ract=del&place=".urlencode($key)."&placeid=".urlencode($tempfoundplaceid)."&type=crawl'>Delete</a>
+		<a class='w3-button w3-red w3-padding-small' href='".esc_url( $delete_url )."'>Delete</a>
 		<a class='w3-button w3-green w3-padding-small' href='".$urlgooglegooglecrawl."&ract=edit&place=".urlencode($key)."&placeid=".urlencode($tempfoundplaceid)."'>Get Reviews</a>
 		&nbsp;<img class='buttonloader2 loadinggifchoosepage' width='20' height='20' src='".plugin_dir_url( __FILE__ )."loading.gif' style='display:none;'><span class='googletestresults2'></span>
 		</td></tr>";
@@ -235,8 +264,21 @@ foreach ($googlecrawlsarray as $key => $savedplace) {
 			$placeid_link = esc_html($tempfoundplaceid);
 		}
 		
+		$delete_url = wp_nonce_url(
+			add_query_arg(
+				array(
+					'page'    => 'wp_google-googlesettings',
+					'ract'    => 'del',
+					'place'   => $key,
+					'placeid' => $tempfoundplaceid,
+					'type'    => 'crawl',
+				),
+				admin_url( 'admin.php' )
+			),
+			'wprev_del_google_source'
+		);
 		echo "<tr><td> ".esc_html(limit_text($tempbusiness)) ."</td><td>".$placeid_link."</td><td> Old Crawl Method : ".esc_html($nhful) ."</td><td> 
-		<a class='w3-button w3-red w3-padding-small' href='?page=wp_google-googlesettings&ract=del&place=".urlencode($key)."&placeid=".urlencode($tempfoundplaceid)."&type=crawl'>Delete</a>
+		<a class='w3-button w3-red w3-padding-small' href='".esc_url( $delete_url )."'>Delete</a>
 		<a class='w3-button w3-green w3-padding-small' href='".$urlgooglegooglecrawl."&ract=edit&place=".urlencode($key)."&placeid=".urlencode($tempfoundplaceid)."'>Get Reviews</a>
 		&nbsp;<img class='buttonloader2 loadinggifchoosepage' width='20' height='20' src='".plugin_dir_url( __FILE__ )."loading.gif' style='display:none;'><span class='googletestresults2'></span>
 		</td></tr>";
@@ -267,8 +309,21 @@ foreach ($googleapisarray as $key =>$savedplace) {
 			$placeid_link = esc_html($tempfoundplaceid);
 		}
 		
+		$delete_url = wp_nonce_url(
+			add_query_arg(
+				array(
+					'page'    => 'wp_google-googlesettings',
+					'ract'    => 'del',
+					'place'   => $key,
+					'placeid' => $tempfoundplaceid,
+					'type'    => 'api',
+				),
+				admin_url( 'admin.php' )
+			),
+			'wprev_del_google_source'
+		);
 		echo "<tr><td> ".esc_html(limit_text($tempbusiness)) ."</td><td>".$placeid_link."</td><td> Places API : ".esc_html($savedplace['google_location_sort']) ."</td><td> 
-		<a class='w3-button w3-red w3-padding-small' href='?page=wp_google-googlesettings&ract=del&place=".urlencode($key)."&placeid=".urlencode($tempfoundplaceid)."&type=api'>Delete</a>
+		<a class='w3-button w3-red w3-padding-small' href='".esc_url( $delete_url )."'>Delete</a>
 		<a class='w3-button w3-dark-grey w3-padding-small' href='".$urlgoogleapi."&ract=edit&placeid=".urlencode($key)."'>Edit</a>
 		<a onclick='getgooglereviewsfunction(\"".esc_js($key)."\")' class='w3-button w3-green w3-padding-small' data-type='api' data-placeid='".esc_attr($key)."' data-place='".urlencode($tempbusiness)."' data-nhful='".urlencode($nhful)."'>Download Reviews</a>&nbsp;<img class='buttonloader2 loadinggifchoosepage' width='20' height='20' src='".plugin_dir_url( __FILE__ )."loading.gif' style='display:none;'><span class='googletestresults2'></span>
 		</td></tr>";
