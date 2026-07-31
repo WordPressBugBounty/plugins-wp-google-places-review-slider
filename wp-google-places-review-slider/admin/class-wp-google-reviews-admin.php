@@ -904,6 +904,19 @@ class WP_Google_Reviews_Admin {
 					'userpic'			=> $item['profile_photo_url'],
 					'from_url' =>$response['result']['url']
 				) );
+			} else {
+				// Review already exists (same reviewer + length). Still refresh the
+				// date so Google edits that keep the same text length are reflected.
+				$wpdb->update(
+					$table_name,
+					array(
+						'created_time'       => date( 'Y-m-d H:i:s', $item['time'] ),
+						'created_time_stamp' => $item['time'],
+					),
+					array( 'id' => $checkrow ),
+					array( '%s', '%d' ),
+					array( '%d' )
+				);
 			}
 		}
 		$i = 0;
@@ -1426,6 +1439,19 @@ class WP_Google_Reviews_Admin {
 					'from_url' 			=> $checkdetails['googleurl'],
 					'mediaurlsarrayjson' => $mediaurlsarrayjson,
 				) );
+			} else {
+				// Review already exists (same reviewer + length). Still refresh the
+				// date so Google edits that keep the same text length are reflected.
+				$wpdb->update(
+					$table_name,
+					array(
+						'created_time'       => date( 'Y-m-d H:i:s', $results['created_time_stamp'] ),
+						'created_time_stamp' => $results['created_time_stamp'],
+					),
+					array( 'id' => $checkrow ),
+					array( '%s', '%d' ),
+					array( '%d' )
+				);
 			}
 			
 			$x++;
