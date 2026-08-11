@@ -337,6 +337,13 @@ foreach ($googleapisarray as $key =>$savedplace) {
 
 
   </table>
+	<p class="small_message" style="margin-top:12px;">
+		<?php
+		echo wp_kses_post(
+			__( 'Tired of downloading manually? <a href="https://wpreviewslider.com/" target="_blank">Upgrade to Pro</a> to auto-sync new reviews daily and pull from 100+ sites.', 'wp-google-reviews' )
+		);
+		?>
+	</p>
 </div>
 <?php
 //} else {

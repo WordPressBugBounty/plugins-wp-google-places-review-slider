@@ -834,11 +834,17 @@
 			message = '<strong>' + totalReviews + ' reviews</strong> returned from the crawl server, <strong>' + savedReviews + ' reviews</strong> added to Review List for <strong>' + businessName + '</strong>';
 		}
 		
+		var upsellHtml = '';
+		if (data.first_download_upsell && data.first_download_upsell_html) {
+			upsellHtml = data.first_download_upsell_html;
+		}
+
 		$("#googletestresults2").html(
 			'<div class="w3-panel w3-pale-green w3-display-container w3-border">' +
 			'<h4><i class="fa fa-check-circle" style="color: green;"></i> Reviews Downloaded Successfully!</h4>' +
 			'<p>' + message + '</p>' +
 			'<p>You can now view your reviews in the <a href="?page=wp_google-reviews">Review List</a> page.</p>' +
+			upsellHtml +
 			'</div>'
 		).show();
 	}

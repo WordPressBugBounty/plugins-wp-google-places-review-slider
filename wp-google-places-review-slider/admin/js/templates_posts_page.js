@@ -756,42 +756,39 @@
 		});
 		
 		var currenttab = 0;
+		function hideAllSettingTables() {
+			$( "#settingtable0, #settingtable1, #settingtable2, #settingtable3, #settingtable4" ).hide();
+		}
 		$( ".gotopage0" ).click(function() {
-			//hide everything but page 1
+			hideAllSettingTables();
 			$( "#settingtable0" ).fadeIn();
-			$( "#settingtable1" ).hide();
-			$( "#settingtable2" ).hide();
-			$( "#settingtable3" ).hide();
 			currenttab = 0;
 			changecurrenttab(currenttab);
 
 		});
 		$( ".gotopage1" ).click(function() {
-			//hide everything but page 1
-			$( "#settingtable0" ).hide();
+			hideAllSettingTables();
 			$( "#settingtable1" ).fadeIn();
-			$( "#settingtable2" ).hide();
-			$( "#settingtable3" ).hide();
 			currenttab = 1;
 			changecurrenttab(currenttab);
 
 		});
 		$( ".gotopage2" ).click(function() {
-			//hide everything but page 1
-			$( "#settingtable0" ).hide();
-			$( "#settingtable1" ).hide();
+			hideAllSettingTables();
 			$( "#settingtable2" ).fadeIn();
-			$( "#settingtable3" ).hide();
 			currenttab = 2;
 			changecurrenttab(currenttab);
 		});
 		$( ".gotopage3" ).click(function() {
-			//hide everything but page 1
-			$( "#settingtable0" ).hide();
-			$( "#settingtable1" ).hide();
-			$( "#settingtable2" ).hide();
+			hideAllSettingTables();
 			$( "#settingtable3" ).fadeIn();
 			currenttab = 3;
+			changecurrenttab(currenttab);
+		});
+		$( ".gotopage4" ).click(function() {
+			hideAllSettingTables();
+			$( "#settingtable4" ).fadeIn();
+			currenttab = 4;
 			changecurrenttab(currenttab);
 		});
 		function changecurrenttab(ctab){
@@ -808,6 +805,9 @@
 			}
 			if(ctab==3){
 				$( "#settingtab3" ).addClass("nav-tab-active");
+			}
+			if(ctab==4){
+				$( "#settingtab4" ).addClass("nav-tab-active");
 			}
 
 		}

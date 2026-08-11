@@ -108,9 +108,28 @@ class WP_Google_Reviews_Admin {
 				
 
 			}
+
+			// Star SVG styles for Analytics summary boxes
+			if ( $_GET['page'] === 'wp_google-analytics' ) {
+				wp_enqueue_style( $this->_token . '_style1', plugin_dir_url( dirname( __FILE__ ) ) . 'public/css/wprev-public_combine.css', array(), $this->version, 'all' );
+			}
 			//review list
 			if($_GET['page']=="wp_google-reviews"){
 				wp_enqueue_style( $this->_token."lity_min", plugin_dir_url( __FILE__ ) . 'css/lity.min.css', array(), $this->version, 'all' );
+			}
+
+			// Analytics page styles
+			if ( $_GET['page'] === 'wp_google-analytics' ) {
+				wp_enqueue_style( 'chart-min', plugin_dir_url( __FILE__ ) . 'css/Chart.min.css', array(), $this->version, 'all' );
+				wp_enqueue_style( $this->_token . '_daterangepicker', plugin_dir_url( __FILE__ ) . 'css/daterangepicker.css', array(), $this->version, 'all' );
+				wp_enqueue_style( $this->_token . '_select2', plugin_dir_url( __FILE__ ) . 'css/select2.min.css', array(), $this->version, 'all' );
+				wp_enqueue_style( $this->_token . '_jqcloud', plugin_dir_url( __FILE__ ) . 'css/jqcloud.css', array(), $this->version, 'all' );
+			}
+
+			// AI Analysis sample page
+			if ( $_GET['page'] === 'wp_google-ai_analysis' ) {
+				wp_enqueue_style( 'chart-min', plugin_dir_url( __FILE__ ) . 'css/Chart.min.css', array(), $this->version, 'all' );
+				wp_enqueue_style( $this->_token . '_style1', plugin_dir_url( dirname( __FILE__ ) ) . 'public/css/wprev-public_combine.css', array(), $this->version, 'all' );
 			}
 		}
 
@@ -276,7 +295,102 @@ class WP_Google_Reviews_Admin {
 				wp_enqueue_style( 'wp-color-picker' );
 				//enque alpha color add-on wprevpro-wp-color-picker-alpha.js
 				wp_enqueue_script( 'wp-color-picker-alpha', plugin_dir_url( __FILE__ ) . 'js/wprevpro-wp-color-picker-alpha.js', array( 'wp-color-picker' ), '3.0.0', false );
+
+				// Lightbox for AI Summary example thumbnails
+				wp_enqueue_style( $this->_token . 'lity_min', plugin_dir_url( __FILE__ ) . 'css/lity.min.css', array(), $this->version, 'all' );
+				wp_enqueue_script( 'wpgoo_lity-js', plugin_dir_url( __FILE__ ) . 'js/lity.min.js', array( 'jquery' ), $this->version, false );
 				
+			}
+
+			//scripts for analytics page
+			if ( $_GET['page'] === 'wp_google-analytics' ) {
+				global $wpdb;
+				$reviews_table_name = $wpdb->prefix . 'wpfb_reviews';
+				$typearray          = $wpdb->get_col( "SELECT type FROM {$reviews_table_name} WHERE type = 'Google' GROUP BY type" );
+
+				wp_enqueue_script( 'wprevpro_analytics_page-js', plugin_dir_url( __FILE__ ) . 'js/wprevpro_analytics_page.js', array( 'jquery' ), $this->version, false );
+				wp_localize_script(
+					'wprevpro_analytics_page-js',
+					'adminjs_script_vars',
+					array(
+						'wpfb_nonce'            => wp_create_nonce( 'randomnoncestring' ),
+						'ajax_url'              => admin_url( 'admin-ajax.php' ),
+						'gmt_offset_minutes'    => (int) ( get_option( 'gmt_offset' ) * 60 ),
+						'pluginsUrl'            => WPREV_GOOGLE_PLUGIN_URL,
+						'globalwprevtypearray'  => wp_json_encode( $typearray ),
+						'customSourcesIconUrls' => wp_json_encode( array() ),
+						'msg1'                  => esc_html__( 'Location Filter', 'wp-google-reviews' ),
+						'msg2'                  => esc_html__( 'Type Filter', 'wp-google-reviews' ),
+						'd1'                    => esc_html__( 'Today', 'wp-google-reviews' ),
+						'd2'                    => esc_html__( 'Yesterday', 'wp-google-reviews' ),
+						'd3'                    => esc_html__( 'Last 7 Days', 'wp-google-reviews' ),
+						'd4'                    => esc_html__( 'Last 30 Days', 'wp-google-reviews' ),
+						'd5'                    => esc_html__( 'Last 60 Days', 'wp-google-reviews' ),
+						'd6'                    => esc_html__( 'Last 90 Days', 'wp-google-reviews' ),
+						'd7'                    => esc_html__( 'This Month', 'wp-google-reviews' ),
+						'd8'                    => esc_html__( 'Last Month', 'wp-google-reviews' ),
+						'd9'                    => esc_html__( 'This Year', 'wp-google-reviews' ),
+						'd10'                   => esc_html__( 'Last Year', 'wp-google-reviews' ),
+						'd11'                   => esc_html__( 'All Time', 'wp-google-reviews' ),
+						'msg3'                  => esc_html__( 'Error accessing language function via ajax.', 'wp-google-reviews' ),
+						'msg4'                  => esc_html__( 'Ratings', 'wp-google-reviews' ),
+						'msg5'                  => esc_html__( 'Error returning json object. Please try again or contact us and copy and send us the following:', 'wp-google-reviews' ),
+						'msg6'                  => esc_html__( 'Overall Ratings (Old >> New)', 'wp-google-reviews' ),
+						'msg7'                  => esc_html__( 'Review Response:', 'wp-google-reviews' ),
+						'msg8'                  => esc_html__( 'Type', 'wp-google-reviews' ),
+						'msg9'                  => esc_html__( 'Page', 'wp-google-reviews' ),
+						'msg10'                 => esc_html__( 'Source URL', 'wp-google-reviews' ),
+						'msg11'                 => esc_html__( 'Reviewer URL', 'wp-google-reviews' ),
+						'msg12'                 => esc_html__( 'Review Details', 'wp-google-reviews' ),
+					)
+				);
+
+				wp_register_script( $this->_token . 'chart-js', plugin_dir_url( __FILE__ ) . 'js/Chart.bundle.min.js', array(), $this->version, false );
+				wp_enqueue_script( $this->_token . 'chart-js' );
+
+				wp_register_script( $this->_token . 'chart-js-trendline', plugin_dir_url( __FILE__ ) . 'js/chartjs-plugin-trendline.js', array(), $this->version, false );
+				wp_enqueue_script( $this->_token . 'chart-js-trendline' );
+
+				wp_register_script( $this->_token . '_moment', plugin_dir_url( __FILE__ ) . 'js/moment.min.js', array(), $this->version, false );
+				wp_enqueue_script( $this->_token . '_moment' );
+
+				wp_register_script( $this->_token . '_daterangepicker', plugin_dir_url( __FILE__ ) . 'js/daterangepicker.js', array(), $this->version, false );
+				wp_enqueue_script( $this->_token . '_daterangepicker' );
+
+				wp_register_script( $this->_token . '_select2', plugin_dir_url( __FILE__ ) . 'js/select2.min.js', array(), $this->version, false );
+				wp_enqueue_script( $this->_token . '_select2' );
+
+				wp_register_script( $this->_token . '_jqcloud', plugin_dir_url( __FILE__ ) . 'js/jqcloud.min.js', array(), $this->version, false );
+				wp_enqueue_script( $this->_token . '_jqcloud' );
+
+				wp_enqueue_script( 'thickbox' );
+				wp_enqueue_style( 'thickbox' );
+			}
+
+			//scripts for AI Analysis sample page
+			if ( $_GET['page'] === 'wp_google-ai_analysis' ) {
+				wp_enqueue_script( 'thickbox' );
+				wp_enqueue_style( 'thickbox' );
+
+				wp_register_script( $this->_token . 'chart-js', plugin_dir_url( __FILE__ ) . 'js/Chart.bundle.min.js', array(), $this->version, false );
+				wp_enqueue_script( $this->_token . 'chart-js' );
+
+				wp_enqueue_script(
+					'wprevpro_ai_analysis_page-js',
+					plugin_dir_url( __FILE__ ) . 'js/wprevpro_ai_analysis_page.js',
+					array( 'jquery', 'thickbox', $this->_token . 'chart-js' ),
+					$this->version,
+					false
+				);
+				wp_localize_script(
+					'wprevpro_ai_analysis_page-js',
+					'adminjs_script_vars',
+					array(
+						'wpfb_nonce' => wp_create_nonce( 'randomnoncestring' ),
+						'ajax_url'   => admin_url( 'admin-ajax.php' ),
+						'pluginsUrl' => WPREV_GOOGLE_PLUGIN_URL,
+					)
+				);
 			}
 		}
 		
@@ -335,6 +449,33 @@ class WP_Google_Reviews_Admin {
 		$submenu_title = 'Templates';
 		$submenu_slug = 'wp_google-templates_posts';
 		add_submenu_page($menu_slug, $submenu_page_title, $submenu_title, $capability, $submenu_slug, array($this,'wp_fb_templates_posts'));
+
+		// Analytics (working, no upgrade)
+		$submenu_page_title = 'WP Google Reviews: Analytics';
+		$submenu_title = 'Analytics';
+		$submenu_slug = 'wp_google-analytics';
+		add_submenu_page($menu_slug, $submenu_page_title, $submenu_title, $capability, $submenu_slug, array($this,'wp_fb_analytics'));
+
+		// Pro feature teaser pages (pitch + screenshots)
+		$submenu_page_title = 'WP Google Reviews: Badges';
+		$submenu_title = 'Badges';
+		$submenu_slug = 'wp_google-badges';
+		add_submenu_page($menu_slug, $submenu_page_title, $submenu_title, $capability, $submenu_slug, array($this,'wp_fb_badges'));
+
+		$submenu_page_title = 'WP Google Reviews: Forms';
+		$submenu_title = 'Forms';
+		$submenu_slug = 'wp_google-forms';
+		add_submenu_page($menu_slug, $submenu_page_title, $submenu_title, $capability, $submenu_slug, array($this,'wp_fb_forms'));
+
+		$submenu_page_title = 'WP Google Reviews: Floats';
+		$submenu_title = 'Floats';
+		$submenu_slug = 'wp_google-float';
+		add_submenu_page($menu_slug, $submenu_page_title, $submenu_title, $capability, $submenu_slug, array($this,'wp_fb_float'));
+
+		$submenu_page_title = 'WP Google Reviews: AI Analysis';
+		$submenu_title = 'AI Analysis';
+		$submenu_slug = 'wp_google-ai_analysis';
+		add_submenu_page($menu_slug, $submenu_page_title, $submenu_title, $capability, $submenu_slug, array($this,'wp_fb_ai_analysis'));
 		
 		// Now add the submenu page for the reviews templates
 		//$submenu_page_title = 'WP Google Reviews: Upgrade';
@@ -369,8 +510,81 @@ class WP_Google_Reviews_Admin {
 	public function wp_fb_templates_posts() {
 		require_once plugin_dir_path( __FILE__ ) . '/partials/templates_posts.php';
 	}
+	public function wp_fb_analytics() {
+		require_once plugin_dir_path( __FILE__ ) . '/partials/analytics.php';
+	}
+	public function wp_fb_badges() {
+		require_once plugin_dir_path( __FILE__ ) . '/partials/badges.php';
+	}
+	public function wp_fb_forms() {
+		require_once plugin_dir_path( __FILE__ ) . '/partials/forms.php';
+	}
+	public function wp_fb_float() {
+		require_once plugin_dir_path( __FILE__ ) . '/partials/float.php';
+	}
+	public function wp_fb_ai_analysis() {
+		require_once plugin_dir_path( __FILE__ ) . '/partials/ai_analysis.php';
+	}
 	public function wp_fb_getpro() {
 		require_once plugin_dir_path( __FILE__ ) . '/partials/get_pro.php';
+	}
+
+	/**
+	 * Count Google reviews currently stored.
+	 *
+	 * @return int
+	 */
+	public function wprev_get_google_review_count() {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'wpfb_reviews';
+		return (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table_name} WHERE type = 'Google'" );
+	}
+
+	/**
+	 * One-time first-download Pro upsell. Call after a successful save when
+	 * $count_before is the Google review count from before that save.
+	 *
+	 * @param int $count_before Review count before this download.
+	 * @return bool True if the upsell should be shown now.
+	 */
+	public function wprev_should_show_first_download_upsell( $count_before ) {
+		if ( get_option( 'wprev_google_first_download_upsell' ) === 'shown' ) {
+			return false;
+		}
+		if ( (int) $count_before > 0 ) {
+			update_option( 'wprev_google_first_download_upsell', 'shown' );
+			return false;
+		}
+		update_option( 'wprev_google_first_download_upsell', 'shown' );
+		return true;
+	}
+
+	/**
+	 * HTML block for the first-download Pro upsell.
+	 *
+	 * @return string
+	 */
+	public function wprev_first_download_upsell_html() {
+		return '<div class="w3-panel w3-pale-yellow w3-border" style="margin-top:10px;"><p>&#127881; ' .
+			esc_html__( 'Awesome! You just downloaded your first reviews. Keep the momentum going—upgrade to Pro to automatically sync new reviews and mix in reviews from another 100 sites and even collect them on your site! Use code WPPRO15 for 15% off.', 'wp-google-reviews' ) .
+			' <a href="https://wpreviewslider.com/" target="_blank"><strong>' .
+			esc_html__( 'Upgrade to Pro', 'wp-google-reviews' ) .
+			'</strong></a></p></div>';
+	}
+
+	/**
+	 * Plain-text / HTML fragment for embedding in AJAX ack messages.
+	 *
+	 * @return string
+	 */
+	public function wprev_first_download_upsell_message() {
+		return '&#127881; ' .
+			esc_html__( 'Awesome! You just downloaded your first reviews. Keep the momentum going—upgrade to Pro to automatically sync new reviews and mix in reviews from another 100 sites and even collect them on your site! Use code', 'wp-google-reviews' ) .
+			' <strong>WPPRO15</strong> ' .
+			esc_html__( 'for 15% off.', 'wp-google-reviews' ) .
+			' <a href="https://wpreviewslider.com/" target="_blank"><strong>' .
+			esc_html__( 'Upgrade to Pro', 'wp-google-reviews' ) .
+			'</strong></a>';
 	}
 	
 	
@@ -381,7 +595,7 @@ class WP_Google_Reviews_Admin {
 		$menu_pos = 1; // whatever position you want your menu to appear
 		if (array_key_exists($menu_slug, $submenu)) {
 			// add the external links to the slug you used when adding the top level menu
-			$submenu[$menu_slug][] = array('<div id="wprev-66022">Go Pro!</div>', 'manage_options', 'https://wpreviewslider.com/');
+			$submenu[$menu_slug][] = array('<div id="wprev-66022">&#11088; Go Pro!</div>', 'manage_options', 'https://wpreviewslider.com/');
 		}
 	}
 	public function wpse_66022_add_jquery() 
@@ -857,6 +1071,7 @@ class WP_Google_Reviews_Admin {
 
 		$stats = array();
 		$table_name = $wpdb->prefix . 'wpfb_reviews';
+		$count_before = $this->wprev_get_google_review_count();
 
 		$numreturned = count($response['result']['reviews']);
 		
@@ -954,6 +1169,10 @@ class WP_Google_Reviews_Admin {
 		echo sprintf( __('%d Reviews returned from API. %d New Reviews downloaded.', 'wp-google-reviews' ), $numreturned,$i );
 		
 		echo "<br><a href='".$google_places_url."' target='_blank'>Google Result</a> ";
+
+		if ( $i > 0 && $this->wprev_should_show_first_download_upsell( $count_before ) ) {
+			echo $this->wprev_first_download_upsell_html();
+		}
 		
 		return;
 	}
@@ -1380,6 +1599,7 @@ class WP_Google_Reviews_Admin {
 	
 		$stats = array();
 		$table_name = $wpdb->prefix . 'wpfb_reviews';
+		$count_before = $this->wprev_get_google_review_count();
 		
 		$x=0;
 		$numreturned = count($crawlerreviewsarray);
@@ -1477,6 +1697,11 @@ class WP_Google_Reviews_Admin {
 		
 		if(isset($_POST['getrevsplaceid'])){
 			$results['ackmsg'] =sprintf( __('<b>%d</b> New Reviews downloaded', 'wp-google-reviews' ), $i );
+		}
+
+		if ( $i > 0 && $this->wprev_should_show_first_download_upsell( $count_before ) ) {
+			$results['ackmsg'] .= '<br><br>' . $this->wprev_first_download_upsell_message();
+			$results['first_download_upsell'] = true;
 		}
 		
 		$results = json_encode($results);
@@ -2667,6 +2892,8 @@ class WP_Google_Reviews_Admin {
 				
 				// Save reviews to database if we have them
 				$saved_count = 0;
+				$first_download_upsell = false;
+				$count_before = $this->wprev_get_google_review_count();
 				if (!empty($reviews)) {
 					// Extract place_id and business name from business_info
 					$place_id = isset($business_info['foundplaceid']) ? $business_info['foundplaceid'] : '';
@@ -2677,7 +2904,9 @@ class WP_Google_Reviews_Admin {
 					
 					$saved_count = $this->save_dataforseo_reviews($reviews, $place_id, $business_name);
 
-
+					if ( $saved_count > 0 && $this->wprev_should_show_first_download_upsell( $count_before ) ) {
+						$first_download_upsell = true;
+					}
 
 				}
 				
@@ -2715,7 +2944,9 @@ class WP_Google_Reviews_Admin {
 					'business_info' => $business_info,
 					'daily_remaining' => $daily_remaining,
 					'total_reviews' => $total_reviews,
-					'saved_reviews' => $saved_count
+					'saved_reviews' => $saved_count,
+					'first_download_upsell' => $first_download_upsell,
+					'first_download_upsell_html' => $first_download_upsell ? $this->wprev_first_download_upsell_html() : '',
 				));
 			} else {
 				// Task still processing

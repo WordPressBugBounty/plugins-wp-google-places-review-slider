@@ -457,8 +457,20 @@ echo $dbmsg;
 	<span id="settingtab1" class="settingtab nav-tab cursorpointer gotopage1">General Settings</span>
 	<span id="settingtab2" class="settingtab nav-tab cursorpointer gotopage2">Filter Settings</span>
 	<span id="settingtab3" class="settingtab nav-tab cursorpointer gotopage3">Badge Settings</span>
+	<span id="settingtab4" class="settingtab nav-tab cursorpointer gotopage4">AI Summary <span style="background:#ff6b35;color:#fff;padding:1px 5px;border-radius:3px;font-size:10px;font-weight:bold;margin-left:4px;">PRO</span></span>
 </h2>
 <table id="settingtable0" class="form-table settingstable ">
+			<tr class="wpfbr_row">
+				<td colspan="2" class="wpfbr-pro-tab-banner-cell">
+					<div class="wpfbr-pro-tab-banner">
+						<p style="margin:0;">
+							<?php echo wp_kses_post( __( 'Unlock <strong>15 review layouts</strong>, custom star styles, date formats, avatar controls, hover effects, and more with Pro.', 'wp-google-reviews' ) ); ?>
+							<a href="https://wpreviewslider.com/" target="_blank"><strong><?php esc_html_e( 'Explore Pro Features', 'wp-google-reviews' ); ?></strong></a>
+							— <?php esc_html_e( 'Use code', 'wp-google-reviews' ); ?> <code>WPPRO15</code> <?php esc_html_e( 'for 15% off.', 'wp-google-reviews' ); ?>
+						</p>
+					</div>
+				</td>
+			</tr>
 	<tr class="wprevpro_row">
 				<td>
 					<div class="w3_wprs-row">
@@ -640,8 +652,6 @@ echo $dbmsg;
 						</div>
 						</div>
 					</div>
-					<p class="description">
-					<?php _e('More styles and options available in <a href="https://wpreviewslider.com/">Pro Version</a> of plugin!', 'wp-google-reviews'); ?></p>
 				</td>
 			</tr>
 			<tr class="wprevpro_row">
@@ -652,6 +662,15 @@ echo $dbmsg;
 
 			</table>
 <table id="settingtable1" class="form-table settingstable " style="display:none;">
+			<tr class="wpfbr_row">
+				<td colspan="2" class="wpfbr-pro-tab-banner-cell">
+					<div class="wpfbr-pro-tab-banner">
+						<p style="margin:0;">
+							<?php echo wp_kses_post( __( 'Build <strong>masonry grids</strong> and advanced sliders with up to <strong>200 slides</strong>, Load More, endless scroll, fade effects, and custom breakpoints with Pro.', 'wp-google-reviews' ) ); ?>
+						</p>
+					</div>
+				</td>
+			</tr>
 			<tr class="wpfbr_row">
 				<th scope="row">
 					<?php _e('Number of Reviews', 'wp-google-reviews'); ?><a class="wprevpro_helpicon_p wprevpro_btnicononlyhelp dashicons-before dashicons-editor-help"></a>
@@ -853,7 +872,16 @@ echo $dbmsg;
 			</tr>
 </table>
 
-<table id="settingtable2" class="form-table settingstable " style="display:none;">		
+<table id="settingtable2" class="form-table settingstable " style="display:none;">
+			<tr class="wpfbr_row">
+				<td colspan="2" class="wpfbr-pro-tab-banner-cell">
+					<div class="wpfbr-pro-tab-banner">
+						<p style="margin:0;">
+							<?php echo wp_kses_post( __( 'Filter reviews by <strong>keywords</strong>, length, tags, language, media, multiple locations, or hand-pick specific reviews with Pro.', 'wp-google-reviews' ) ); ?>
+						</p>
+					</div>
+				</td>
+			</tr>
 			<tr class="wpfbr_row">
 				<th scope="row">
 					<?php _e('Choose Source', 'wp-google-reviews'); ?><a class="wprevpro_helpicon_p wprevpro_btnicononlyhelp dashicons-before dashicons-editor-help"></a>
@@ -986,6 +1014,15 @@ if(!isset($template_misc_array['bimgsize'])){
 	$template_misc_array['bimgsize']="50";
 }
 ?>
+			<tr class="wpfbr_row">
+				<td colspan="2" class="wpfbr-pro-tab-banner-cell">
+					<div class="wpfbr-pro-tab-banner">
+						<p style="margin:0;">
+							<?php echo wp_kses_post( __( 'Create <strong>standalone review badges</strong>, dynamically display review totals, and get more control over your Review Us button with Pro.', 'wp-google-reviews' ) ); ?>
+						</p>
+					</div>
+				</td>
+			</tr>
 			<tr class="wpfbr_row tabnoterow">
 				<td colspan="2">
 				<div class="tabnote">
@@ -1159,11 +1196,67 @@ if(!isset($template_misc_array['bimgsize'])){
 			<tr class="wprevpro_row">
 				<th scope="row" colspan="2">
 				<span class="nextprevbtn w3-green button button-secondary dashicons-before dashicons-arrow-left gotopage2">Previous</span>
+				<span class="nextprevbtn w3-green button button-secondary dashicons-before dashicons-arrow-right-after gotopage4">Next</span>
 				</th>
 			</tr>
 			
 		</tbody>
 	</table>
+
+	<table id="settingtable4" class="form-table settingstable " style="display:none;">
+		<tbody>
+			<tr class="wpfbr_row">
+				<td colspan="2" class="wpfbr-pro-tab-banner-cell">
+					<div class="wpfbr-pro-tab-banner">
+						<p style="margin:0;">
+							<?php echo wp_kses_post( __( '<strong>AI Review Summary</strong> turns your Google reviews into a clear visitor-facing summary with overall sentiment, common praise, and areas for improvement.', 'wp-google-reviews' ) ); ?>
+						</p>
+					</div>
+				</td>
+			</tr>
+			<tr class="wpfbr_row">
+				<th scope="row">
+					<?php esc_html_e( 'Example', 'wp-google-reviews' ); ?>
+				</th>
+				<td>
+					<?php
+					$ai_summary_img1 = plugin_dir_url( __FILE__ ) . 'imgs/ai_summary_example.png';
+					$ai_summary_img2 = plugin_dir_url( __FILE__ ) . 'imgs/ai_summary_example2.png';
+					?>
+					<div class="wpfbr-ai-summary-thumbs">
+						<a href="<?php echo esc_url( $ai_summary_img1 ); ?>" data-lity class="wpfbr-ai-summary-thumb">
+							<img src="<?php echo esc_url( $ai_summary_img1 ); ?>" alt="<?php esc_attr_e( 'AI Review Summary example', 'wp-google-reviews' ); ?>">
+						</a>
+						<a href="<?php echo esc_url( $ai_summary_img2 ); ?>" data-lity class="wpfbr-ai-summary-thumb">
+							<img src="<?php echo esc_url( $ai_summary_img2 ); ?>" alt="<?php esc_attr_e( 'AI Review Summary example 2', 'wp-google-reviews' ); ?>">
+						</a>
+					</div>
+				</td>
+			</tr>
+			<tr class="wpfbr_row">
+				<th scope="row">
+					<?php esc_html_e( 'Settings in Pro', 'wp-google-reviews' ); ?>
+				</th>
+				<td>
+					<ul style="list-style: disc; margin: 0 0 0 1.5em; line-height: 1.7;">
+						<li><?php esc_html_e( 'Turn AI Summary on or off for each review template.', 'wp-google-reviews' ); ?></li>
+						<li><?php esc_html_e( 'Choose the language of the generated summary (or leave blank to match the reviews).', 'wp-google-reviews' ); ?></li>
+						<li><?php esc_html_e( 'Set the approximate number of sentences for summary length.', 'wp-google-reviews' ); ?></li>
+						<li><?php esc_html_e( 'Generate AI Instructions for use with your own AI tool, or generate the summary with the Pro AI service.', 'wp-google-reviews' ); ?></li>
+						<li><?php esc_html_e( 'Choose where it displays: as the first review, above the reviews, in a badge, and/or in the header.', 'wp-google-reviews' ); ?></li>
+						<li><?php esc_html_e( 'Show or hide “What customers love” (common praises).', 'wp-google-reviews' ); ?></li>
+						<li><?php esc_html_e( 'Show or hide “Areas for improvement” (common complaints).', 'wp-google-reviews' ); ?></li>
+					</ul>
+				</td>
+			</tr>
+			<tr class="wprevpro_row">
+				<th scope="row" colspan="2">
+					<span class="nextprevbtn w3-green button button-secondary dashicons-before dashicons-arrow-left gotopage3">Previous</span>
+				</th>
+			</tr>
+		</tbody>
+	</table>
+
 	<?php 
 	//security nonce
 	wp_nonce_field( 'wpfbr_save_template');

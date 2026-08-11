@@ -9,12 +9,23 @@ $urlgoogleapi = esc_url( add_query_arg( 'page', 'wp_google-googleplacesapi',$url
 $urlgooglegooglecrawl = esc_url( add_query_arg( 'page', 'wp_google-googlecrawl_dfs',$urltrimmedtab ) );
 $urlreviewlist = esc_url( add_query_arg( 'page', 'wp_google-reviews',$urltrimmedtab ) );
 $urltemplateposts = esc_url( add_query_arg( 'page', 'wp_google-templates_posts',$urltrimmedtab ) );
+$urlanalytics = esc_url( add_query_arg( 'page', 'wp_google-analytics',$urltrimmedtab ) );
+$urlbadges = esc_url( add_query_arg( 'page', 'wp_google-badges',$urltrimmedtab ) );
+$urlforms = esc_url( add_query_arg( 'page', 'wp_google-forms',$urltrimmedtab ) );
+$urlfloat = esc_url( add_query_arg( 'page', 'wp_google-float',$urltrimmedtab ) );
+$urlai = esc_url( add_query_arg( 'page', 'wp_google-ai_analysis',$urltrimmedtab ) );
 $urlgetpro = esc_url( add_query_arg( 'page', 'wp_google-get_pro',$urltrimmedtab ) );
+$probadge = ' <span style="background: #ff6b35; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; margin-left: 4px;">PRO</span>';
 ?>	
 <div class="w3-bar w3-border w3-white">
   <a href="<?php echo $urlwelcome; ?>" class="w3-bar-item w3-button <?php if($_GET['page']=='wp_google-welcome'){echo 'w3-green';} ?>"><i class="fa fa-home"></i> <?php _e('Welcome', 'wp-google-reviews'); ?></a>
   <a href="<?php echo $urlgooglesettings; ?>" class="w3-bar-item w3-button <?php if($_GET['page']=='wp_google-googlesettings'){echo 'w3-green';} ?>"><i class="fa fa-search"></i> <?php _e('Get Google Reviews', 'wp-google-reviews'); ?></a>
   <a href="<?php echo $urlreviewlist; ?>" class="w3-bar-item w3-button <?php if($_GET['page']=='wp_google-reviews'){echo 'w3-green';} ?>"><i class="fa fa-list"></i> <?php _e('Review List', 'wp-google-reviews'); ?></a>
   <a href="<?php echo $urltemplateposts; ?>" class="w3-bar-item w3-button <?php if($_GET['page']=='wp_google-templates_posts'){echo 'w3-green';} ?>"><i class="fa fa-commenting-o"></i> <?php _e('Templates', 'wp-google-reviews'); ?></a>
+  <a href="<?php echo $urlanalytics; ?>" class="w3-bar-item w3-button <?php if($_GET['page']=='wp_google-analytics'){echo 'w3-green';} ?>"><i class="fa fa-bar-chart"></i> <?php _e('Analytics', 'wp-google-reviews'); ?></a>
+  <a href="<?php echo $urlbadges; ?>" class="w3-bar-item w3-button <?php if($_GET['page']=='wp_google-badges'){echo 'w3-green';} ?>"><i class="fa fa-certificate"></i> <?php _e('Badges', 'wp-google-reviews'); ?><?php echo $probadge; ?></a>
+  <a href="<?php echo $urlforms; ?>" class="w3-bar-item w3-button <?php if($_GET['page']=='wp_google-forms'){echo 'w3-green';} ?>"><i class="fa fa-wpforms"></i> <?php _e('Forms', 'wp-google-reviews'); ?><?php echo $probadge; ?></a>
+  <a href="<?php echo $urlfloat; ?>" class="w3-bar-item w3-button <?php if($_GET['page']=='wp_google-float'){echo 'w3-green';} ?>"><i class="fa fa-arrows-alt"></i> <?php _e('Floats', 'wp-google-reviews'); ?><?php echo $probadge; ?></a>
+  <a href="<?php echo $urlai; ?>" class="w3-bar-item w3-button <?php if($_GET['page']=='wp_google-ai_analysis'){echo 'w3-green';} ?>"><i class="fa fa-cogs"></i> <?php _e('AI Analysis', 'wp-google-reviews'); ?><?php echo $probadge; ?></a>
   <a href="https://wpreviewslider.com/" target="_blank" class="goprohbtn w3-bar-item w3-button"><i class="fa fa-external-link-square" aria-hidden="true"></i> <?php _e('Get Pro Version', 'wp-google-reviews'); ?></a>
 </div>

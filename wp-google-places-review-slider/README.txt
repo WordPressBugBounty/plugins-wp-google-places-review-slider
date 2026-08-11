@@ -4,7 +4,7 @@ Donate link: http://ljapps.com/
 Tags: google reviews, business reviews, social proof, testimonial slider, gmb reviews
 Requires at least: 3.0.1
 Tested up to: 7.0
-Stable tag: 18.6
+Stable tag: 18.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -155,6 +155,10 @@ Please report security bugs found in the source code of the wp-google-places-rev
 10. Create as many templates as you like.
 
 == Changelog ==
+= 18.7 =
+* Added a new Analytics page for review insights and charts.
+* Added Pro feature highlights and upgrade nudges throughout the admin.
+
 = 18.6 =
 * Update the stored review date when an existing Google review is re-imported after being edited.
 

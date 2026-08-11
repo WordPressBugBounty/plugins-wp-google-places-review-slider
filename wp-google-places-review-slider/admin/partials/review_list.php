@@ -252,10 +252,16 @@ include("tabmenu.php");
 ?>	
 <div class="wpfbr_margin10">
 	<a id="wpfbr_helpicon" class="wpfbr_btnicononly button dashicons-before dashicons-editor-help"></a>
-	<a id="wpfbr_removeallbtn" data-sec="<?php echo esc_attr( $nonce ); ?>" class="button dashicons-before dashicons-no"><?php _e('Remove All Reviews', 'wp-google-reviews'); ?></a> <br><span class="small_message">
-	<?php 
-_e('Search reviews, hide certain reviews, manually add reviews, download a CSV file of your reviews, and more features available in the <a href="?page=wp_google-get_pro">Pro Version</a> of this plugin!', 'wp-google-reviews'); 
-?>
+	<a id="wpfbr_removeallbtn" data-sec="<?php echo esc_attr( $nonce ); ?>" class="button dashicons-before dashicons-no"><?php _e('Remove All Reviews', 'wp-google-reviews'); ?></a>
+	<a href="https://wpreviewslider.com/" target="_blank" class="button dashicons-before dashicons-plus-alt" title="<?php esc_attr_e('Pro feature', 'wp-google-reviews'); ?>"><?php _e('Add Review', 'wp-google-reviews'); ?> <span style="background:#ff6b35;color:#fff;padding:1px 5px;border-radius:3px;font-size:10px;font-weight:bold;margin-left:4px;">PRO</span></a>
+	<a href="https://wpreviewslider.com/" target="_blank" class="button dashicons-before dashicons-download" title="<?php esc_attr_e('Pro feature', 'wp-google-reviews'); ?>"><?php _e('Download CSV', 'wp-google-reviews'); ?> <span style="background:#ff6b35;color:#fff;padding:1px 5px;border-radius:3px;font-size:10px;font-weight:bold;margin-left:4px;">PRO</span></a>
+	<a href="https://wpreviewslider.com/" target="_blank" class="button" style="opacity:0.85;" title="<?php esc_attr_e('Pro feature - Search reviews', 'wp-google-reviews'); ?>"><?php esc_html_e( 'Search...', 'wp-google-reviews' ); ?> <span style="background:#ff6b35;color:#fff;padding:1px 5px;border-radius:3px;font-size:10px;font-weight:bold;margin-left:4px;">PRO</span></a>
+	<br><span class="small_message">
+	<?php
+	echo wp_kses_post(
+		__( 'Search reviews, manually add reviews, download/import a CSV, tag reviews, bulk edit, and more available in the <a href="https://wpreviewslider.com/" target="_blank">Pro Version</a> of this plugin!', 'wp-google-reviews' )
+	);
+	?>
 </span>
 </div>
 <div class="wprevpro_margin10 w3-container w3-white w3-border w3-border-light-gray2" id="wprevpro_new_review" <?php if($currentreview->id<1){echo "style='display:none;'";}?>>
@@ -534,7 +540,7 @@ _e('Search reviews, hide certain reviews, manually add reviews, download a CSV f
 			}
 		} else {
 				$html .= '<tr>
-						<th colspan="9" scope="col" class="manage-column">'.__('No reviews found. Please visit the <a href="?page=wp_google-googlesettings">Get Google Reviews</a> page to retrieve reviews from Google.', 'wp-google-reviews').'</th>
+						<th colspan="9" scope="col" class="manage-column">'.__('No reviews found. Please visit the <a href="?page=wp_google-googlesettings">Get Google Reviews</a> page to retrieve reviews from Google.', 'wp-google-reviews').'<br><br>'.__('Want to put this on autopilot? <a href="https://wpreviewslider.com/" target="_blank">Upgrade to Pro</a> to automatically sync new reviews, pull from 100+ sites, and collect reviews on your site. Use code <strong>WPPRO15</strong> for 15% off.', 'wp-google-reviews').'</th>
 					</tr>';
 		}					
 				
