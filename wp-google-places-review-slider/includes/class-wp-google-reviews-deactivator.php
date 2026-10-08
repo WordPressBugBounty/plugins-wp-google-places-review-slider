@@ -32,6 +32,8 @@ class WP_Google_Reviews_Deactivator {
 	public static function deactivate() {
 
 		wp_clear_scheduled_hook( 'wpfbr_cron_google_review' );
+		wp_clear_scheduled_hook( 'wprev_google_trustguide_daily_sync' );
+		delete_option( 'wprev_google_trustguide' );
 
 		//delete review table in database -----move to unistall---------
 		/*

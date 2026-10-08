@@ -91,6 +91,15 @@
 		$title = htmlentities($_POST['wpfbr_template_title']);
 		$template_type = htmlentities($_POST['wpfbr_template_type']);
 		$style = htmlentities($_POST['wprevpro_template_style']);
+		if ( $style !== '1' && $style !== '6' ) {
+			$style = '1';
+			if ( ! empty( $t_id ) ) {
+				$existing_style = $wpdb->get_var( $wpdb->prepare( "SELECT style FROM {$table_name} WHERE id = %d", absint( $t_id ) ) );
+				if ( $existing_style === '1' || $existing_style === '6' ) {
+					$style = $existing_style;
+				}
+			}
+		}
 		$display_num = htmlentities($_POST['wpfbr_t_display_num']);
 		$display_num_rows = htmlentities($_POST['wpfbr_t_display_num_rows']);
 		$display_order = htmlentities($_POST['wpfbr_t_display_order']);
@@ -525,8 +534,24 @@ echo $dbmsg;
 							<div class="w3_wprs-col s6">
 								<div class="wprevpre_temp_label_row">
 									<select name="wprevpro_template_style" id="wprevpro_template_style">
-									  <option value="1" <?php if($currenttemplate->style=='1' || $currenttemplate->style==""){echo "selected";} ?>><?php _e('Style', 'wp-google-reviews'); ?> 1</option>
-									  <option value="6" <?php if($currenttemplate->style=='6'){echo "selected";} ?>><?php _e('Style', 'wp-google-reviews'); ?> 6</option>
+									<?php
+									$wprev_pro_only_styles = array( '2', '3', '4', '5', '7', '8', '9', '10', '11', '12', '13', '14', '15' );
+									for ( $wprev_style_num = 1; $wprev_style_num <= 15; $wprev_style_num++ ) {
+										$wprev_style_val = (string) $wprev_style_num;
+										$wprev_style_selected = ( $currenttemplate->style == $wprev_style_val || ( $wprev_style_val === '1' && $currenttemplate->style == '' ) );
+										$wprev_style_is_pro = in_array( $wprev_style_val, $wprev_pro_only_styles, true );
+										echo '<option value="' . esc_attr( $wprev_style_val ) . '"';
+										if ( $wprev_style_is_pro ) {
+											echo ' class="wprevpro-pro-style" style="color:#a7aaad;background-color:#fff;"';
+										} else {
+											echo ' style="color:#1d2327;background-color:#fff;"';
+										}
+										if ( $wprev_style_selected ) {
+											echo ' selected';
+										}
+										echo '>' . esc_html( sprintf( __( 'Style %d', 'wp-google-reviews' ), $wprev_style_num ) ) . '</option>';
+									}
+									?>
 									</select>
 									<a href="https://wpreviewslider.com/features/#templatedivid" target="_blank" rel="noopener noreferrer" style="font-size: 11px; margin-left: 8px; vertical-align: middle; display: inline-block; line-height: 1.2;"><?php echo wp_kses( __( 'Pro Version<br>Styles...', 'wp-google-reviews' ), array( 'br' => array() ) ); ?></a>
 								</div>
@@ -638,6 +663,7 @@ echo $dbmsg;
 							</div>
 						  </div>
 						  <div class="w3_wprs-col s6" id="">
+								<p id="wprevpro_pro_style_note" class="wprevpro-pro-style-note"><?php esc_html_e( 'Pro version only style', 'wp-google-reviews' ); ?></p>
 								<div class="w3_wprs-col" id="wprevpro_template_preview">
 
 								</div>
@@ -1265,6 +1291,7 @@ if(!isset($template_misc_array['bimgsize'])){
 	<a id="wpfbr_addnewtemplate_cancel" class="button button-secondary"><?php _e('Cancel', 'wp-google-reviews'); ?></a>
 	<input type="submit" name="wpfbr_submittemplatebtn" id="wpfbr_submittemplatebtn" class="button button-primary" value="<?php _e('Save & Close', 'wp-google-reviews'); ?>">
 	<a id="wprevpro_addnewtemplate_update" class="button button-primary"><?php if($currenttemplate->id>0){_e('Update', 'wp-google-reviews');} else {_e('Update', 'wp-google-reviews');} ?></a>
+	<span id="wprevpro_pro_save_note" class="wprevpro-pro-save-note" data-msg="<?php echo esc_attr( __( 'Style %s is Pro version only, please select style 1 or 6.', 'wp-google-reviews' ) ); ?>"></span>
 	<div id="update_form_msg_div"><img src="<?php echo WPREV_GOOGLE_PLUGIN_URL; ?>/public/partials/imgs/loading_ripple.gif" id="savingformimg" class="wprptemplate_update_loading_image" style="display:none;"><span id="update_form_msg" style="display:none;"><span class="dashicons dashicons-saved"></span></span></div>
 	</form>
 </div>

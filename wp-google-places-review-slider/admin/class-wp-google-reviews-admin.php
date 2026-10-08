@@ -87,13 +87,16 @@ class WP_Google_Reviews_Admin {
 				
 				wp_enqueue_style( $this->_token."_wprev_w3", plugin_dir_url( __FILE__ ) . 'css/wprev_w3.css', array(), $this->version, 'all' );
 				
-				wp_enqueue_style( $this->_token, plugin_dir_url( __FILE__ ) . 'css/wprev_admin.css', array(), $this->version, 'all' );
+				wp_enqueue_style( $this->_token, plugin_dir_url( __FILE__ ) . 'css/wprev_admin.css', array(), filemtime( plugin_dir_path( __FILE__ ) . 'css/wprev_admin.css' ), 'all' );
 			}
 			
 			//load template styles for wp_pro-templates_posts page
 			if($_GET['page']=="wp_google-templates_posts" || $_GET['page']=="wp_google-get_pro" || $_GET['page']=="wp_google-welcome"){
 				//enque template styles for preview
 				wp_enqueue_style( $this->_token."_style1", plugin_dir_url(dirname(__FILE__)) . 'public/css/wprev-public_combine.css', array(), $this->version, 'all' );
+				if ( $_GET['page'] == 'wp_google-templates_posts' ) {
+					wp_enqueue_style( $this->_token . '_pro_style_preview', plugin_dir_url( __FILE__ ) . 'css/wprev_pro_style_preview.css', array( $this->_token . '_style1' ), filemtime( plugin_dir_path( __FILE__ ) . 'css/wprev_pro_style_preview.css' ), 'all' );
+				}
 				
 				//also load javascript for creating preview.
 				wp_enqueue_script( $this->_token."_plublic_comb", plugin_dir_url(dirname(__FILE__)) . 'public/js/wprev-public-com-min.js', array( 'jquery' ), $this->version, true );
@@ -284,7 +287,7 @@ class WP_Google_Reviews_Admin {
 			//scripts for templates posts page
 			if($_GET['page']=="wp_google-templates_posts"){
 				//admin js
-				wp_enqueue_script('templates_posts_page-js', plugin_dir_url( __FILE__ ) . 'js/templates_posts_page.js', array( 'jquery' ), $this->version, false );
+				wp_enqueue_script('templates_posts_page-js', plugin_dir_url( __FILE__ ) . 'js/templates_posts_page.js', array( 'jquery' ), filemtime( plugin_dir_path( __FILE__ ) . 'js/templates_posts_page.js' ), false );
 				wp_localize_script('templates_posts_page-js', 'adminjs_script_vars', 
 					array(
 					'wpfb_nonce'=> wp_create_nonce('randomnoncestring'),
@@ -379,7 +382,7 @@ class WP_Google_Reviews_Admin {
 					'wprevpro_ai_analysis_page-js',
 					plugin_dir_url( __FILE__ ) . 'js/wprevpro_ai_analysis_page.js',
 					array( 'jquery', 'thickbox', $this->_token . 'chart-js' ),
-					$this->version,
+					filemtime( plugin_dir_path( __FILE__ ) . 'js/wprevpro_ai_analysis_page.js' ),
 					false
 				);
 				wp_localize_script(
@@ -2258,6 +2261,15 @@ class WP_Google_Reviews_Admin {
 		$title = htmlentities($formarray['wpfbr_template_title']);
 		$template_type = htmlentities($formarray['wpfbr_template_type']);
 		$style = htmlentities($formarray['wprevpro_template_style']);
+		if ( $style !== '1' && $style !== '6' ) {
+			$style = '1';
+			if ( ! empty( $t_id ) ) {
+				$existing_style = $wpdb->get_var( $wpdb->prepare( "SELECT style FROM {$table_name} WHERE id = %d", absint( $t_id ) ) );
+				if ( $existing_style === '1' || $existing_style === '6' ) {
+					$style = $existing_style;
+				}
+			}
+		}
 		$display_num = htmlentities($formarray['wpfbr_t_display_num']);
 		$display_num_rows = htmlentities($formarray['wpfbr_t_display_num_rows']);
 		$display_order = htmlentities($formarray['wpfbr_t_display_order']);

@@ -71,8 +71,12 @@
 		var imagehrefmystery = adminjs_script_vars.pluginsUrl + '/admin/partials/google_mystery_man.png';
 		var avatarimg = imagehref;
 		var verified1 = '<span class="verifiedloc1 wprevpro_verified_svg wprevtooltip" data-wprevtooltip="Verified on Google"><span class="svgicons svg-wprsp-verified"></span></span>';
+		var quoteimg = adminjs_script_vars.pluginsUrl + '/admin/partials/testimonial_quote.png';
+		var samplemediaimage = adminjs_script_vars.pluginsUrl + '/admin/partials/samplemediaimage.jpg';
+		var productimg = adminjs_script_vars.pluginsUrl + '/admin/partials/default-product-image2.png';
 		
 		var displayname = 'John '+lastnamehtml;
+		var displayname3 = '<div id="wprev_showname">'+displayname+'</div>';
 		
 		var style1html ='<div class="wprevpro_t1_outer_div w3_wprs-row-padding">	\
 							<div class="wprevpro_t1_DIV_1 w3_wprs-col">	\
@@ -98,6 +102,191 @@
 									<div class="wpproslider_t6_DIV_4"><p class="wpproslider_t6_P_4 wprev_preview_tcolor1">'+sampltext+'</p></div>	\
 									<div class="wpproslider_t6_DIV_3_logo"><img id="wprev_showicon" src="'+iconhref+'" alt="Google Logo" class="wprevpro_t6_site_logo siteicon"></div>	\
 								</div></div></div>';
+
+		var style2html = '<div class="wprevpro_t2_outer_div w3_wprs-row-padding">	\
+							<div class="wpproslider_t2_DIV_1 w3_wprs-col l12">	\
+								<div class="wpproslider_t2_DIV_2 wprev_preview_bg1 wprev_preview_bradius">	\
+								<img src="'+avatarimg+'" class="wprev_avatar_opt wpproslider_t2_IMG_2">	\
+								<div class="wpproslider_t2_DIV_3">	\
+									<p class="wpproslider_t2_P_4 wprev_preview_tcolor1">	\
+										'+starhtml+''+verified1+''+sampltext+'		</p> <strong class="wpproslider_t2_STRONG_5 wprev_preview_tcolor2">'+displayname+'</strong> <span class="wpproslider_t2_SPAN_6 wprev_preview_tcolor2">'+datehtml+'</span>	\
+										<img id="wprev_showicon" src="'+iconhref+'" alt="Google Logo" class="wprevpro_t2_site_logo siteicon">	\
+								</div></div></div></div>';
+
+		var style3html = '<div class="wprevpro_t3_outer_div w3_wprs-row-padding">	\
+				<div class="wpproslider_t3_DIV_1 w3_wprs-col l12">	\
+			<div class="wpproslider_t3_DIV_1a wprev_preview_bg2 wprev_preview_bradius">	\
+				<div class="wpproslider_t3_DIV_2 wprev_preview_bg1 wprev_preview_tcolor2 wprev_preview_tcolor3">	\
+					<div class="wpproslider_t3_avatar_div">	\
+					<img src="'+avatarimg+'" class="wprev_avatar_opt wpproslider_t3_avatar">	\
+					</div>	\
+					'+displayname3+'</div>	\
+				<p class="wpproslider_t3_P_3 wprev_preview_tcolor1"><img src="'+quoteimg+'" alt="" class="wpproslider_t3_quote">'+starhtml+''+verified1+''+sampltext+' '+datehtml+'</p>	\
+				<img id="wprev_showicon" src="'+iconhref+'" alt="Google Logo" class="wprevpro_t3_site_logo siteicon">	\
+			</div>	\
+		</div>	\
+		</div>';
+
+		var style4html = '<div class="wprevpro_t4_outer_div w3_wprs-row-padding">	\
+			<div class="wpproslider_t4_DIV_1 w3_wprs-col l12">	\
+		<div class="wpproslider_t4_DIV_1a wprev_preview_bg1 wprev_preview_bradius">	\
+			<div class="wpproslider_t4_avatar_div">	\
+			<img src="'+avatarimg+'" class="wprev_avatar_opt wpproslider_t4_IMG_2">	\
+			</div>	\
+			<h3 class="wpproslider_t4_H3_3 wprev_preview_tcolor1">'+displayname+'</h3>	\
+			<span class="wpproslider_t4_SPAN_4">'+starhtml+''+verified1+'</span>	\
+			<p class="wpproslider_t4_P_5 wprev_preview_tcolor2">'+sampltext+'</p>	\
+			<span class="wpproslider_t4_date wprev_preview_tcolor3">'+datehtml+'</span>	\
+			<div><img id="wprev_showicon" src="'+iconhref+'" alt="Google Logo" class="wprevpro_t4_site_logo siteicon"></div>	\
+		</div></div></div>';
+
+		var style5html = '<div class="wprevpro_t5_outer_div w3_wprs-row-padding">	\
+							<div class="wpproslider_t5_DIV_1 w3_wprs-col l12">	\
+								<div class="wpproslider_t5_DIV_2 wprev_preview_bg1 wprev_preview_bradius">	\
+								<div class="wpproslider_t5_DIV_3L"><img src="'+avatarimg+'" class="wprev_avatar_opt wpproslider_t5_IMG_2"><span class="wpproslider_t5_STRONG_5 wprev_preview_tcolor2">'+displayname+'</span></div>	\
+								<div class="wpproslider_t5_DIV_3">	\
+									<p class="wpproslider_t5_P_4 wprev_preview_tcolor1">	\
+										'+starhtml+''+verified1+''+sampltext+'<span class="wpproslider_t5_SPAN_6 wprev_preview_tcolor2"> - '+datehtml+'</span></p> 	\
+								</div>	\
+								<div class="wpproslider_t5_DIV_3_logo"><img id="wprev_showicon" src="'+iconhref+'" alt="Google Logo" class="wprevpro_t5_site_logo wprevsiteicon siteicon"></div>	\
+								</div></div></div>';
+
+		var style7html = '<div class="wprevpro_t7_outer_div w3_wprs-row-padding">	\
+							<div class="wpproslider_t7_DIV_1 w3_wprs-col l12">	\
+								<div class="wpproslider_t7_DIV_2 wprev_preview_bg1 wprev_preview_bradius">	\
+								<div class="wpproslider_t7_DIV_2_top">	\
+									<div class="wpproslider_t7_DIV_3L">	\
+										<div class="wpproslider_t7_DIV_3_logo"><img id="wprev_showicon" src="'+iconhref+'" alt="Google Logo" class="wprevpro_t7_site_logo siteicon"></div>	\
+										<div class="wpproslider_t7_star_DIV">'+starhtml+''+verified1+'</div>	\
+									</div>	\
+								</div>	\
+								<div class="wpproslider_t7_DIV_4">	\
+									<div class="wpproslider_t7_DIV_3">	\
+										<p class="wpproslider_t7_P_4 wprev_preview_tcolor1">"'+sampltext+'"</p> 	\
+									</div>	\
+									<div class="wpproslider_t7_STRONG_5 wprev_preview_tcolor2 t7displayname">'+displayname+'</div>	\
+									<div class="wpproslider_t7_SPAN_6 wprev_preview_tcolor2 t7datediv">'+datehtml+'</div>	\
+								</div>	\
+								</div></div></div>';
+
+		var style8html = '<div class="wprevpro_t8_outer_div w3_wprs-row-padding">	\
+							<div class="wpproslider_t8_DIV_1 w3_wprs-col l12">	\
+								<div class="wpproslider_t8_DIV_2 wprev_preview_bg1 wprev_preview_bradius">	\
+									<div class="wpproslider_t8_DIV_2_top" style="line-height:24px;">	\
+										<div class="wpproslider_t8_DIV_3">	\
+											<div class="wpproslider_t8_STRONG_5 wprev_preview_tcolor2 t8displayname">'+displayname+'<span class="wpproslider_t8_SPAN_6 wprev_preview_tcolor2 t8datediv">'+datehtml+'</span></div>	\
+											<div class="wpproslider_t8_star_DIV">'+starhtml+''+verified1+'</div>	\
+											<div class="wpproslider_t8_DIV_4"><p class="wpproslider_t8_P_4 wprev_preview_tcolor1">	\
+											'+sampltext+'</p> 	\
+										</div>	\
+										</div>	\
+									</div>	\
+									<div class="wpproslider_t8_DIV_3_logo"><img id="wprev_showicon" src="'+iconhref+'" alt="Google Logo" class="wprevpro_t8_site_logo siteicon"></div>	\
+								</div></div></div>';
+
+		var style9html = '<div class=" wprevpro_t9_DIV_1 w3_wprs-col">	\
+								<div class="wpproslider_t9_DIV_1a">	\
+									<div class="wpproslider_t9_DIV_2 wprev_preview_bg1 wprev_preview_bradius">	\
+									<div class="wpproslider_t9_DIV_2_top">	\
+										<div class="wpproslider_t9_DIV_3L"><img src="'+avatarimg+'" alt="Avatar" class="wprev_avatar_opt wpproslider_t9_IMG_2 wprevpro_avatarimg"></div>	\
+										<div class="wpproslider_t9_star_DIV wprevpro_star_imgs_T9">'+starhtml+''+verified1+'</div>	\
+										<div class="wpprooutoffive">5 out of 5 stars</div><div class="wpproslider_t9_DIV_3_logo"><img id="wprev_showicon" src="'+iconhref+'" alt="Google Logo" class="wprevpro_t9_site_logo siteicon"></div>	\
+									</div>	\
+									<div class="wpproslider_t9_DIV_3">	\
+											<div class="t9displayname wpproslider_t9_STRONG_5 wprev_preview_tcolor2">'+displayname+'</div>	\
+											<div class="wpproslider_t9_SPAN_6 wprev_preview_tcolor2"><span class="wprev_showdate_T9 wprev_preview_tcolor2">'+datehtml+'</span></div>	\
+									</div>	\
+									<div class="indrevdiv wpproslider_t9_DIV_4">	\
+											<p class="wpproslider_t9_P_4 wprev_preview_tcolor1">'+sampltext+'</p>	\
+									</div></div></div></div>';
+
+		var style10html = '<div class="wprevpro_t10_outer_div w3_wprs-row-padding">	\
+							<div class="wpproslider_t10_DIV_1 w3_wprs-col l12">	\
+								<div class="wpproslider_t10_DIV_2 wprev_preview_bg1 wprev_preview_bradius">	\
+									<div class="wpproslider_t10_DIV_2_top" style="line-height:24px;">	\
+										<div class="wpproslider_t10_DIV_3L"><img src="'+avatarimg+'" class="wprev_avatar_opt wpproslider_t10_IMG_2"></div>	\
+										<div class="wpproslider_t10_DIV_3">	\
+											<div class="wpproslider_t10_STRONG_5 wprev_preview_tcolor2 t10displayname"><span class="t10_revname wprev_preview_tcolor1">'+displayname+'</span> left us a 5 star review</div>	\
+											<div class="wpproslider_t10_star_DIV">'+starhtml+''+verified1+' <span class="t10_onsite"> on Google</span></div>	\
+											<div class="wpproslider_t10_SPAN_6 t10datediv">'+datehtml+'</div>	\
+										</div>	\
+									</div>	\
+									<div class="wpproslider_t10_DIV_3_logo"><img id="wprev_showicon" src="'+iconhref+'" alt="Google Logo" class="wprevpro_t10_site_logo siteicon"></div>	\
+								</div></div></div>';
+
+		var style11html = '<div class="wprevpro_t11_outer_div w3_wprs-row-padding">	\
+							<div class="wpproslider_t11_DIV_1 w3_wprs-col l12">	\
+								<div class="wpproslider_t11_DIV_2 wpproslider_t11_has_woo_image wprev_preview_bg1 wprev_preview_bradius">	\
+								<div class="mscpic-img-side"><div class="mscpic-img-body"><img src="'+productimg+'" class="miscpic-listing-image" alt="sample product image"></div></div>	\
+									<div class="wpproslider_t11_DIV_2_top" style="line-height:24px;">	\
+										<div class="wpproslider_t11_DIV_3">	\
+											<div class="wpproslider_t11_STRONG_5 wprev_preview_tcolor2 t11displayname">'+displayname+'<span class="wpproslider_t11_SPAN_6 wprev_preview_tcolor2 t11datediv">'+datehtml+'</span></div>	\
+											<div class="wpproslider_t11_star_DIV">'+starhtml+''+verified1+'</div>	\
+											<div class="wpproslider_t11_DIV_4"><p class="wpproslider_t11_P_4 wprev_preview_tcolor1">	\
+											'+sampltext+'</p> 	\
+											<div class="miscpicdiv mpdiv_t11 wprev_preview_tcolor1"><div class="mscpic-body wprev_preview_tcolor1"><span>Sample Product Title</span></div></div>	\
+										</div>	\
+										</div>	\
+									</div>	\
+									<div class="wpproslider_t11_DIV_3_logo"><img id="wprev_showicon" src="'+iconhref+'" alt="Google Logo" class="wprevpro_t11_site_logo siteicon"></div>	\
+								</div></div></div>';
+
+		var style12html = '<div class="wprevpro_t12_outer_div w3_wprs-row-padding">	\
+			<div class="wpproslider_t12_DIV_1 w3_wprs-col l12">	\
+		<div class="wpproslider_t12_DIV_1a wprev_preview_bg1 wprev_preview_bradius">	\
+			<span class="wpproslider_t12_SPAN_4">'+starhtml+''+verified1+'</span>	\
+			<p class="wpproslider_t12_P_5 wprev_preview_tcolor2">'+sampltext+'</p>	\
+			<div class="wpproslider_t12_avatar_div">	\
+			<img src="'+avatarimg+'" class="wprev_avatar_opt wpproslider_t12_IMG_2">	\
+			</div>	\
+			<div><h3 class="wpproslider_t12_H3_3 wprev_preview_tcolor1">'+displayname+'</h3></div>	\
+			<div><span class="wpproslider_t12_date wprev_preview_tcolor3">'+datehtml+'</span></div>	\
+			<div><img id="wprev_showicon" src="'+iconhref+'" alt="Google Logo" class="wprevpro_t12_site_logo siteicon"></div>	\
+		</div></div></div>';
+
+		var style13html = '<div class="wprevpro_t13_outer_div w3_wprs-col l4 outerrevdiv" style="width: 100%; display: inline-block;">	\
+	<div class="wpproslider_t6_DIV_1a"><div class="indrevdiv wpproslider_t13_DIV_2 wprev_preview_bg1 wprev_preview_bradius"><div class="wpproslider_t13_DIV_4"><div class="indrevtxt wpproslider_t13_P_4 wprev_preview_tcolor1">	\
+	<div class="wprev_preview_tcolor1">'+sampltext+'</div>	\
+	</div></div>	\
+		<div class="wpproslider_t13_DIV_2_bot">	\
+			<div class="wpproslider_t6_DIV_3L"><img src="'+avatarimg+'" alt="Avatar" class="wprev_avatar_opt wpproslider_t13_IMG_2 wprevpro_avatarimg"></div>	\
+			<div class="wpproslider_t13_DIV_3 wprev_preview_tcolor2">	\
+				<div class="t13displayname wpproslider_t6_STRONG_5 wprev_preview_tcolor2">'+displayname+'</div>	\
+				<div class="wpproslider_t13_star_DIV"><span class="wprevpro_star_imgs_T13">'+starhtml+''+verified1+'</span>	\
+			</div><div class="wpproslider_t13_SPAN_6 wprev_preview_tcolor2"><span class="wprev_showdate_T13">'+datehtml+'</span></div></div>	\
+		</div><div class="wpproslider_t13_DIV_3_logo">	\
+		<img id="wprev_showicon" src="'+iconhref+'" alt="Google Logo" class="wprevpro_t6_site_logo siteicon">	\
+		</div></div></div></div>';
+
+		var style14html = '<div class="wprevpro_t14_DIV_1 wprevpro_t14_outer_div outerrevdiv wprevpro_t14_DIV_1_preview">	\
+			<div class="wprevpro_t14_DIV_1a">	\
+				<div class="wprevpro_t14_DIV_2 wprev_preview_bradius indrevdiv">	\
+				<div class="wprevpro_t14_image_wrapper" style="background-image: url('+samplemediaimage+');"> \
+						<div class="wprevpro_t14_review_text_overlay wprev_preview_tcolor1 wprev_preview_bg1">	\
+						<div class="indrevlineclamp wprev_preview_tcolor1">'+sampltext+'</div>	\
+						</div></div>	\
+					<div class="wprevpro_t14_footer indrevtxt wprev_preview_bg2 wprevpro_t14_SPAN_5 wprev_preview_tcolor2">	\
+						<div class="wprevpro_t14_avatarimg"><span class="wprevpro_t14_A_8"><img src="'+avatarimg+'" alt="Avatar" class="wprev_avatar_opt wprevpro_t14_IMG_4 wprevpro_avatarimg"></span></div>	\
+						<div class="wprevpro_t14_SPAN_5">	\
+							<div class="wprevpro_t14_rname wprevpro_t14_name wprev_preview_tcolor2">'+displayname+'</div>	\
+							<div class="wprevpro_star_imgs_T14">'+starhtml+''+verified1+'</div>	\
+							<div class="wprevpro_t14_showdate wprevpro_t14_date wprev_preview_tcolor3">'+datehtml+'</div>	\
+						</div>	\
+						<img id="wprev_showicon" src="'+iconhref+'" alt="Google Logo" class="wprevpro_t14_site_logo siteicon">	\
+						</div>	\
+				</div>	\
+			</div>	\
+		</div>';
+
+		var style15html = '<div class="wpproslider_t15_DIV_1 w3_wprs-col l4 outerrevdiv" style="width: 100%; display: inline-block;">	\
+		<div class="indrevdiv wpproslider_t15_DIV_1a wprev_preview_bg1 wprev_preview_bradius">	\
+			<div class="wpproslider_t15_avatar_div"><img src="'+avatarimg+'" alt="Avatar" class="wpproslider_t15_IMG_2 wprevpro_avatarimg wprev_avatar_opt"></div>	\
+			<div class="wpproslider_t15_H3_3 wprev_preview_tcolor1">'+displayname+'</div>	\
+			<span class="wprev_showdate_T15 wprev_preview_tcolor3">'+datehtml+'</span>	\
+			<span class="wpproslider_t15_SPAN_4">'+starhtml+''+verified1+'</span>	\
+			<div class="indrevtxt wpproslider_t15_P_5 wprev_preview_tcolor2"><p class="wpproslider_t15_P_5 wprev_preview_tcolor2">'+sampltext+'</p></div>	\
+			<div class="wprevt15_icon_div"><img id="wprev_showicon" src="'+iconhref+'" alt="Google Logo" class="wprevpro_t15_site_logo siteicon"></div>	\
+		</div></div>';
 		
 		changepreviewhtml();
 
@@ -199,6 +388,26 @@
 			}
 		});
 		
+		function isProOnlyTemplateStyle(val){
+			return val !== '1' && val !== '6' && val !== '' && val != null;
+		}
+		function updateProStyleNote(templatenum){
+			$( "#wprevpro_pro_save_note" ).hide();
+			if(isProOnlyTemplateStyle(templatenum)){
+				$( "#wprevpro_template_style" ).addClass('wprevpro-pro-selected');
+				$( "#wprevpro_pro_style_note" ).show();
+			} else {
+				$( "#wprevpro_template_style" ).removeClass('wprevpro-pro-selected');
+				$( "#wprevpro_pro_style_note" ).hide();
+			}
+		}
+		function showProSaveNote(){
+			var note = $( "#wprevpro_pro_save_note" );
+			var msg = note.attr( "data-msg" ) || "Style %s is Pro version only, please select style 1 or 6.";
+			var style = $( "#wprevpro_template_style" ).val();
+			note.text( msg.replace( "%s", style ) ).css( "display", "inline" );
+		}
+
 		function changepreviewhtml(){
 			var templatenum = $( "#wprevpro_template_style" ).val();
 			var bradius = $( "#wprevpro_template_misc_bradius" ).val();
@@ -221,18 +430,77 @@
 				prestyle += '<style>'+$( "#wpfbr_template_css" ).val()+'</style>';
 			}
 			
-				var temphtml;
+				var previewhtml = '';
 				if(templatenum=='1'){
-					$( "#wprevpro_template_preview" ).html(prestyle+style1html);
-					//hide background 2 select
+					previewhtml = style1html;
 					$( ".wprevpre_bgcolor2" ).hide();
 					$( ".wprevpre_tcolor3" ).hide();
-					$( '.wprev_preview_bg1' ).css( "border", '' );
-				} else if(templatenum=='6'){
-					$( "#wprevpro_template_preview" ).html(prestyle+style6html);
+				} else if(templatenum=='2'){
+					previewhtml = style2html;
 					$( ".wprevpre_bgcolor2" ).show();
 					$( ".wprevpre_tcolor3" ).hide();
-					$( '.wprev_preview_bg1' ).css( "border", '1px solid '+bg2 );
+				} else if(templatenum=='3'){
+					previewhtml = style3html;
+					$( ".wprevpre_bgcolor2" ).show();
+					$( ".wprevpre_tcolor3" ).show();
+				} else if(templatenum=='4'){
+					previewhtml = style4html;
+					$( ".wprevpre_bgcolor2" ).hide();
+					$( ".wprevpre_tcolor3" ).show();
+				} else if(templatenum=='5'){
+					previewhtml = style5html;
+					$( ".wprevpre_bgcolor2" ).show();
+					$( ".wprevpre_tcolor3" ).hide();
+				} else if(templatenum=='6'){
+					previewhtml = style6html;
+					$( ".wprevpre_bgcolor2" ).show();
+					$( ".wprevpre_tcolor3" ).hide();
+				} else if(templatenum=='7'){
+					previewhtml = style7html;
+					$( ".wprevpre_bgcolor2" ).hide();
+					$( ".wprevpre_tcolor3" ).hide();
+				} else if(templatenum=='8'){
+					previewhtml = style8html;
+					$( ".wprevpre_bgcolor2" ).hide();
+					$( ".wprevpre_tcolor3" ).hide();
+				} else if(templatenum=='9'){
+					previewhtml = style9html;
+					$( ".wprevpre_bgcolor2" ).hide();
+					$( ".wprevpre_tcolor3" ).hide();
+				} else if(templatenum=='10'){
+					previewhtml = style10html;
+					$( ".wprevpre_bgcolor2" ).hide();
+					$( ".wprevpre_tcolor3" ).hide();
+				} else if(templatenum=='11'){
+					previewhtml = style11html;
+					$( ".wprevpre_bgcolor2" ).hide();
+					$( ".wprevpre_tcolor3" ).hide();
+				} else if(templatenum=='12'){
+					previewhtml = style12html;
+					$( ".wprevpre_bgcolor2" ).hide();
+					$( ".wprevpre_tcolor3" ).show();
+				} else if(templatenum=='13'){
+					previewhtml = style13html;
+					$( ".wprevpre_bgcolor2" ).hide();
+					$( ".wprevpre_tcolor3" ).hide();
+				} else if(templatenum=='14'){
+					previewhtml = style14html;
+					$( ".wprevpre_bgcolor2" ).hide();
+					$( ".wprevpre_tcolor3" ).show();
+				} else if(templatenum=='15'){
+					previewhtml = style15html;
+					$( ".wprevpre_bgcolor2" ).hide();
+					$( ".wprevpre_tcolor3" ).show();
+				}
+				$( "#wprevpro_template_preview" ).html(prestyle+previewhtml);
+				updateProStyleNote(templatenum);
+				if(!isProOnlyTemplateStyle(templatenum)){
+					$( '.wprev_preview_bg1' ).css( "border", "" );
+					$( '.wprev_preview_bg1' ).css( "border-bottom", "" );
+					$( '.wprev_preview_tcolor3' ).css( "text-shadow", '' );
+					if(templatenum=='6' && bg2){
+						$( '.wprev_preview_bg1' ).css( "border", '1px solid '+bg2 );
+					}
 				}
 			//now hide and show things based on values in select boxes
 			if($( "#wprevpro_template_misc_showstars" ).val()=="no"){
@@ -252,10 +520,20 @@
 			}
 			//set colors and bradius by changing css via jQuery     border-radius: 10px 10px 10px 10px;
 			$( '.wprev_preview_bradius' ).css( "border-radius", bradius+'px' );
-			$( '.wprev_preview_bg1' ).css( "background", bg1 );
-			$( '.wprev_preview_bg2' ).css( "background", bg2 );
-			$( '.wprev_preview_tcolor1' ).css( "color", tcolor1 );
-			$( '.wprev_preview_tcolor2' ).css( "color", tcolor2 );
+			if(!isProOnlyTemplateStyle(templatenum)){
+				if(bg1){
+					$( '.wprev_preview_bg1' ).css( "background", bg1 );
+				}
+				if(bg2){
+					$( '.wprev_preview_bg2' ).css( "background", bg2 );
+				}
+				if(tcolor1){
+					$( '.wprev_preview_tcolor1' ).css( "color", tcolor1 );
+				}
+				if(tcolor2){
+					$( '.wprev_preview_tcolor2' ).css( "color", tcolor2 );
+				}
+			}
 			if(tfont1 > 0){
 				$( '.wprev_preview_tcolor1' ).css( {"font-size": tfont1+"px", "line-height": "normal"} );
 			} else {
@@ -273,6 +551,12 @@
 				if(templatenum=='6'){
 					$( ".wpproslider_t6_DIV_3L" ).hide();
 				}
+				if(templatenum=='5'){
+					$( ".wpproslider_t5_DIV_3L" ).hide();
+				}
+				if(templatenum=='10'){
+					$( ".wpproslider_t10_DIV_3L" ).hide();
+				}
 			} else if(avataropt=='mystery'){
 				//set img src
 				$(".wprev_avatar_opt").attr("src",imagehrefmystery);
@@ -284,6 +568,12 @@
 				$( ".wprev_avatar_opt" ).show();
 				if(templatenum=='6'){
 					$( ".wpproslider_t6_DIV_3L" ).show();
+				}
+				if(templatenum=='5'){
+					$( ".wpproslider_t5_DIV_3L" ).show();
+				}
+				if(templatenum=='10'){
+					$( ".wpproslider_t10_DIV_3L" ).show();
 				}
 			}
 			
@@ -399,7 +689,12 @@
 		//-------------------------------
 		
 		//form validation
-		$("#newtemplateform").submit(function(){   
+		$("#newtemplateform").submit(function(){
+			if(isProOnlyTemplateStyle($( "#wprevpro_template_style" ).val())){
+				$( "#wprevpro_pro_style_note" ).show();
+				showProSaveNote();
+				return false;
+			}
 			if(jQuery( "#wpfbr_template_title").val()==""){
 				alert("Please enter a title.");
 				$( "#wpfbr_template_title" ).focus();
@@ -678,7 +973,13 @@
 		*/
 		
 		//for updating the form without closing it, sending via ajax
-		$( "#wprevpro_addnewtemplate_update" ).click(function() {
+		$( "#wprevpro_addnewtemplate_update" ).click(function(event) {
+			if(isProOnlyTemplateStyle($( "#wprevpro_template_style" ).val())){
+				event.preventDefault();
+				$( "#wprevpro_pro_style_note" ).show();
+				showProSaveNote();
+				return;
+			}
 			console.log('updating');
 			$( "#wpfbr_preview_outermost" ).show();
 			
