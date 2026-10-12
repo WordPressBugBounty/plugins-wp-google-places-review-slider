@@ -70,7 +70,7 @@ class WP_Google_Reviews {
 	public function __construct() {
 
 		$this->_token = 'wp-google-reviews';
-		$this->version = '18.9';
+		$this->version = '18.10';
 		//using this for development
 		//$this->version = time();
 
@@ -140,7 +140,13 @@ class WP_Google_Reviews {
 			//create table in database
 			global $wpdb;
 			$table_name = $wpdb->prefix . 'wpfb_reviews';
-			$charset_collate = $wpdb->get_charset_collate();
+			// Create new tables as utf8mb4 so emoji in review text can be stored.
+			$has_utf8mb4 = $wpdb->get_var( "SHOW CHARACTER SET LIKE 'utf8mb4'" ) !== null;
+			if ( $has_utf8mb4 ) {
+				$charset_collate = 'DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+			} else {
+				$charset_collate = $wpdb->get_charset_collate();
+			}
 
 		$sql = "CREATE TABLE $table_name (
 				id mediumint(9) NOT NULL AUTO_INCREMENT,
@@ -193,6 +199,9 @@ class WP_Google_Reviews {
 
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
+
+			// Convert a legacy 3-byte reviews table to utf8mb4 so emoji can be stored.
+			self::wpgr_maybe_convert_table_to_utf8mb4( $this->version );
 			
 			//create template posts table in dbDelta 
 			$table_name = $wpdb->prefix . 'wpfb_post_templates';
@@ -511,6 +520,84 @@ class WP_Google_Reviews {
 	 *
 	 * @since    1.0.0
 	 */
+	/**
+	 * Convert an existing 3-byte (utf8/utf8mb3) reviews table to utf8mb4 so emoji can be saved.
+	 *
+	 * dbDelta() never changes the charset of an existing table, so sites whose table was
+	 * created as utf8 reject inserts containing 4-byte characters such as emoji.
+	 * Skips tables with non-utf8 columns, very large tables, or sites whose database
+	 * connection is not utf8mb4. When a version is passed (plugin update path) the
+	 * conversion is attempted at most once per version; activation passes nothing so a
+	 * manual deactivate/reactivate always retries.
+	 *
+	 * @param string $version Optional. Current plugin version, used to limit attempts.
+	 * @return bool True if the table is utf8mb4 after this call.
+	 */
+	public static function wpgr_maybe_convert_table_to_utf8mb4( $version = '' ) {
+		global $wpdb;
+
+		if ( 'utf8mb4' !== $wpdb->charset ) {
+			return false;
+		}
+
+		$table = $wpdb->prefix . 'wpfb_reviews';
+
+		$suppress = $wpdb->suppress_errors();
+		$columns  = $wpdb->get_results( "SHOW FULL COLUMNS FROM `{$table}`" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$wpdb->suppress_errors( $suppress );
+		$wpdb->last_error = '';
+
+		if ( empty( $columns ) ) {
+			return false;
+		}
+
+		$three_byte    = array( 'utf8', 'utf8mb3' );
+		$needs_convert = false;
+		foreach ( $columns as $column ) {
+			if ( empty( $column->Collation ) ) {
+				continue; // numeric / blob column
+			}
+			list( $charset ) = explode( '_', $column->Collation );
+			$charset = strtolower( $charset );
+			if ( 'utf8mb4' === $charset ) {
+				continue;
+			}
+			if ( ! in_array( $charset, $three_byte, true ) ) {
+				// latin1 or other: converting could scramble stored text.
+				return false;
+			}
+			$needs_convert = true;
+		}
+
+		if ( ! $needs_convert ) {
+			return true;
+		}
+
+		// Skip very large tables; the rebuild could outlast the request. Handle those manually.
+		$status = $wpdb->get_row( $wpdb->prepare( 'SHOW TABLE STATUS LIKE %s', $table ) );
+		if ( $status ) {
+			$bytes = (int) $status->Data_length + (int) $status->Index_length;
+			if ( $bytes > 256 * 1024 * 1024 ) {
+				return false;
+			}
+		}
+
+		// Only try once per plugin version so a killed request does not retry on every admin load.
+		if ( '' !== (string) $version ) {
+			if ( get_option( 'wpgr_reviews_utf8mb4_attempted', '' ) === (string) $version ) {
+				return false;
+			}
+			update_option( 'wpgr_reviews_utf8mb4_attempted', (string) $version, false );
+		}
+
+		$suppress = $wpdb->suppress_errors();
+		$result   = $wpdb->query( "ALTER TABLE `{$table}` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$wpdb->suppress_errors( $suppress );
+		$wpdb->last_error = '';
+
+		return false !== $result;
+	}
+
 	public function run() {
 	
 		$this->loader->run();

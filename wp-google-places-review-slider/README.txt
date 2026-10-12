@@ -4,7 +4,7 @@ Donate link: http://ljapps.com/
 Tags: google reviews, business reviews, social proof, testimonial slider, gmb reviews
 Requires at least: 3.0.1
 Tested up to: 7.0
-Stable tag: 18.9
+Stable tag: 18.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -155,6 +155,10 @@ Please report security bugs found in the source code of the wp-google-places-rev
 10. Create as many templates as you like.
 
 == Changelog ==
+= 18.10 =
+* Checks the reviews table encoding on update and converts legacy utf8 (3-byte) tables to utf8mb4 so reviews containing emojis can be saved.
+* Fix js error on template page.
+
 = 18.9 =
 * Updated Freemius sdk.
 * Other small bug fixes and changes.
